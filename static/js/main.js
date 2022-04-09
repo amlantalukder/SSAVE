@@ -26,7 +26,7 @@ loadData = () => {
     }
 
     document.getElementById('status_area').innerHTML = '';
-    showStatus('Loading...');
+    showStatus('Uploading data ... (this may take a while)');
     
     $.ajax({
         url: "/scvis/load",
