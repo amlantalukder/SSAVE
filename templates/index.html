@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block head %}
+<title>Sleep Cycle Visualization Tool</title>
+{% endblock %}
+
+{% block body %}
+<div id="main" class="container mt-5">
+  <div class="row h-5">
+    <div class="col p-2 text-center">
+      <h4>SCVis - Sleep Cycle Visualization Tool</h4>
+    </div>
+  </div>
+  <div class="row">
+    <div id="status_area" class="col"></div>
+  </div>
+  <div class="row p-2">
+    <div class="col-md-5">
+      <div class="input_panel row border border-5">
+        <div class="col">
+          <form id="input_form">
+            <div class="row p-2 border">
+              <div class="col">
+                <h5>Sample Path:</h5>
+                <input id="sample_file_path" type="file" accept=".edf" class="form-control form-control-sm" name="sample_file_path">
+              </div>
+            </div>
+            <div class="row p-2 border">
+              <div class="col">
+                <h5>Sample Type:</h5>
+                <div class="row border border-light">
+                  <div class="col-md-12">
+                    <input type="radio" name="file_type" value="edf" onchange="setSampleFileType();" checked>
+                    <label for="edf">EDF File</label>
+                  </div>
+                  <div class="col-md-12">
+                    <input type="radio" name="file_type" value="annot" onchange="setSampleFileType();">
+                    <label for="annot">Annotation Epochs</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row p-2 border">
+              <div class="col">
+                <h5>Epoch Size:</h5>
+                <input type="text" class="form-control form-control-sm" name="epoch_size" value="30">
+              </div>
+            </div>
+            <div class="row border-top border-5 p-2">
+              <div class="col">
+                <div class="row">
+                  <a class="btn btn-primary" onclick="loadData();">Load</a>
+                </div>
+                <div class="row">
+                  <div class="col-md m-1">
+                    <a id="configure_btn" class="btn btn-info disabled" href="{{ url_for('config') }}" target="_blank">Configure</a>
+                  </div>
+                  <div class="col-md m-auto">
+                    <input id="apply_filter_btn" class="form-check-input" type="checkbox" name="apply_filter" disabled>
+                    <label id="apply_filter_label" class="form-check-label" for="apply_filter" disabled>Apply Filter</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="row">
+            <textarea id="status_textarea" class="form-control w-100" style="height:190px" readonly></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-7">
+      <div class="output_panel row h-100 border">
+        <div class="col">
+          <div class="row mt-1">
+            <div class="col">
+              <ul class="nav nav-tabs d-flex">
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="#visualization" data-bs-toggle="tab">Visualization</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#sleep_cycles" data-bs-toggle="tab">Sleep Cycles</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#sleep_stages" data-bs-toggle="tab">Sleep Stages</a>
+                </li>
+                <li class="flex-grow-1">
+                  <a id="download_btn" class="btn btn-info float-end disabled" onclick="downloadOutputs()">Download</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+                <div class="tab-content border">
+                    <div id="visualization" class="tab-pane active p-1">
+                      <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                    </div>
+                    <div id="sleep_cycles" class="tab-pane overflow-auto">
+                      <table class="table table-bordered table-responsive-md">
+                        <thead>
+                          <tr>
+                            <td>EPOCH</td>
+                            <td>SLEEP CYCLE INDEX</td>
+                            <td>SLEEP CYCLE</td>
+                          </tr>
+                        </thead>
+                        <tbody id="sc_table_content">
+                          <tr></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div id="sleep_stages" class="tab-pane overflow-auto">
+                      <table class="table table-bordered table-responsive-md">
+                        <thead>
+                          <tr>
+                            <td>EPOCH</td>
+                            <td>SLEEP STAGE</td>
+                          </tr>
+                        </thead>
+                        <tbody id="st_table_content">
+                          <tr></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  const assets_folder = "{{url_for('static', filename='assets')}}"
+</script>
+{% endblock %}
