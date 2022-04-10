@@ -1,2 +1,232 @@
 WARNING:werkzeug: * Debugger is active!
 INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "[35m[1mGET /scvis/ HTTP/1.1[0m" 500 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "GET /scvis/?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "GET /scvis/?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "GET /scvis/?__debugger__=yes&cmd=resource&f=ubuntu.ttf HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "GET /scvis/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:05:45] "GET /scvis/?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 200 -
+INFO:app_web:['code/scvis/app_web.py']
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:06:09] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:06:09] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:06:09] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:06:09] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:37] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:37] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:37] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:52] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:52] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:52] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:07:52] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:00] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:00] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:00] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:00] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:18] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:18] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:18] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 20:09:18] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:32] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:32] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:32] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:32] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:app_web:Data load request: <Request 'http://127.0.0.1:5002/scvis/load' [POST]>
+INFO:app_web:Data load response: ('Error', "Data loading failed, 'NoneType' object has no attribute 'filename'")
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:11:44] "POST /scvis/load HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:12:47] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:12:47] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:12:47] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:12:47] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Data load request: <Request 'http://127.0.0.1:5002/scvis/load' [POST]>
+INFO:app_web:Data load response: ('Error', "Data loading failed, 'NoneType' object has no attribute 'filename'")
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:12:52] "POST /scvis/load HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/controller.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Data load request: <Request 'http://127.0.0.1:5002/scvis/load' [POST]>
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:28:16] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:28:16] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:28:16] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:28:16] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:37] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:37] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:37] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:38] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:38] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:38] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:38] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:39] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:39] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:39] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:29:39] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:19] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:20] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:21] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:21] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:21] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:30:21] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:03] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:03] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:03] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:03] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:03] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:31:04] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:05] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:05] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:05] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:05] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:06] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:06] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:06] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:06] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:36:33] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:werkzeug: * Detected change in '/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/controller.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:['code/scvis/app_web.py']
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:37:20] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:37:20] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:37:20] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:37:20] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:['code/scvis/app_web.py']
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:37] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:38] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:39] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:39] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:39] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:40:39] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:41:15] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in '/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py', reloading
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:['code/scvis/app_web.py']
+INFO:werkzeug: * Running on http://127.0.0.1:5002/ (Press CTRL+C to quit)
+INFO:werkzeug: * Restarting with stat
+INFO:app_web:['/Users/talukdera2/Desktop/projects/eeg_dl/code/scvis/app_web.py']
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 294-155-093
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:33] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:33] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:33] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:33] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/js/main.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/css/main.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:34] "[36mGET /scvis/static/assets/dummy.jpg HTTP/1.1[0m" 304 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:35] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:35] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:35] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:35] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -
+INFO:app_web:Home page loaded.
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:36] "GET /scvis/ HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:36] "GET /scvis/static/css/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:36] "GET /scvis/static/js/main.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [09/Apr/2022 21:42:36] "GET /scvis/static/assets/dummy.jpg HTTP/1.1" 200 -

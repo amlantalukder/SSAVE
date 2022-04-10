@@ -27,7 +27,71 @@ loadData = () => {
 
     document.getElementById('status_area').innerHTML = '';
     showStatus('Uploading data ... (this may take a while)');
+
+    $.ajax({
+        xhr : function () {
+            var xhr = new window.XMLHttpRequest();
+            xhr.upload.addEventListener('progress', function(evt) {
+                if (evt.lengthComputable) {
+                    var progress_val = evt.loaded / evt.total;
+                    progress_val = parseInt(progress_val * 100);
+                    console.log(evt.loaded, evt.total, progress_val);
+                    $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class').replace('d-none', ''));
+                    $('#input_file_upload_progess_bar').width(progress_val+'%');
+                    $('#input_file_upload_progess_bar').html(progress_val+'%');
+                }
+            }, false);
+
+            return xhr;
+        },
+        url: "/scvis/load",
+        data: fd,
+        cache: false,
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        success: function (result) {
+            $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class') + ' d-none');
+            var status = result[0];
+            var msg = result[1];
+            showStatus(msg);
+            if(status == 'Failed') return;
+            for(var id in arr=['configure_btn', 'execute_btn']){
+                document.getElementById(arr[id]).className = replaceClass(document.getElementById(arr[id]).className, 'disabled', '');
+            }
+        
+            for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
+                document.getElementById(arr[id]).disabled = false;
+            }
+        }
+        /*
+        beforeSend: function() {
+            var progress_val = '0%';
+            progressbar.className = replaceClass(progressbar.className, 'd-none', '');
+            progressbar.attr('aria-valuenow', progress_val).css('width', progress_val);
+        },
+        uploadProgress: function(event, position, total, percentComplete) {
+            var progress_val = percentComplete + '%';
+            progressbar.attr('aria-valuenow', progress_val).css('width', progress_val);
+        },
+        complete: function(xhr) {
+            progressbar.className += ' d-none';
+            var status = result[0];
+            var msg = result[1];
+            showStatus(msg);
+            if(status == 'Failed') return;
+            for(var id in arr=['configure_btn', 'execute_btn']){
+                document.getElementById(arr[id]).className = replaceClass(document.getElementById(arr[id]).className, 'disabled', '');
+            }
+        
+            for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
+                document.getElementById(arr[id]).disabled = false;
+            }
+        }
+        */
+      });
     
+    /*
     $.ajax({
         url: "/scvis/load",
         data: fd,
@@ -49,6 +113,7 @@ loadData = () => {
             }
         }
     });
+    */
 };
 
 execute = () => {

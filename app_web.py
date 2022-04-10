@@ -3,7 +3,7 @@ from controller import WebUIController
 from flask import Flask, render_template, make_response, redirect, request, jsonify, url_for
 
 log_path = os.path.join(os.path.dirname(__file__), 'scvis.log')
-logging.basicConfig(filename=log_path, level=logging.INFO)
+#logging.basicConfig(filename=log_path, level=logging.INFO)
 
 class PrefixMiddleware(object):
 
@@ -131,7 +131,9 @@ def getFilterSettings(config):
 if __name__ == '__main__':
 
     ip_address, port = '127.0.0.1', 5002
-    print(sys.argv)
+    
+    app.logger.info(sys.argv)
+    
     if len(sys.argv) > 1:
         ip_address = sys.argv[1]
     elif len(sys.argv) > 2:
