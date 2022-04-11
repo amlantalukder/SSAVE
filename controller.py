@@ -151,8 +151,13 @@ class WebUIController(Controller):
     FOLDER_INPUT = os.path.join(os.path.dirname(__file__), 'static/assets/temp/input_files')
     FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), 'static/assets/temp/output_files')
 
-    def __init__(self, app):
-        self.app = app
+    __instance = None
+
+    def __new__(cls, app):
+        if cls.__instance is None:
+            cls.__instance = Controller.__new__(cls)
+            cls.app = app
+        return cls.__instance
     
     # --------------------------------------------------------------------------
     def loadSleepData(self, view):
