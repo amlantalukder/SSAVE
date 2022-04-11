@@ -94,6 +94,8 @@ execute = () => {
                 return
             }
 
+            showStatus('Output files generated')
+            
             src_viz = `${assets_folder}/temp/output_files/${msg}.jpg?dummy=${Date.now()}`
             src_sc_data = `${assets_folder}/temp/output_files/${msg}_sc.txt`
             src_st_data = `${assets_folder}/temp/output_files/${msg}_st.txt`
