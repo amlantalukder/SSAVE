@@ -49,11 +49,13 @@
                 <input type="text" class="form-control form-control-sm" name="epoch_size" value="30">
               </div>
             </div>
-            <div class="row border-top border-5 p-2">
-              <div class="col">
-                <div class="row">
-                  <a class="btn btn-primary" onclick="loadData();">Load</a>
-                </div>
+          </form>
+          <div class="row border-top border-5 p-2">
+            <div class="col">
+              <div class="row">
+                <a class="btn btn-primary" onclick="loadData();">Load</a>
+              </div>
+              <form id="exec_form">
                 <div class="row">
                   <div class="col-md m-1">
                     <a id="configure_btn" class="btn btn-info disabled" href="{{ url_for('config') }}" target="_blank">Configure</a>
@@ -63,12 +65,12 @@
                     <label id="apply_filter_label" class="form-check-label" for="apply_filter" disabled>Apply Filter</label>
                   </div>
                 </div>
-                <div class="row">
-                  <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
-                </div>
+              </form>
+              <div class="row">
+                <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
               </div>
             </div>
-          </form>
+          </div>
           <div class="row">
             <textarea id="status_textarea" class="form-control w-100" style="height:190px" readonly></textarea>
           </div>

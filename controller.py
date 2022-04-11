@@ -233,7 +233,7 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def execute(self, view):
-    
+
         if self.scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
             self.scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
             self.app.logger.info(f'Apply filter: {self.scv_obj.apply_filter}')
@@ -244,6 +244,7 @@ class WebUIController(Controller):
                 self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
                 self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
                 self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
+                self.app.logger.info('Removing old output files')
                 self.removeOutputFiles()
                 self.scv_obj.clearSleepData()
                 scv.extractSleepStages(self.scv_obj)
@@ -251,7 +252,7 @@ class WebUIController(Controller):
         except Exception as error:
             return ('Failed', f"Execution failed, {str(error)}")
 
-        return ('Success', "Execution complete")
+        return ('Success', self.scv_obj.sample_name)
 
     # --------------------------------------------------------------------------
     def download(self):

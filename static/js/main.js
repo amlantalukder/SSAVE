@@ -64,56 +64,7 @@ loadData = () => {
                 document.getElementById(arr[id]).disabled = false;
             }
         }
-        /*
-        beforeSend: function() {
-            var progress_val = '0%';
-            progressbar.className = replaceClass(progressbar.className, 'd-none', '');
-            progressbar.attr('aria-valuenow', progress_val).css('width', progress_val);
-        },
-        uploadProgress: function(event, position, total, percentComplete) {
-            var progress_val = percentComplete + '%';
-            progressbar.attr('aria-valuenow', progress_val).css('width', progress_val);
-        },
-        complete: function(xhr) {
-            progressbar.className += ' d-none';
-            var status = result[0];
-            var msg = result[1];
-            showStatus(msg);
-            if(status == 'Failed') return;
-            for(var id in arr=['configure_btn', 'execute_btn']){
-                document.getElementById(arr[id]).className = replaceClass(document.getElementById(arr[id]).className, 'disabled', '');
-            }
-        
-            for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
-                document.getElementById(arr[id]).disabled = false;
-            }
-        }
-        */
       });
-    
-    /*
-    $.ajax({
-        url: "/scvis/load",
-        data: fd,
-        cache: false,
-        processData: false,
-        contentType: false,
-        type: 'POST',
-        success: function (result) {
-            var status = result[0];
-            var msg = result[1];
-            showStatus(msg);
-            if(status == 'Failed') return;
-            for(var id in arr=['configure_btn', 'execute_btn']){
-                document.getElementById(arr[id]).className = replaceClass(document.getElementById(arr[id]).className, 'disabled', '');
-            }
-        
-            for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
-                document.getElementById(arr[id]).disabled = false;
-            }
-        }
-    });
-    */
 };
 
 execute = () => {
@@ -123,7 +74,7 @@ execute = () => {
     document.getElementById('sc_table_content').innerHTML = '';
     document.getElementById('st_table_content').innerHTML = '';
 
-    let myform = document.getElementById("input_form");
+    let myform = document.getElementById("exec_form");
     let fd = new FormData(myform);
     
     $.ajax({
@@ -136,16 +87,16 @@ execute = () => {
         success: function (result) {
             var status = result[0];
             var msg = result[1];
-            showStatus(msg);
 
             if(status == 'Failed'){
+                showStatus(msg);
                 document.getElementById('vis_image').src = `${assets_folder}/failed.jpg`;
                 return
-            } 
+            }
 
-            src_viz = `${assets_folder}/temp/output_files/22-0320_F_1.6_1_splt_di.jpg?dummy=${Date.now()}`
-            src_sc_data = `${assets_folder}/temp/output_files/22-0320_F_1.6_1_splt_di_sc.txt`
-            src_st_data = `${assets_folder}/temp/output_files/22-0320_F_1.6_1_splt_di_st.txt`
+            src_viz = `${assets_folder}/temp/output_files/${msg}.jpg?dummy=${Date.now()}`
+            src_sc_data = `${assets_folder}/temp/output_files/${msg}_sc.txt`
+            src_st_data = `${assets_folder}/temp/output_files/${msg}_st.txt`
 
             document.getElementById('vis_image').src = src_viz;
 
@@ -299,7 +250,34 @@ moveAnnotsToLeftPanel = () => {
     loadSleepStageSettings();
 }
 
-loadSleepStageSettings = () => {
+loadSettings = () => {
+
+    var html = '';
+    var checked_all = true;
+    for(var i in channel_settings){
+        let channel_row = channel_settings[i];
+        let html_cols = '';
+        for(var j in channel_row){
+            let ch_name = channel_row[j][0];
+            let checked = channel_row[j][1];
+            if(!checked) checked_all = false;
+            html_cols += 
+            `<div class="col-6 col-md-3 col-xl-2 border border-light text-center">\
+                <input class="form-check-input" type="checkbox" name="channel_values" value="${ch_name}" ${checked}>\
+                <label class="form-check-label" for="${ch_name}">${ch_name}</label>\
+            </div>`
+        }
+        html += `<div class="row">${html_cols}</div>`
+    }
+    var select_all_or_none_btn = document.getElementById('select_all_or_none');
+    if(!checked_all) {
+        select_all_or_none_btn.innerHTML = 'Select All';
+    }
+    else {
+        select_all_or_none_btn.innerHTML = 'Select None';
+    }
+    select_all_or_none_btn.onclick = () => {selectAllChannels(!checked_all)};
+    document.getElementById('channels').innerHTML = html;
 
     var html = '';
     

@@ -69,11 +69,11 @@ class Config:
                                         'sleep stage r': REM_STAGE,
                                         'sleep stage w': WAKE_STAGE,
                                         'sleep stage ?': U_STAGE}
-    SLEEP_STAGE_ALL_NAMES = ['WAKE STAGE', 'REM STAGE', 'N1 STAGE', 'N2 STAGE', 'N3 STAGE', 'Unassigned STAGE']
+    SLEEP_STAGE_ALL_NAMES = ['WAKE STAGE', 'REM STAGE', 'N1 STAGE', 'N2 STAGE', 'N3 STAGE']#, 'Unassigned STAGE']
     SLEEP_STAGES = [WAKE_STAGE, REM_STAGE, N1_STAGE, N2_STAGE, N3_STAGE]
     SLEEP_STAGE_ANNOTS = {WAKE_STAGE:5, REM_STAGE:4, N1_STAGE:3, N2_STAGE:2, N3_STAGE:1}
-    SLEEP_STAGES_ALL = [WAKE_STAGE, REM_STAGE, N1_STAGE, N2_STAGE, N3_STAGE, U_STAGE]#, 'O', 'NA']
-    SLEEP_STAGE_ANNOTS_ALL = {WAKE_STAGE:5, REM_STAGE:4, N1_STAGE:3, N2_STAGE:2, N3_STAGE:1, U_STAGE:0}#, 'O':6, 'NA':7}
+    SLEEP_STAGES_ALL = [WAKE_STAGE, REM_STAGE, N1_STAGE, N2_STAGE, N3_STAGE]#, U_STAGE]#, 'O', 'NA']
+    SLEEP_STAGE_ANNOTS_ALL = {WAKE_STAGE:5, REM_STAGE:4, N1_STAGE:3, N2_STAGE:2, N3_STAGE:1}#, U_STAGE:0}#, 'O':6, 'NA':7}
     FILTERS = {'notch': 60.,  # [Hz]
         'bandpass': [0.5, 20.],  # [Hz]
         'amplitude_max': 500,
