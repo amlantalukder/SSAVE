@@ -234,11 +234,14 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def execute(self, view):
 
-        if self.scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
-            self.scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
-            self.app.logger.info(f'Apply filter: {self.scv_obj.apply_filter}')
-            self.state_changed = True
         try:
+            assert self.scv_obj != None, "Sleep data not loaded properly, please try uploading the data again"
+
+            if self.scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
+                self.scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
+                self.app.logger.info(f'Apply filter: {self.scv_obj.apply_filter}')
+                self.state_changed = True
+
             self.app.logger.info(f'State changed: {self.state_changed}')
             if self.state_changed:
                 self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
