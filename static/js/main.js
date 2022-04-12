@@ -15,7 +15,7 @@ setSampleFileType = () => {
 
 loadData = () => {
 
-    for(var id in arr=['configure_btn', 'execute_btn']){
+    for(var id in arr=['configure_btn', 'execute_btn', 'download_btn']){
         let ele = document.getElementById(arr[id]);
         let regexp = new RegExp("\\b" + 'disabled' + "\\b");
         if(ele.className.search(regexp) == -1) ele.className += ' disabled';
