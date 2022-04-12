@@ -544,7 +544,7 @@ class SleepInfo:
     def visualize(self, show_sc=False, show_spec=False):
 
         sleep_stage_colors = {Config.WAKE_STAGE:'limegreen', Config.REM_STAGE:'gold', Config.N1_STAGE:'deepskyblue', \
-            Config.N2_STAGE:'royalblue', Config.N3_STAGE:'darkblue', Config.U_STAGE:'black'}#, 'O':'red', 'NA':'orange'}
+            Config.N2_STAGE:'royalblue', Config.N3_STAGE:'darkblue'}#, Config.U_STAGE:'black'}#, 'O':'red', 'NA':'orange'}
 
         self.extractEpochs()
         if show_spec: self.extractSpectogram(nw=2)

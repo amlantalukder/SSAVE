@@ -67,8 +67,8 @@ class Config:
                                         'sleep stage n2': N2_STAGE, 
                                         'sleep stage n3': N3_STAGE, 
                                         'sleep stage r': REM_STAGE,
-                                        'sleep stage w': WAKE_STAGE,
-                                        'sleep stage ?': U_STAGE}
+                                        'sleep stage w': WAKE_STAGE}#,
+                                        #'sleep stage ?': U_STAGE}
     SLEEP_STAGE_ALL_NAMES = ['WAKE STAGE', 'REM STAGE', 'N1 STAGE', 'N2 STAGE', 'N3 STAGE']#, 'Unassigned STAGE']
     SLEEP_STAGES = [WAKE_STAGE, REM_STAGE, N1_STAGE, N2_STAGE, N3_STAGE]
     SLEEP_STAGE_ANNOTS = {WAKE_STAGE:5, REM_STAGE:4, N1_STAGE:3, N2_STAGE:2, N3_STAGE:1}
