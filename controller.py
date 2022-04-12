@@ -255,7 +255,7 @@ class WebUIController(Controller):
         except Exception as error:
             return ('Failed', f"Execution failed, {str(error)}")
 
-        return ('Success', self.scv_obj.sample_name)
+        return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), self.scv_obj.sample_name))
 
     # --------------------------------------------------------------------------
     def download(self):
@@ -268,7 +268,7 @@ class WebUIController(Controller):
         except Exception as error:
             return ('Failed', f"Internal error occurred, {str(error)}")
 
-        return ('Success', 'Download link prepared')
+        return ('Success', os.path.basename(self.FOLDER_OUTPUT + '.zip'))
 
 # --------------------------------------------------------------------------
 class CLIController(Controller):

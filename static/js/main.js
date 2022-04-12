@@ -14,6 +14,16 @@ setSampleFileType = () => {
 }
 
 loadData = () => {
+
+    for(var id in arr=['configure_btn', 'execute_btn']){
+        let ele = document.getElementById(arr[id]);
+        let regexp = new RegExp("\\b" + 'disabled' + "\\b");
+        if(ele.className.search(regexp) == -1) ele.className += ' disabled';
+    }
+
+    for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
+        document.getElementById(arr[id]).disabled = true;
+    }
     
     let myform = document.getElementById("input_form");
     let fd = new FormData(myform);
@@ -35,7 +45,6 @@ loadData = () => {
                 if (evt.lengthComputable) {
                     var progress_val = evt.loaded / evt.total;
                     progress_val = parseInt(progress_val * 100);
-                    console.log(evt.loaded, evt.total, progress_val);
                     $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class').replace('d-none', ''));
                     $('#input_file_upload_progess_bar').width(progress_val+'%');
                     $('#input_file_upload_progess_bar').html(progress_val+'%');
@@ -96,9 +105,9 @@ execute = () => {
 
             showStatus('Output files generated')
             
-            src_viz = `${assets_folder}/temp/output_files/${msg}.jpg?dummy=${Date.now()}`
-            src_sc_data = `${assets_folder}/temp/output_files/${msg}_sc.txt`
-            src_st_data = `${assets_folder}/temp/output_files/${msg}_st.txt`
+            src_viz = `${assets_folder}/temp/${msg}.jpg?dummy=${Date.now()}`
+            src_sc_data = `${assets_folder}/temp/${msg}_sc.txt`
+            src_st_data = `${assets_folder}/temp/${msg}_st.txt`
 
             document.getElementById('vis_image').src = src_viz;
 
@@ -140,11 +149,13 @@ downloadOutputs = () => {
         success: function (result) {
             var status = result[0];
             var msg = result[1];
-            if(status == 'Failed') return;
-            showStatus(msg)
+            if(status == 'Failed') {
+                showStatus(msg);
+                return;
+            } 
             const link = document.createElement("a");
             link.download = 'output_files.zip';
-            link.href = `${assets_folder}/temp/output_files.zip`;
+            link.href = `${assets_folder}/temp/${msg}`;
             document.body.appendChild(link)
             link.click();
             document.body.removeChild(link)
@@ -366,5 +377,6 @@ showStatus = msg => {
 }
 
 replaceClass = (class_str, class_to_replace, class_to_replace_with) => {
-    return class_str.replace(class_to_replace, class_to_replace_with);
+    let regexp = new RegExp("\\b" + class_to_replace + "\\b");
+    return class_str.replace(regexp, class_to_replace_with);
 }
