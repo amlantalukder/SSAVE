@@ -61,7 +61,7 @@ class WebUIController(Controller):
     def loadSleepData(self, view):
 
         try:
-            print(id(self), id(self.app))
+            
             file_type = self.validate(view.form.get('file_type'), 'file_type')
             f = view.files.get('sample_file_path')
             if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
@@ -96,7 +96,9 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def saveSettings(self, view):
+        
         try:
+
             channels_selected = np.array(view.form.getlist('channel_values'))
 
             new_st_mapping = {}
@@ -145,8 +147,9 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def execute(self, view):
-        print(id(self), id(self.app))
+        
         try:
+
             other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
             scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['epoch_size'], other_data['apply_filter'])
@@ -170,6 +173,7 @@ class WebUIController(Controller):
                 scv_obj.clearSleepData()
                 scv.extractSleepStages(scv_obj)
                 other_data['state_changed'] = False
+
         except Exception as error:
             return ('Failed', f"Execution failed, {str(error)}")
 
@@ -178,7 +182,6 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def getConfig(self):
 
-        print(id(self), id(self.app))
         try:
             other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
