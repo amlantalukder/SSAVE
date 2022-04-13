@@ -1,5 +1,5 @@
-__pycache__/*
+*__pycache__*
 .DS_Store
-static/assets/temp
 Run.txt
-scvis.log
+web_version/static/assets/temp
+web_version/scvis.log
