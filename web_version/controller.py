@@ -8,13 +8,13 @@ import visualize_sleep as scv
 class Controller():
     
     # --------------------------------------------------------------------------
-    def removeOutputFiles(self):
+    def removeOutputFiles(self, scv_obj):
 
-        img_path = os.path.join(self.scv_obj.folder_cache, f'{self.scv_obj.sample_name}.jpg')
-        sc_path = os.path.join(self.scv_obj.folder_cache, f'{self.scv_obj.sample_name}_sc.txt')
-        st_path = os.path.join(self.scv_obj.folder_cache, f'{self.scv_obj.sample_name}_st.txt')
-        eeg_path = os.path.join(self.scv_obj.folder_cache, f'{self.scv_obj.sample_name}_eeg.npy')
-        spec_path = os.path.join(self.scv_obj.folder_cache, f'{self.scv_obj.sample_name}_spec_2.npy')
+        img_path = os.path.join(scv_obj.folder_cache, f'{scv_obj.sample_name}.jpg')
+        sc_path = os.path.join(scv_obj.folder_cache, f'{scv_obj.sample_name}_sc.txt')
+        st_path = os.path.join(scv_obj.folder_cache, f'{scv_obj.sample_name}_st.txt')
+        eeg_path = os.path.join(scv_obj.folder_cache, f'{scv_obj.sample_name}_eeg.npy')
+        spec_path = os.path.join(scv_obj.folder_cache, f'{scv_obj.sample_name}_spec_2.npy')
 
         if os.path.exists(img_path): os.remove(img_path)
         if os.path.exists(sc_path): os.remove(sc_path)
@@ -52,8 +52,9 @@ class WebUIController(Controller):
     def __init__(self, app, job_id):
         self.app = app
         self.job_id = job_id
-        self.FOLDER_INPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/input_files_{self.job_id}')
-        self.FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/output_files_{self.job_id}')
+        self.FOLDER_INPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/input_files')
+        self.FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/output_files')
+        self.FOLDER_OTHER_DATA = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/other_data_files')
         print(self)
 
     # --------------------------------------------------------------------------
@@ -71,23 +72,27 @@ class WebUIController(Controller):
 
             if (file_type is None) or (input_file_path is None) or (epoch_size is None): raise Exception
 
-            self.scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type, epoch_size)
-            if file_type == 'edf':
-                if self.scv_obj.eeg_data is None: self.scv_obj.loadEEG()
-                self.annotations_all = np.sort(np.unique(self.scv_obj.eeg_data._annotations.description))
-                self.channels_all = self.scv_obj.eeg_data.info['ch_names']
-                if len(self.channels_all) == 0: print('No channels found !!!')
-                scv.Config.CHANNELS_SELECTED = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, self.channels_all)]
+            other_data = {'input_file_path': input_file_path, 'file_type': file_type, 'epoch_size': epoch_size, 'apply_filter': False}
 
-            self.state_changed = True
+            scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type, epoch_size)
+            if file_type == 'edf':
+                if scv_obj.eeg_data is None: scv_obj.loadEEG()
+                other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
+                other_data['channels_all'] = scv_obj.eeg_data.info['ch_names']
+                if len(other_data['channels_all']) == 0: print('No channels found !!!')
+                other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
+                other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
+                other_data['FILTERS'] = scv.Config.FILTERS
+
+            other_data['state_changed'] = True
+
+            if not os.path.exists(self.FOLDER_OTHER_DATA): os.makedirs(self.FOLDER_OTHER_DATA)
+            np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
+            
         except Exception as error:
             return ('Error', f"Data loading failed, {str(error)}")
 
         return ('Success', "Loaded sleep data successfully")
-
-    # --------------------------------------------------------------------------
-    def getConfig(self):
-        return scv.Config
 
     # --------------------------------------------------------------------------
     def saveSettings(self, view):
@@ -119,15 +124,19 @@ class WebUIController(Controller):
             if bandpass_max_freq < bandpass_min_freq:
                 return (False, "Bandpass maximum frequency cannot be less than minimum frequency")
         
-            scv.Config.CHANNELS_SELECTED = channels_selected
-            scv.Config.sleep_stage_event_to_id_mapping = new_st_mapping
-            scv.Config.FILTERS['notch'] = notch_freq
-            scv.Config.FILTERS['bandpass'] = [bandpass_min_freq, bandpass_max_freq]
-            scv.Config.FILTERS['amplitude_max'] = amplitude_max
-            scv.Config.FILTERS['flat_signal'] = [flat_signal_duration, freq_std_min, freq_std_max]
-            scv.Config.FILTERS['bad_annots'] = bad_annots
+            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
-            self.state_changed = True
+            other_data['CHANNELS_SELECTED'] = channels_selected
+            other_data['sleep_stage_event_to_id_mapping'] = new_st_mapping
+            other_data['FILTERS']['notch'] = notch_freq
+            other_data['FILTERS']['bandpass'] = [bandpass_min_freq, bandpass_max_freq]
+            other_data['FILTERS']['amplitude_max'] = amplitude_max
+            other_data['FILTERS']['flat_signal'] = [flat_signal_duration, freq_std_min, freq_std_max]
+            other_data['FILTERS']['bad_annots'] = bad_annots
+
+            other_data['state_changed'] = True
+
+            np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
 
         except Exception as error:
             return ('Failed', f"Settings could not be saved, {str(error)}")
@@ -138,27 +147,108 @@ class WebUIController(Controller):
     def execute(self, view):
         print(id(self), id(self.app))
         try:
-            assert self.scv_obj != None, "Sleep data not loaded properly, please try uploading the data again"
+            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
-            if self.scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
-                self.scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
-                self.app.logger.info(f'Apply filter: {self.scv_obj.apply_filter}')
-                self.state_changed = True
+            scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['epoch_size'], other_data['apply_filter'])
+        
+            scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
+            scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
+            scv.Config.FILTERS = other_data['FILTERS']
+
+            if scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
+                scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
+                self.app.logger.info(f'Apply filter: {scv_obj.apply_filter}')
+                other_data['state_changed'] = True
 
             self.app.logger.info(f'State changed: {self.state_changed}')
-            if self.state_changed:
+            if other_data['state_changed']:
                 self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
                 self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
                 self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
                 self.app.logger.info('Removing old output files')
-                self.removeOutputFiles()
-                self.scv_obj.clearSleepData()
-                scv.extractSleepStages(self.scv_obj)
-                self.state_changed = False
+                self.removeOutputFiles(scv_obj)
+                scv_obj.clearSleepData()
+                scv.extractSleepStages(scv_obj)
+                other_data['state_changed'] = False
         except Exception as error:
             return ('Failed', f"Execution failed, {str(error)}")
 
-        return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), self.scv_obj.sample_name))
+        return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), scv_obj.sample_name))
+
+    # --------------------------------------------------------------------------
+    def getConfig(self):
+
+        print(id(self), id(self.app))
+        try:
+            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+
+            channel_settings = self.getChannelSettings(other_data)
+            annots_left_settings, annots_right_settings, sleep_stages = self.getSleepStageSettings(other_data)
+            filter_settings, bad_annot_settings = self.getFilterSettings(other_data)
+
+        except Exception as error:
+            return ('Failed', f"Configuration could not be acquired, {str(error)}", None)
+
+        return ('Success', "Configuration loaded successfully", (channel_settings, \
+                                                                annots_left_settings, annots_right_settings, sleep_stages, \
+                                                                filter_settings, bad_annot_settings))
+
+    # --------------------------------------------------------------------------
+    def getChannelSettings(self, other_data):
+
+        row, num_cols = 0, 12
+        channels_of_interest = set(list(other_data['CHANNELS_SELECTED']))
+        
+        channel_cols, channel_settings = [], []
+        for i in range(len(other_data['channels_all'])):
+            
+            ch_name = other_data['channels_all'][i]
+            
+            if i // num_cols != row:
+                if i > 0: channel_settings.append(channel_cols)
+                channel_cols = []
+                row = i // num_cols
+
+            channel_cols.append((ch_name, "checked" if ch_name in channels_of_interest else ""))
+
+            if i == len(other_data['channels_all'])-1:
+                channel_settings.append(channel_cols)
+
+        return channel_settings
+
+    # --------------------------------------------------------------------------
+    def getSleepStageSettings(self, other_data):
+
+        annots_left_settings = []
+        for i in range(len(other_data['annotations_all'])):
+            annot_name = other_data['annotations_all'][i]
+            if annot_name.lower() not in other_data['sleep_stage_event_to_id_mapping']:
+                annots_left_settings.append(annot_name)
+
+        annots_right_settings = {sleep_stage:[] for sleep_stage in scv.Config.SLEEP_STAGE_ALL_NAMES}
+
+        for annot_name in other_data['annotations_all']:
+            if annot_name.lower() in other_data['sleep_stage_event_to_id_mapping']:
+                for st_stage_ind in range(len(scv.Config.SLEEP_STAGE_ALL_NAMES)):
+                    if other_data['sleep_stage_event_to_id_mapping'][annot_name.lower()] == scv.Config.SLEEP_STAGES_ALL[st_stage_ind]:
+                        annots_right_settings[scv.Config.SLEEP_STAGE_ALL_NAMES[st_stage_ind]].append(annot_name)
+
+        return annots_left_settings, annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
+
+    # --------------------------------------------------------------------------
+    def getFilterSettings(self, other_data):
+
+        filter_settings = {key:value for key, value in other_data['FILTERS'].items() if key in ['notch', 'bandpass', 'amplitude_max', 'flat_signal']}
+
+        bad_annots = set(other_data['FILTERS']['bad_annots'])
+        bad_annot_settings = []
+        for annot in other_data['annotations_all']:
+            if annot in bad_annots:
+                bad_annot_settings.append([annot, 'checked'])
+            else:
+                bad_annot_settings.append([annot, ''])
+            
+        return filter_settings, bad_annot_settings
 
     # --------------------------------------------------------------------------
     def download(self):

@@ -109,9 +109,9 @@ execute = () => {
 
             showStatus('Output files generated')
             
-            src_viz = `${assets_folder}/temp/${msg}.jpg?dummy=${Date.now()}`
-            src_sc_data = `${assets_folder}/temp/${msg}_sc.txt`
-            src_st_data = `${assets_folder}/temp/${msg}_st.txt`
+            src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
+            src_sc_data = `${data_folder}/${msg}_sc.txt`
+            src_st_data = `${data_folder}/${msg}_st.txt`
 
             document.getElementById('vis_image').src = src_viz;
 
@@ -159,7 +159,7 @@ downloadOutputs = () => {
             } 
             const link = document.createElement("a");
             link.download = 'output_files.zip';
-            link.href = `${assets_folder}/temp/${msg}`;
+            link.href = `${data_folder}/${msg}`;
             document.body.appendChild(link)
             link.click();
             document.body.removeChild(link)

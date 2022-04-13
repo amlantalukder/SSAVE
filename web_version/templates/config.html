@@ -194,8 +194,9 @@
   </div>
 </div>
 <script type="text/javascript">
-  var channel_settings = JSON.parse('{{ channel_settings|tojson }}');
+  const job_id = "{{job_id}}";
   const sleep_stages = JSON.parse('{{ sleep_stages|tojson }}');
+  var channel_settings = JSON.parse('{{ channel_settings|tojson }}');
   var annots_left_settings = JSON.parse('{{ annots_left_settings|tojson }}');
   var annots_right_settings = JSON.parse('{{ annots_right_settings|tojson }}');
   loadSettings();
