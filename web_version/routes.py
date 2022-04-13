@@ -15,9 +15,7 @@ def home():
 @app.route('/config/<job_id>', methods=['GET'])
 def config(job_id):
     print(job_id)
-    pdb.set_trace()
     if job_id not in controller_pool:
-        pdb.set_trace()
         return redirect(url_for('home'))
     controller = controller_pool[job_id]
     
