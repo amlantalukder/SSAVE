@@ -1,4 +1,5 @@
 import sys, os, logging, pdb
+import uuid
 from controller import WebUIController
 from flask import Flask, render_template, make_response, redirect, request, jsonify, url_for
 
@@ -23,19 +24,28 @@ class PrefixMiddleware(object):
 
 app = Flask(__name__)
 app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/scvis')
-controller = WebUIController(app)
+
+print(id(app))
+controller_pool = {}
 
 @app.route('/', methods=['GET'])
 def home():
     app.logger.info('Home page loaded.')
-    return render_template('index.html')
+    job_id = uuid.uuid4().hex
+    return render_template('index.html', job_id=job_id)
 
-@app.route('/config', methods=['GET'])
-def config():
-    config = controller.getConfig()
-    channel_settings = getChannelSettings(config)
-    annots_left_settings, annots_right_settings, sleep_stages = getSleepStageSettings(config)
-    filter_settings, bad_annot_settings = getFilterSettings(config)
+@app.route('/config/<job_id>', methods=['GET'])
+def config(job_id):
+    print(job_id)
+    pdb.set_trace()
+    if job_id not in controller_pool:
+        pdb.set_trace()
+        return redirect(url_for('home'))
+    controller = controller_pool[job_id]
+    
+    channel_settings = getChannelSettings(controller)
+    annots_left_settings, annots_right_settings, sleep_stages = getSleepStageSettings(controller)
+    filter_settings, bad_annot_settings = getFilterSettings(controller)
     app.logger.info('Configurations loaded.')
     return render_template('config.html', channel_settings=channel_settings, 
                                             annots_left_settings=annots_left_settings,
@@ -44,35 +54,54 @@ def config():
                                             filter_settings=filter_settings,
                                             bad_annot_settings=bad_annot_settings)
 
-@app.route('/load', methods = ['POST'])
-def loadData():
+@app.route('/load/<job_id>', methods = ['POST'])
+def loadData(job_id):
+    print(job_id)
+    global controller_pool
+    controller = WebUIController(app, job_id)
     app.logger.info(f'Data load request: {request}')
     response = controller.loadSleepData(request)
+    controller_pool[job_id] = controller
     app.logger.info(f'Data load response: {response}')
     return jsonify(response)
 
-@app.route('/execute', methods = ['POST'])
-def execute():
+@app.route('/execute/<job_id>', methods = ['POST'])
+def execute(job_id):
+    print(job_id)
+    if job_id not in controller_pool: 
+        return redirect(url_for('home'))
+    controller = controller_pool[job_id]
+
     app.logger.info(f'Execution request: {request}')
     response = controller.execute(request)
     app.logger.info(f'Execution response: {response}')
     return jsonify(response)
 
-@app.route('/savesettings', methods = ['POST'])
-def saveSettings():
+@app.route('/savesettings/<job_id>', methods = ['POST'])
+def saveSettings(job_id):
+    print(job_id)
+    if job_id not in controller_pool: 
+        return redirect(url_for('home'))
+    controller = controller_pool[job_id]
+
     app.logger.info(f'Save settings request: {request}')
     response = controller.saveSettings(request)
     app.logger.info(f'Save settings response: {response}')
     return jsonify(response)
 
-@app.route('/download', methods = ['GET'])
-def download():
+@app.route('/download/<job_id>', methods = ['GET'])
+def download(job_id):
+    print(job_id)
+    if job_id not in controller_pool: 
+        return redirect(url_for('home'))
+    controller = controller_pool[job_id]
+
     app.logger.info(f'Download request')
     response = controller.download()
     app.logger.info(f'Download response: {response}')
     return jsonify(response)
 
-def getChannelSettings(config):
+def getChannelSettings(controller):
 
     config = controller.getConfig()
     row, num_cols = 0, 12
@@ -94,7 +123,7 @@ def getChannelSettings(config):
 
     return channel_settings
 
-def getSleepStageSettings(config):
+def getSleepStageSettings(controller):
 
     config = controller.getConfig()
 
@@ -114,7 +143,9 @@ def getSleepStageSettings(config):
 
     return annots_left_settings, annots_right_settings, config.SLEEP_STAGE_ALL_NAMES
 
-def getFilterSettings(config):
+def getFilterSettings(controller):
+
+    config = controller.getConfig()
 
     filter_settings = {key:value for key, value in config.FILTERS.items() if key in ['notch', 'bandpass', 'amplitude_max', 'flat_signal']}
 

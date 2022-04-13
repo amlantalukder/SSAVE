@@ -148,16 +148,18 @@ class WebUIController(Controller):
     state_changed = True
     scv_obj = None
 
-    def __init__(self, app):
+    def __init__(self, app, job_id):
         self.app = app
-        self.FOLDER_INPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/input_files_{id(self)}')
-        self.FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/output_files_{id(self)}')
+        self.job_id = job_id
+        self.FOLDER_INPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/input_files_{self.job_id}')
+        self.FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/output_files_{self.job_id}')
         print(self)
 
     # --------------------------------------------------------------------------
     def loadSleepData(self, view):
 
         try:
+            print(id(self), id(self.app))
             file_type = self.validate(view.form.get('file_type'), 'file_type')
             f = view.files.get('sample_file_path')
             if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
@@ -233,7 +235,7 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def execute(self, view):
-
+        print(id(self), id(self.app))
         try:
             assert self.scv_obj != None, "Sleep data not loaded properly, please try uploading the data again"
 

@@ -53,7 +53,7 @@ loadData = () => {
 
             return xhr;
         },
-        url: "/scvis/load",
+        url: `/scvis/load/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
@@ -76,6 +76,10 @@ loadData = () => {
       });
 };
 
+gotoConfigPage = () => {
+    window.open(`/scvis/config/${job_id}`);
+}
+
 execute = () => {
 
     showStatus('Executing...');
@@ -87,7 +91,7 @@ execute = () => {
     let fd = new FormData(myform);
     
     $.ajax({
-        url: "/scvis/execute",
+        url: `/scvis/execute/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
@@ -141,7 +145,7 @@ downloadOutputs = () => {
     showStatus('Preparing files to download...');
     
     $.ajax({
-        url: "/scvis/download",
+        url: `/scvis/download/${job_id}`,
         cache: false,
         processData: false,
         contentType: false,
@@ -187,7 +191,7 @@ saveSettings = () => {
     showStatus('Saving settings...');
     
     $.ajax({
-        url: "/scvis/savesettings",
+        url: `/scvis/savesettings/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
