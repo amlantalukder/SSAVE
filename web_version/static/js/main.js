@@ -267,34 +267,7 @@ moveAnnotsToLeftPanel = () => {
     loadSleepStageSettings();
 }
 
-loadSettings = () => {
-
-    var html = '';
-    var checked_all = true;
-    for(var i in channel_settings){
-        let channel_row = channel_settings[i];
-        let html_cols = '';
-        for(var j in channel_row){
-            let ch_name = channel_row[j][0];
-            let checked = channel_row[j][1];
-            if(!checked) checked_all = false;
-            html_cols += 
-            `<div class="col-6 col-md-3 col-xl-2 border border-light">\
-                <input class="form-check-input" type="checkbox" name="channel_values" value="${ch_name}" ${checked}>\
-                <label class="form-check-label ms-2" for="${ch_name}">${ch_name}</label>\
-            </div>`
-        }
-        html += `<div class="row">${html_cols}</div>`
-    }
-    var select_all_or_none_btn = document.getElementById('select_all_or_none');
-    if(!checked_all) {
-        select_all_or_none_btn.innerHTML = 'Select All';
-    }
-    else {
-        select_all_or_none_btn.innerHTML = 'Select None';
-    }
-    select_all_or_none_btn.onclick = () => {selectAllChannels(!checked_all)};
-    document.getElementById('channels').innerHTML = html;
+loadSleepStageSettings = () => {
 
     var html = '';
     
@@ -336,7 +309,40 @@ loadSettings = () => {
         document.getElementById('annotations_selected').innerHTML += `<div id="${sleep_stage}" class="${class_name}">\
                                                                     <div class="col">${html}</div>\
                                                                    </div>`;
-    }                     
+    }
+
+}
+
+loadSettings = () => {
+
+    var html = '';
+    var checked_all = true;
+    for(var i in channel_settings){
+        let channel_row = channel_settings[i];
+        let html_cols = '';
+        for(var j in channel_row){
+            let ch_name = channel_row[j][0];
+            let checked = channel_row[j][1];
+            if(!checked) checked_all = false;
+            html_cols += 
+            `<div class="col-6 col-md-3 col-xl-2 border border-light">\
+                <input class="form-check-input" type="checkbox" name="channel_values" value="${ch_name}" ${checked}>\
+                <label class="form-check-label ms-2" for="${ch_name}">${ch_name}</label>\
+            </div>`
+        }
+        html += `<div class="row">${html_cols}</div>`
+    }
+    var select_all_or_none_btn = document.getElementById('select_all_or_none');
+    if(!checked_all) {
+        select_all_or_none_btn.innerHTML = 'Select All';
+    }
+    else {
+        select_all_or_none_btn.innerHTML = 'Select None';
+    }
+    select_all_or_none_btn.onclick = () => {selectAllChannels(!checked_all)};
+    document.getElementById('channels').innerHTML = html;
+
+    loadSleepStageSettings()                     
 }
 
 showStatusMessage = (msg, type='info') => {
