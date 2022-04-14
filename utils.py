@@ -1,12 +1,18 @@
 import sys, os, pdb
 import numpy as np
 from scipy import stats
-import matplotlib as mpl
-#mpl.use('TkAgg')
 from matplotlib import pyplot as plt
 from itertools import islice
+import matplotlib
+from matplotlib import font_manager, rcParams
+font_dir = ['web_version/static/css/Source_Serif_Pro']
+for font in font_manager.findSystemFonts(font_dir):
+    font_manager.fontManager.addfont(font)
 
-plt.rcParams["font.family"] = "serif"
+matplotlib.use('Agg')
+rcParams['font.family'] = 'serif'
+
+#plt.rcParams["font.family"] = "serif"
 
 # --------------------------------------------------------------------------
 class Config:

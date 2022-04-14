@@ -279,7 +279,7 @@ loadSettings = () => {
             let checked = channel_row[j][1];
             if(!checked) checked_all = false;
             html_cols += 
-            `<div class="col-6 col-md-3 col-xl-2 border border-light text-center">\
+            `<div class="col-6 col-md-3 col-xl-2 border border-light">\
                 <input class="form-check-input" type="checkbox" name="channel_values" value="${ch_name}" ${checked}>\
                 <label class="form-check-label" for="${ch_name}">${ch_name}</label>\
             </div>`
@@ -302,7 +302,7 @@ loadSettings = () => {
         annot = annots_left_settings[i];
         html += 
         `<div class="row"> \
-            <div class="col-2"> \
+            <div class="col-1"> \
                 <input class="form-check-input" type="checkbox" name="annot_checkbuttons_left" value="${annot}"> \
             </div> \
             <div class="col"> \
@@ -322,7 +322,7 @@ loadSettings = () => {
             annot = annots[i];
             html += 
             `<div class="row"> \
-                <div class="col-2"> \
+                <div class="col-1"> \
                     <input class="form-check-input" type="checkbox" name="annot_checkbuttons_right" value="${annot}"> \
                 </div> \
                 <div class="col"> \

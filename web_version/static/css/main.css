@@ -1,34 +1,21 @@
+@font-face {
+    font-family: custom;
+    /*src: url(Alegreya/Alegreya-VariableFont_wght.ttf);*/
+    /*src: url(Ubuntu/Ubuntu-Medium.ttf)*/
+    /*src: url(Lora/static/Lora-Medium.ttf)*/
+    /*src: url(Noto_Serif/NotoSerif-Regular.ttf)*/
+    src: url(Source_Serif_Pro/SourceSerifPro-SemiBold.ttf)
+    /*src: url(Cardo/Cardo-Regular.ttf)*/
+    /*src: url(Spectral/Spectral-Medium.ttf)*/
+}
+
 body {
     margin: 20;
-    font-family: Courier;
+    font-family: custom;
 }
 
 div#sleep_cycles, div#sleep_stages {
     height: 551px;
-}
-
-.h-5 {
-    height: 5%;
-}
-
-.h-30 {
-    height: 30%;
-}
-
-.h-40 {
-    height: 40%;
-}
-
-.h-60 {
-    height: 60%;
-}
-
-.h-65 {
-    height: 65%;
-}
-
-.h-95 {
-    height: 95%;
 }
 
 textarea {

@@ -5,8 +5,6 @@ from matplotlib.patches import Rectangle
 from datetime import timedelta, datetime
 from utils import Config, plt, loadFileNames, createDir, showPercBar, readFileInTable, writeDataTableAsText
 import tkinter as tk
-import matplotlib
-matplotlib.use('Agg')
 
 class SpecialError(Exception):
     def __init__(self, msg):
