@@ -281,7 +281,7 @@ loadSettings = () => {
             html_cols += 
             `<div class="col-6 col-md-3 col-xl-2 border border-light">\
                 <input class="form-check-input" type="checkbox" name="channel_values" value="${ch_name}" ${checked}>\
-                <label class="form-check-label" for="${ch_name}">${ch_name}</label>\
+                <label class="form-check-label ms-2" for="${ch_name}">${ch_name}</label>\
             </div>`
         }
         html += `<div class="row">${html_cols}</div>`
