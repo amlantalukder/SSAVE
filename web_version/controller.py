@@ -68,13 +68,12 @@ class WebUIController(Controller):
             input_file_path = os.path.join(self.FOLDER_INPUT, f.filename)
             f.save(input_file_path)
             input_file_path = self.validate(input_file_path, 'input_file_path')
-            epoch_size = self.validate(view.form.get('epoch_size'), 'epoch_size')
 
-            if (file_type is None) or (input_file_path is None) or (epoch_size is None): raise Exception
+            if(input_file_path is None) or (file_type is None): raise Exception
 
-            other_data = {'input_file_path': input_file_path, 'file_type': file_type, 'epoch_size': epoch_size, 'apply_filter': False}
+            other_data = {'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
 
-            scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type, epoch_size)
+            scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type)
             if file_type == 'edf':
                 if scv_obj.eeg_data is None: scv_obj.loadEEG()
                 other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
@@ -83,6 +82,7 @@ class WebUIController(Controller):
                 other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
                 other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
                 other_data['FILTERS'] = scv.Config.FILTERS
+                other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
 
             other_data['state_changed'] = True
 
@@ -116,6 +116,8 @@ class WebUIController(Controller):
             freq_std_max = self.validate(view.form.get('freq_std_min_epoch_entry'), 'frequency', input_name='Minimum frequency standard deviation in an epoch')
             bad_annots = view.form.getlist('bad_annots_list')
 
+            epoch_size = self.validate(view.form.get('epoch_size'), 'epoch_size')
+
             if len(channels_selected) == 0:
                 return (False, "No channels selected")
 
@@ -135,6 +137,7 @@ class WebUIController(Controller):
             other_data['FILTERS']['amplitude_max'] = amplitude_max
             other_data['FILTERS']['flat_signal'] = [flat_signal_duration, freq_std_min, freq_std_max]
             other_data['FILTERS']['bad_annots'] = bad_annots
+            other_data['EPOCH_SIZE'] = epoch_size
 
             other_data['state_changed'] = True
 
@@ -148,34 +151,35 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def execute(self, view):
         
-        try:
+        #try:
 
-            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+        other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
-            scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['epoch_size'], other_data['apply_filter'])
-        
-            scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
-            scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
-            scv.Config.FILTERS = other_data['FILTERS']
+        scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['apply_filter'])
+    
+        scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
+        scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
+        scv.Config.FILTERS = other_data['FILTERS']
+        scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
 
-            if scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
-                scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
-                self.app.logger.info(f'Apply filter: {scv_obj.apply_filter}')
-                other_data['state_changed'] = True
+        if scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
+            scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
+            self.app.logger.info(f'Apply filter: {scv_obj.apply_filter}')
+            other_data['state_changed'] = True
 
-            self.app.logger.info(f'State changed: {self.state_changed}')
-            if other_data['state_changed']:
-                self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
-                self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
-                self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
-                self.app.logger.info('Removing old output files')
-                self.removeOutputFiles(scv_obj)
-                scv_obj.clearSleepData()
-                scv.extractSleepStages(scv_obj)
-                other_data['state_changed'] = False
+        self.app.logger.info(f'State changed: {self.state_changed}')
+        if other_data['state_changed']:
+            self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
+            self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
+            self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
+            self.app.logger.info('Removing old output files')
+            self.removeOutputFiles(scv_obj)
+            scv_obj.clearSleepData()
+            scv.extractSleepStages(scv_obj)
+            other_data['state_changed'] = False
 
-        except Exception as error:
-            return ('Failed', f"Execution failed, {str(error)}")
+        #except Exception as error:
+        #    return ('Failed', f"Execution failed, {str(error)}")
 
         return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), scv_obj.sample_name))
 
@@ -188,13 +192,15 @@ class WebUIController(Controller):
             channel_settings = self.getChannelSettings(other_data)
             annots_left_settings, annots_right_settings, sleep_stages = self.getSleepStageSettings(other_data)
             filter_settings, bad_annot_settings = self.getFilterSettings(other_data)
+            epoch_size = other_data['EPOCH_SIZE']
 
         except Exception as error:
             return ('Failed', f"Configuration could not be acquired, {str(error)}", None)
 
         return ('Success', "Configuration loaded successfully", (channel_settings, \
                                                                 annots_left_settings, annots_right_settings, sleep_stages, \
-                                                                filter_settings, bad_annot_settings))
+                                                                filter_settings, bad_annot_settings, \
+                                                                epoch_size))
 
     # --------------------------------------------------------------------------
     def getChannelSettings(self, other_data):

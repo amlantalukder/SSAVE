@@ -24,7 +24,7 @@ class SleepInfo:
     sleep_stages_epoch_wise = None
     sleep_cycles = None
     spectogram = None
-    epoch_size = 30
+    epoch_size = None
     enable_cache = False
     use_cache = True
     #folder_cache = f'{Config.FOLDER_PROCESSED_DATA}/sleep_data_epoch_wise_shifted'
@@ -74,8 +74,7 @@ class SleepInfo:
         # --------------------------------------------------------------------------
         # Read eeg signal data
         # --------------------------------------------------------------------------
-        #self.edf_file_path = 'test_edf.edf'
-        #self.edf_file_path = f'{self.folder_cache}/{self.sample_name}_al.edf'
+        self.epoch_size = Config.EPOCH_SIZE
         self.eeg_data = mne.io.read_raw_edf(self.edf_file_path, verbose=False)
         
         self.sampling_freq = float(self.eeg_data.info['sfreq'])
@@ -574,7 +573,7 @@ def printDec(msg):
     print("")
 
 # --------------------------------------------------------------------------
-def loadSleepData(input_file_path, output_folder_path, input_file_type="edf", epoch_size=30, apply_filter=False):
+def loadSleepData(input_file_path, output_folder_path, input_file_type="edf", apply_filter=False):
 
     edf_file_path, annot_file_path = None, None
 
@@ -597,7 +596,6 @@ def loadSleepData(input_file_path, output_folder_path, input_file_type="edf", ep
     # --------------------------------------------------------------------------
  
     sleep_obj = SleepInfo(sample_name=sample_name, edf_file_path=edf_file_path, annot_file_path=annot_file_path, input_file_type=input_file_type, use_cache=False)
-    sleep_obj.epoch_size = epoch_size
     sleep_obj.folder_cache = output_folder_path
 
     return sleep_obj

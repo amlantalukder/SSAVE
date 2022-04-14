@@ -24,7 +24,8 @@ def config(job_id):
     status, response, data = controller.getConfig()
     channel_settings, \
     annots_left_settings, annots_right_settings, sleep_stages, \
-    filter_settings, bad_annot_settings = data
+    filter_settings, bad_annot_settings, \
+    epoch_size = data
 
     app.logger.info(f'Configuration response: {response}, job id: {job_id}')
 
@@ -34,7 +35,8 @@ def config(job_id):
                                             annots_right_settings=annots_right_settings,
                                             sleep_stages=sleep_stages,
                                             filter_settings=filter_settings,
-                                            bad_annot_settings=bad_annot_settings)
+                                            bad_annot_settings=bad_annot_settings,
+                                            epoch_size=epoch_size)
 
 @app.route('/load/<job_id>', methods = ['POST'])
 def loadData(job_id):
