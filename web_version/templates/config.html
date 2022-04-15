@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block body %}
-<div id="settings" class="container border mt-5">
+<div id="settings" class="container border">
   <div class="row ">
     <div class="col text-center">
       <h4>
@@ -55,45 +55,89 @@
                   </div>
                   <div id="select_sleep_stages" class="tab-pane">
                     <div class="row m-2">
-                      <div class="col-5">
-                        <span class="lead">Annotations</span>
-                      </div>
-                      <div class="col-2">
-                      </div>
-                      <div class="col-5">
-                        <select id="sleep_stages" class="form-select w-100" onchange="showSleepStageAnnots(value, event);">
-                          {% for i in range(sleep_stages|length) %}
-                            {% if i == 0 %}
-                            <option value="{{ sleep_stages[i] }}" selected>{{ sleep_stages[i] }}</option>
-                            {% else %}
-                            <option value="{{ sleep_stages[i] }}">{{ sleep_stages[i] }}</option>
-                            {% endif %}
-                            {% endfor %}
-                        </select>
-                      </div>
-                    </div>
-                    <div class="row m-2">
-                      <div id="annotations" class="col-5 overflow-auto border" style="height:550px"></div>
-                      <div class="col-2 m-auto">
-                        <div class="row">
-                          <div class="col-12 p-1 text-center">
-                            <a class="btn btn-primary" onclick="moveAnnotsToRightPanel();">&gt;&gt;</a>
-                          </div>
-                          <div class="col-12 p-1 text-center">
-                            <a class="btn btn-primary" onclick="moveAnnotsToLeftPanel();">&#60;&#60;</a>
+                      <div class="col">
+                        <div class="row" style="height:30px">
+                          <div class="col m-auto text-center">
+                            <span class="lead">Annotations</span>
                           </div>
                         </div>
+                        <div class="row">
+                          <div id="annotations" class="col overflow-auto border pt-1 pb-1" style="height:550px"></div>
+                        </div>
                       </div>
-                      <div id="annotations_selected" class="col-5 overflow-auto border" style="height:550px"></div>
+                      <div class="col-auto">
+                        <div class="row" style="height:30px">
+                        </div>
+                        <div class="row" style="height: 250px;">
+                          <div class="col m-auto">
+                            <div class="row">
+                              <div class="col-auto p-1 text-center">
+                                <a class="btn btn-primary" onclick="moveAnnotsToRightPanel();">&gt;&gt;</a>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div class="col-auto p-1 text-center">
+                                <a class="btn btn-primary" onclick="moveAnnotsToLeftPanel();">&#60;&#60;</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row"></div>
+                      </div>
+                      <div class="col">
+                        <div class="row" style="height:30px">
+                          <div class="col m-auto text-center">
+                            <span class="lead">Assigned Annotations</span>
+                          </div>
+                        </div>
+                        <div class="row border border-1 p-2" style="height: 250px;">
+                          <div class="col">
+                            <div class="row">
+                              <div class="col">
+                                <select id="sleep_stages" class="form-select w-100" onchange="showSleepStageAnnots(value, event);">
+                                  {% for i in range(sleep_stages|length) %}
+                                    {% if i == 0 %}
+                                    <option value="{{ sleep_stages[i] }}" selected>{{ sleep_stages[i] }}</option>
+                                    {% else %}
+                                    <option value="{{ sleep_stages[i] }}">{{ sleep_stages[i] }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                              </div>
+                            </div>
+                            <div class="row">
+                              <div id="annotations_selected" class="col overflow-auto border p-2" style="height:200px"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row mt-5 overflow-auto border border-1" style="height:250px">
+                          <table class="table table-bordered table-responsive-md text-center">
+                            <thead>
+                              <tr>
+                                <td>SLEEP STAGES</td>
+                                <td>SELECTED ANNOTATIONS</td>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {% for i in range(sleep_stages|length) %}
+                              <tr>
+                                <td>{{sleep_stages[i]}}</td>
+                                <td id="st_annot_td_{{sleep_stages[i]}}"></td>
+                              </tr>
+                              {%endfor%}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div id="set_filters" class="row tab-pane m-2">
                     <div class="col">
                       <div class="row border border-light m-1">
-                        <div class="col-md-9">
+                        <div class="col-9">
                           <label class="float-end" for="notch_freq_entry">Notch filter frequency (Hz):</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-3">
                           <input type="text" class="form-control form-control-sm" name="notch_freq_entry" value="{{filter_settings['notch']}}">
                         </div>
                       </div>
@@ -103,28 +147,28 @@
                             <h5>Bandpass filter options</h5>
                           </div>
                           <div class="row border border-light m-1">
-                            <div class="col-md-9">
+                            <div class="col-9">
                               <label class="float-end" for="bandpass_min_freq_entry">Minimum frequency (Hz):</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-3">
                               <input type="text" class="form-control form-control-sm" name="bandpass_min_freq_entry" value="{{filter_settings['bandpass'][0]}}">
                             </div>
                           </div>
                           <div class="row border border-light m-1">
-                            <div class="col-md-9">
+                            <div class="col-9">
                               <label class="float-end" for="bandpass_max_freq_entry">Maximum frequency (Hz):</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-3">
                               <input type="text" class="form-control form-control-sm" name="bandpass_max_freq_entry" value="{{filter_settings['bandpass'][1]}}">
                             </div>
                           </div>
                         </div>
                       </div>
                       <div class="row border border-light m-1">
-                        <div class="col-md-9">
+                        <div class="col-9">
                           <label class="float-end" for="amplitude_max_entry">Maximum amplitude (micro Volt):</label>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-3">
                           <input type="text" class="form-control form-control-sm" name="amplitude_max_entry" value="{{filter_settings['amplitude_max']}}">
                         </div>
                       </div>
@@ -134,26 +178,26 @@
                             <h5>Flat signal filter options</h5>
                           </div>
                           <div class="row border border-light m-1">
-                            <div class="col-md-9">
+                            <div class="col-9">
                               <label class="float-end" for="flat_signal_duration_entry">Duration (seconds):</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-3">
                               <input type="text" class="form-control form-control-sm" name="flat_signal_duration_entry" value="{{filter_settings['flat_signal'][0]}}">
                             </div>
                           </div>
                           <div class="row border border-light m-1">
-                            <div class="col-lg-9">
+                            <div class="col-9">
                               <label class="float-end" for="freq_std_min_flat_entry">Minimum frequency standard deviation in flat signal duration:</label>
                             </div>
-                            <div class="col-lg-3">
+                            <div class="col-3">
                               <input type="text" class="form-control form-control-sm" name="freq_std_min_flat_entry" value="{{filter_settings['flat_signal'][1]}}">
                             </div>
                           </div>
                           <div class="row border border-light m-1">
-                            <div class="col-md-9">
+                            <div class="col-9">
                               <label class="float-end" for="freq_std_min_epoch_entry">Minimum frequency standard deviation in an epoch:</label>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-3">
                               <input type="text" class="form-control form-control-sm" name="freq_std_min_epoch_entry" value="{{filter_settings['flat_signal'][2]}}">
                             </div>
                           </div>
@@ -165,7 +209,7 @@
                             <h5>Annotations to remove from consideration</h5>
                           </div>
                           <div class="row">
-                            <div class="col d-flex flex-column" style="height:240px">
+                            <div id="bad_annotations" class="col d-flex flex-column">
                               <div class="row flex-grow-1 border border-light overflow-auto">
                               {% for annot, checked in bad_annot_settings %}
                                 <div class="row border border-light">

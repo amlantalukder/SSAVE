@@ -5,76 +5,84 @@
 {% endblock %}
 
 {% block body %}
-<div id="main" class="container mt-5">
-  <div class="row">
+<div id="main" class="container">
+  <div class="row h-5">
     <div class="col p-2 text-center">
       <h4>SCVis - Sleep Cycle Visualization Tool</h4>
     </div>
   </div>
-  <div class="row">
-    <div id="status_area" class="col"></div>
-  </div>
-  <div class="row p-2">
-    <div class="col-md-5">
-      <div class="input_panel row border border-5">
-        <div class="col">
+  <div id="content" class="row p-2 h-95">
+    <div id="input_panel" class="col-md-5 d-flex flex-column">
+      <div class="row flex-grow-1 border border-5">
+        <div class="col d-flex flex-column">
           <form id="input_form">
-            <div class="row p-2 border">
-              <div class="col">
-                <h5>Load:</h5>
-                <input id="sample_file_path" type="file" accept=".edf" class="form-control form-control-sm" name="sample_file_path">
-                <div id="upload_progressbar" class="progress mt-1 d-none">
-                  <div id="input_file_upload_progess_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
-                </div>
-              </div>
-            </div>
-            <div class="row p-2 border">
-              <div class="col">
+            <div class="row ps-2 pe-2 pt-4 pb-4 border">
+              <div class="col-auto my-auto">
                 <h5>Sample Type:</h5>
-                <div class="row border border-light">
-                  <div class="col-md-12">
+              </div>
+              <div class="col-auto border border-1">
+                <div class="row">
+                  <div class="col-auto">
                     <input type="radio" name="file_type" value="edf" onchange="setSampleFileType();" checked>
+                  </div> 
+                  <div class="col-auto">
                     <label for="edf">EDF File</label>
                   </div>
-                  <div class="col-md-12">
+                </div>
+                <div class="row">
+                  <div class="col-auto">
                     <input type="radio" name="file_type" value="annot" onchange="setSampleFileType();">
+                  </div>
+                  <div class="col-auto">
                     <label for="annot">Annotation Epochs</label>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-          <div class="row border-top border-5 p-2">
-            <div class="col">
-              <div class="row">
-                <a class="btn btn-primary" onclick="loadData();">Load</a>
-              </div>
-              <form id="exec_form">
+            <div class="row ps-2 pe-2 pt-4 pb-1 border">
+              <div class="col">
                 <div class="row">
-                  <div class="col-md m-1 text-center">
-                    <a id="configure_btn" class="btn btn-info disabled" onclick="gotoConfigPage();" target="_blank">Configure</a>
+                  <div class="col">
+                    <input id="sample_file_path" type="file" accept=".edf" class="form-control form-control-sm mt-1 w-100" name="sample_file_path">
                   </div>
-                  <div class="col-md m-auto text-center">
-                    <input id="apply_filter_btn" class="form-check-input" type="checkbox" name="apply_filter" disabled>
-                    <label id="apply_filter_label" class="form-check-label" for="apply_filter" disabled>Apply Filter</label>
+                  <div class="col-auto text-end">
+                    <a class="btn btn-primary" onclick="loadData();">Load</a>
                   </div>
                 </div>
-              </form>
-              <div class="row">
-                <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
+                <div class="row">
+                  <div class="col">
+                    <div id="upload_progressbar" class="progress mt-1 invisible">
+                      <div id="input_file_upload_progess_bar" class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="row">
-            <textarea id="status_textarea" class="form-control w-100" style="height:270px" readonly></textarea>
+          </form>
+          <form id="exec_form">
+            <div class="row border-top border-5 p-2">
+              <div class="col m-auto text-start">
+                <a id="configure_btn" class="btn btn-info disabled" onclick="gotoConfigPage();" target="_blank">Configure</a>
+              </div>
+              <div class="col m-auto text-center">
+                <input id="apply_filter_btn" class="form-check-input" type="checkbox" name="apply_filter" disabled>
+                <label id="apply_filter_label" class="form-check-label" for="apply_filter" disabled>Apply Filter</label>
+              </div>
+              <div class="col m-auto text-end">
+                <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
+              </div>  
+            </div>
+          </form>
+          <div class="row flex-grow-1">
+            <textarea id="status_textarea" class="form-control w-100 flex-grow-1" readonly></textarea>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-md-7">
-      <div class="output_panel row h-100 border">
+    <div id="output_panel" class="col-md-7">
+      <div class="row h-100 border pt-1 pb-1">
         <div class="col">
-          <div class="row mt-1">
+          <div class="row">
             <div class="col">
               <ul class="nav nav-tabs d-flex">
                 <li class="nav-item">

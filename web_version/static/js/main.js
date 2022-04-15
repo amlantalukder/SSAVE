@@ -45,7 +45,7 @@ loadData = () => {
                 if (evt.lengthComputable) {
                     var progress_val = evt.loaded / evt.total;
                     progress_val = parseInt(progress_val * 100);
-                    $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class').replace('d-none', ''));
+                    $('#upload_progressbar').attr('class', replaceClass($('#upload_progressbar').attr('class'), 'invisible', ''));
                     $('#input_file_upload_progess_bar').width(progress_val+'%');
                     $('#input_file_upload_progess_bar').html(progress_val+'%');
                 }
@@ -60,7 +60,7 @@ loadData = () => {
         contentType: false,
         type: 'POST',
         success: function (result) {
-            $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class') + ' d-none');
+            $('#upload_progressbar').attr('class', $('#upload_progressbar').attr('class') + ' invisible');
             var status = result[0];
             var msg = result[1];
             showStatus(msg);
@@ -291,6 +291,7 @@ loadSleepStageSettings = () => {
 
     for(const [sleep_stage, annots] of Object.entries(annots_right_settings)) {
         var html = '';
+        var annots_selected = '';
         for(var i in annots){
             annot = annots[i];
             html += 
@@ -302,6 +303,10 @@ loadSleepStageSettings = () => {
                     <label class="form-check-label" for="${annot}">${annot}</label> \
                 </div> \
             </div>`
+            if (annots_selected == '')
+                annots_selected = annot
+            else
+                annots_selected += (', ' + annot)
         }
         class_name = 'row';
         if(sleep_stage != sleep_stage_selected)
@@ -309,6 +314,8 @@ loadSleepStageSettings = () => {
         document.getElementById('annotations_selected').innerHTML += `<div id="${sleep_stage}" class="${class_name}">\
                                                                     <div class="col">${html}</div>\
                                                                    </div>`;
+
+        document.getElementById(`st_annot_td_${sleep_stage}`).innerHTML = annots_selected;
     }
 
 }
