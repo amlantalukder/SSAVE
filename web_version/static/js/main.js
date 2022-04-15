@@ -13,6 +13,17 @@ setSampleFileType = () => {
     }
 }
 
+enableLoadButton = () => {
+    if(document.getElementById("sample_file_path").files.length > 0) {
+        document.getElementById("sample_file_path_proxy").value = document.getElementById("sample_file_path").files[0].name;
+        document.getElementById('load_btn').className = replaceClass(document.getElementById('load_btn').className, 'disabled', '');
+    }
+    else {
+        document.getElementById("sample_file_path_proxy").value = "No file chosen";
+        document.getElementById('load_btn').className = addClass(document.getElementById('load_btn').className, 'disabled');
+    }
+}
+
 loadData = () => {
 
     for(var id in arr=['configure_btn', 'execute_btn', 'download_btn']){
@@ -396,4 +407,10 @@ showStatus = msg => {
 replaceClass = (class_str, class_to_replace, class_to_replace_with) => {
     let regexp = new RegExp("\\b" + class_to_replace + "\\b");
     return class_str.replace(regexp, class_to_replace_with);
+}
+
+addClass = (class_str, class_to_add) => {
+    let regexp = new RegExp("\\b" + class_to_add + "\\b");
+    if(class_str.search(regexp) == -1) class_str += ' ' + class_to_add;
+    return class_str
 }

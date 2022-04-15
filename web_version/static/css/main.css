@@ -47,7 +47,7 @@ textarea {
     h5, span.lead {
         font-size: 12px;
     }
-    body, a.btn, .form-control select.form-select{
+    body, a.btn, .form-control, select.form-select{
         font-size: 10px;
     }
 

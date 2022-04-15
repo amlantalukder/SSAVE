@@ -114,14 +114,14 @@
                           <table class="table table-bordered table-responsive-md text-center">
                             <thead>
                               <tr>
-                                <td>SLEEP STAGES</td>
+                                <td style="width:25%">SLEEP STAGES</td>
                                 <td>SELECTED ANNOTATIONS</td>
                               </tr>
                             </thead>
                             <tbody>
                               {% for i in range(sleep_stages|length) %}
                               <tr>
-                                <td>{{sleep_stages[i]}}</td>
+                                <td style="vertical-align:middle">{{sleep_stages[i]}}</td>
                                 <td id="st_annot_td_{{sleep_stages[i]}}"></td>
                               </tr>
                               {%endfor%}
