@@ -151,35 +151,35 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def execute(self, view):
         
-        #try:
+        try:
 
-        other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
-        scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['apply_filter'])
-    
-        scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
-        scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
-        scv.Config.FILTERS = other_data['FILTERS']
-        scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
+            scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['apply_filter'])
+        
+            scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
+            scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
+            scv.Config.FILTERS = other_data['FILTERS']
+            scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
 
-        if scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
-            scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
-            self.app.logger.info(f'Apply filter: {scv_obj.apply_filter}')
-            other_data['state_changed'] = True
+            if scv_obj.apply_filter != (view.form.get('apply_filter') == 'on'):
+                scv_obj.apply_filter = (view.form.get('apply_filter') == 'on')
+                self.app.logger.info(f'Apply filter: {scv_obj.apply_filter}')
+                other_data['state_changed'] = True
 
-        self.app.logger.info(f'State changed: {self.state_changed}')
-        if other_data['state_changed']:
-            self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
-            self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
-            self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
-            self.app.logger.info('Removing old output files')
-            self.removeOutputFiles(scv_obj)
-            scv_obj.clearSleepData()
-            scv.extractSleepStages(scv_obj)
-            other_data['state_changed'] = False
+            self.app.logger.info(f'State changed: {self.state_changed}')
+            if other_data['state_changed']:
+                self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
+                self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
+                self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
+                self.app.logger.info('Removing old output files')
+                self.removeOutputFiles(scv_obj)
+                scv_obj.clearSleepData()
+                scv.extractSleepStages(scv_obj)
+                other_data['state_changed'] = False
 
-        #except Exception as error:
-        #    return ('Failed', f"Execution failed, {str(error)}")
+        except Exception as error:
+            return ('Failed', f"Execution failed, {str(error)}")
 
         return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), scv_obj.sample_name))
 
