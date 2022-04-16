@@ -40,6 +40,10 @@ textarea {
     height: 95%;
 }
 
+.lead {
+    color:white;
+}
+
 @media only screen and (max-width: 600px) {
     #output_panel {
       margin-top:10pt;

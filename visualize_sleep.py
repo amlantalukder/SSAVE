@@ -101,7 +101,7 @@ class SleepInfo:
     # --------------------------------------------------------------------------
     def applyFilterOnEEG(self):
 
-        print(Config.FILTERS)
+        print(f'Applying filters:', Config.FILTERS)
 
         if self.sampling_freq/2 > Config.FILTERS['notch']:
             self.eeg_data_epoch_wise = mne.filter.notch_filter(self.eeg_data_epoch_wise, self.sampling_freq, Config.FILTERS['notch'], fir_design="firwin", verbose=False)
