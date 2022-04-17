@@ -95,8 +95,7 @@ execute = () => {
 
     showStatus('Executing...');
     document.getElementById('vis_image').src = `${assets_folder}/loading.jpg`;
-    document.getElementById('sc_table_content').innerHTML = '';
-    document.getElementById('st_table_content').innerHTML = '';
+    document.getElementById('sc_st_table_content').innerHTML = '';
 
     let myform = document.getElementById("exec_form");
     let fd = new FormData(myform);
@@ -120,31 +119,65 @@ execute = () => {
 
             showStatus('Output files generated')
             
-            src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
-            src_sc_data = `${data_folder}/${msg}_sc.txt`
-            src_st_data = `${data_folder}/${msg}_st.txt`
+            let src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
+            let src_sc_data = `${data_folder}/${msg}_sc.txt`
+            let src_st_data = `${data_folder}/${msg}_st.txt`
 
             document.getElementById('vis_image').src = src_viz;
 
             tabulateData = data => {
-                html = ''
+                let data_tab = [];
                 data.split('\n').forEach((row, index) => {
-                    html_row = ''
-                    row.split('\t').forEach((col) => {
+                    data_tab.push(row.split('\t'));
+                })
+                return data_tab
+            }
+        
+            getCombinedTable = (data_tab1, data_tab2) => {
+        
+                makeHTMLRow = (last_epoch, i, data_comb) => {
+                    let html_row = '';
+                    if(i != last_epoch)
+                        html_row = `<td>${last_epoch}-${i}</td>`;
+                    else
+                        html_row = `<td>${last_epoch}</td>`;
+                    data_comb.forEach((col) => {
                         html_row += `<td>${col}</td>`
                     })
-                    html += `<tr><td>${index+1}</td>${html_row}</tr>`
-                })
-                return html
+                    return html_row;
+                }
+        
+                isEqArr = (array1, array2) => {
+                    return (array1.length == array2.length) && array1.every(function(element, index) {
+                                                                        return element === array2[index]; 
+                    });
+                }
+        
+                var html = '';
+                for(var i=0; i < data_tab1.length; i++)
+                {
+                    if(i==0 || !isEqArr(data_comb, [...data_tab1[i], ...data_tab2[i]])){
+                        if(i > 0){
+                            html += ('<tr>' + makeHTMLRow(last_epoch, i, data_comb) + '</tr>');
+                        }
+                        data_comb = [...data_tab1[i], ...data_tab2[i]];
+                        last_epoch = i+1
+                    }
+                    if(i == (data_tab1.length-1)){
+                        html += ('<tr>' + makeHTMLRow(last_epoch, i+1, data_comb) + '</tr>');
+                    }
+                }
+        
+                return html;
             }
-
-            $.get(src_sc_data, function(data) {   
-                document.getElementById('sc_table_content').innerHTML = tabulateData(data);
-             }, 'text');
-
-             $.get(src_st_data, function(data) {   
-                document.getElementById('st_table_content').innerHTML = tabulateData(data);
-             }, 'text');
+        
+            $.get(src_sc_data, function(data) {
+                let data_tab1 = tabulateData(data);
+                $.get(src_st_data, function(data) {   
+                    let data_tab2 = tabulateData(data);
+                    document.getElementById('sc_st_table_content').innerHTML = getCombinedTable(data_tab1, data_tab2)
+                }, 'text');
+            }, 'text');
 
             document.getElementById('download_btn').className = replaceClass(document.getElementById('download_btn').className, 'disabled', '' );
         }

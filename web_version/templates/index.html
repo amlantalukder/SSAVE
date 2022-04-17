@@ -96,10 +96,7 @@
                   <a class="nav-link active" aria-current="page" href="#visualization" data-bs-toggle="tab">Visualization</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#sleep_cycles" data-bs-toggle="tab">Sleep Cycles</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#sleep_stages" data-bs-toggle="tab">Sleep Stages</a>
+                  <a class="nav-link" href="#sleep_cycles_stages" data-bs-toggle="tab">Sleep Cycles and Stages</a>
                 </li>
                 <li class="flex-grow-1">
                   <a id="download_btn" class="btn btn-primary float-end disabled" onclick="downloadOutputs()">Download</a>
@@ -109,38 +106,35 @@
           </div>
           <div class="row">
             <div class="col">
-                <div class="tab-content border">
-                    <div id="visualization" class="tab-pane active p-1">
-                      <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
-                    </div>
-                    <div id="sleep_cycles" class="tab-pane overflow-auto">
-                      <table class="table table-bordered table-responsive-md text-center">
-                        <thead>
-                          <tr>
-                            <td>EPOCH</td>
-                            <td>SLEEP CYCLE INDEX</td>
-                            <td>SLEEP CYCLE</td>
-                          </tr>
-                        </thead>
-                        <tbody id="sc_table_content">
-                          <tr></tr>
-                        </tbody>
-                      </table>
-                    </div>
-                    <div id="sleep_stages" class="tab-pane overflow-auto">
-                      <table class="table table-bordered table-responsive-md text-center">
-                        <thead>
-                          <tr>
-                            <td>EPOCH</td>
-                            <td>SLEEP STAGE</td>
-                          </tr>
-                        </thead>
-                        <tbody id="st_table_content">
-                          <tr></tr>
-                        </tbody>
-                      </table>
-                    </div>
+              <div class="tab-content border">
+                <div id="visualization" class="tab-pane active p-1">
+                  <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
                 </div>
+                <div id="sleep_cycles_stages" class="tab-pane overflow-auto">
+                  <table class="table table-bordered table-responsive-md text-center">
+                    <thead>
+                      <tr>
+                        <td>EPOCH</td>
+                        <td>SLEEP CYCLE INDEX</td>
+                        <td>SLEEP CYCLE</td>
+                        <td>SLEEP STAGE</td>
+                      </tr>
+                    </thead>
+                    <tbody id="sc_st_table_content"></tbody>
+                  </table>
+                </div>
+                <div id="sleep_stages" class="tab-pane overflow-auto">
+                  <table class="table table-bordered table-responsive-md text-center">
+                    <thead>
+                      <tr>
+                        <td>EPOCH</td>
+                        <td>SLEEP STAGE</td>
+                      </tr>
+                    </thead>
+                    <tbody id="st_table_content"></tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </div>
         </div>

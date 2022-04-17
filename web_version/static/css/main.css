@@ -20,7 +20,7 @@ div.container {
     /*height: 828px;*/
 }
 
-div#sleep_cycles, div#sleep_stages {
+div#sleep_cycles_stages {
     height: 551px;
 }
 
