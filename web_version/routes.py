@@ -2,6 +2,7 @@ import uuid, pdb
 from web_version.controller import WebUIController
 from flask import render_template, redirect, request, jsonify, url_for
 from web_version import app
+import numpy as np
 
 print(id(app))
 
@@ -60,7 +61,16 @@ def execute(job_id):
     
     app.logger.info(f'Execution response: {response}, job id: {job_id}')
     
-    return jsonify(response)
+    status, msg, *cut_options_settings = response
+
+    if cut_options_settings:
+        cut_options, cut_options_selected = cut_options_settings
+        cut_options = list(np.array(cut_options, dtype=str))
+        cut_options_selected = list(np.array(cut_options_selected, dtype=str))
+
+        return jsonify({'status':status, 'msg':msg, 'cut_options':cut_options, 'cut_options_selected':cut_options_selected})
+    
+    return jsonify({'status':status, 'msg':msg})
 
 @app.route('/savesettings/<job_id>', methods = ['POST'])
 def saveSettings(job_id):
@@ -71,7 +81,7 @@ def saveSettings(job_id):
     response = controller.saveSettings(request)
     
     app.logger.info(f'Save settings response: {response}, job id: {job_id}')
-    
+
     return jsonify(response)
 
 @app.route('/download/<job_id>', methods = ['GET'])

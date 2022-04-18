@@ -95,6 +95,9 @@
                 <li class="nav-item">
                   <a class="nav-link active" aria-current="page" href="#visualization" data-bs-toggle="tab">Visualization</a>
                 </li>
+                <li id="nremp_cut_options_tab" class="nav-item d-none">
+                  <a class="nav-link" href="#nremp_cut_options" data-bs-toggle="tab">NREMP cut points</a>
+                </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#sleep_cycles_stages" data-bs-toggle="tab">Sleep Cycles and Stages</a>
                 </li>
@@ -108,7 +111,40 @@
             <div class="col">
               <div class="tab-content border">
                 <div id="visualization" class="tab-pane active p-1">
-                  <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                  <div class="row">
+                    <div id="nremp_cut_option_msg" class="col">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                  </div>
+                </div>
+                <div id="nremp_cut_options" class="tab-pane">
+                  <div class="row m-1">
+                    <div class="col text-center m-auto">
+                      <span style="font-size: 0.8rem;">
+                        We have found the following cut options for longer NREM Cycle. Please select the options you like and click "Execute".
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col">
+                      <table class="table table-bordered table-responsive-md text-center" style="font-size: 0.8rem;">
+                        <thead>
+                          <tr>
+                            <td>NREMP EPOCH RANGE</td>
+                            <td>SLEEP CYCLE INDEX</td>
+                            <td>CUT POINT EPOCH</td>
+                            <td>ACTION</td>
+                          </tr>
+                        </thead>
+                        <tbody id="nremp_cut_options_table_content"></tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <img id="vis_image_1" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                  </div>
                 </div>
                 <div id="sleep_cycles_stages" class="tab-pane overflow-auto">
                   <table class="table table-bordered table-responsive-md text-center">

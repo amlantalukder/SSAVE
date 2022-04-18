@@ -33,6 +33,8 @@ class SleepInfo:
     shift_len = 0
     apply_filter = False
     bad_epoch_indices = []
+    cut_options = []
+    cut_options_selected = []
 
     # --------------------------------------------------------------------------
     # Initialize object with sample name and epoch size (optional)
@@ -260,7 +262,7 @@ class SleepInfo:
     # --------------------------------------------------------------------------
     # Find cut options of long NREMP cycles
     # --------------------------------------------------------------------------
-    def getCutOptions(self):
+    def setCutOptions(self):
 
         # --------------------------------------------------------------------------
         def getGroupWiseCounts(arr):
@@ -279,12 +281,16 @@ class SleepInfo:
             duration_non_w = 0
             for stage, duration in sleep_stage_durations:
                 if stage != Config.WAKE_STAGE: duration_non_w += duration
-                if ((stage == Config.WAKE_STAGE and duration >= 2) or (stage == Config.N1_STAGE and duration >= 7)) and \
-                    ((stage == Config.WAKE_STAGE and duration_non_w > 10 and (total_duration_non_w - duration_non_w) > 10) or \
-                        (stage == Config.N1_STAGE and (duration_non_w - duration) > 10 and (total_duration_non_w - duration_non_w) > 10)):
-                    cut_options.append(index)
+                if ((stage == Config.WAKE_STAGE and duration >= durationInEpoch(1)) or (stage == Config.N1_STAGE and duration > durationInEpoch(3))) and \
+                    ((stage == Config.WAKE_STAGE and duration_non_w > durationInEpoch(5) and (total_duration_non_w - duration_non_w) > durationInEpoch(5)) or \
+                        (stage == Config.N1_STAGE and (duration_non_w - duration) > durationInEpoch(5) and (total_duration_non_w - duration_non_w) > durationInEpoch(5))):
+                    cut_options.append(index+1)
                 index += duration
             return cut_options
+
+        # --------------------------------------------------------------------------
+        def durationInEpoch(duration_in_minute):
+            return duration_in_minute * (60/self.epoch_size)
 
         # --------------------------------------------------------------------------
         # f. If a sleep cycle (usually NC) is longer than 120 minutes (240 epoch), 
@@ -297,7 +303,7 @@ class SleepInfo:
         cut_options_all = []
         
         for i, ([sc_id, sc], duration) in enumerate(sleep_cycle_durations):
-            if sc == 'NREMP' and duration > 240:
+            if sc == 'NREMP' and duration > durationInEpoch(120):
 
                 end_epoch = start_epoch + duration
                 
@@ -306,7 +312,7 @@ class SleepInfo:
                 duration_w = sum([d for stage, d in sleep_stage_durations if stage == Config.WAKE_STAGE])
                 duration_without_w = duration - duration_w
     
-                if duration > 240 and duration_w >= 6:
+                if duration > durationInEpoch(120) and duration_w >= durationInEpoch(3):
 
                     cut_options = np.array(getCutOptionsPerCycle(sleep_stage_durations, duration_without_w)) + start_epoch
                     if len(cut_options): print(f'NREMP (cycle {sc_id}) can be cut at {cut_options[:]}')
@@ -315,7 +321,7 @@ class SleepInfo:
 
             start_epoch += duration
 
-        return cut_options_all
+        self.cut_options = cut_options_all
 
     # --------------------------------------------------------------------------
     # Extract sleep cycles
@@ -415,10 +421,21 @@ class SleepInfo:
         j = 0
         for i in range(len(self.sleep_stages_epoch_wise)):
             if self.sleep_stages_epoch_wise[i] in Config.SLEEP_STAGE_ANNOTS:
-                self.sleep_cycles.append(sleep_cycles[j])
+                self.sleep_cycles.append(sleep_cycles[j][:])
                 j += 1
             else:
                 self.sleep_cycles.append(['NA', 'NA'])
+
+        self.setCutOptions()
+        
+        if len(self.cut_options_selected) > 0:
+            self.cut_options_selected = sorted(self.cut_options_selected)
+            sc_index_inc = j = 0
+            for i in range(self.cut_options_selected[j]-1, len(self.sleep_cycles)):
+                if j < len(self.cut_options_selected) and i == self.cut_options_selected[j]-1: 
+                    sc_index_inc += 1
+                    j += 1
+                if self.sleep_cycles[i][0] != 'NA': self.sleep_cycles[i][0] += sc_index_inc
         
         writeDataTableAsText(self.sleep_cycles, sleep_cycles_path)
 
@@ -494,7 +511,7 @@ class SleepInfo:
                         plt.gca().add_patch(overlay)
                     index_overlay_anchor = i
 
-            if 'NREMP' in sc_levels: ax_ss.vlines(self.getCutOptions(), 0, sc_levels['NREMP'], linestyles='dashed', colors='black')
+            #if 'NREMP' in sc_levels: ax_ss.vlines(self.getCutOptions(), 0, sc_levels['NREMP'], linestyles='dashed', colors='black')
 
         ax_ss.tick_params(axis='x', labelsize=Config.PLOT_TICKLABEL_FONT_SIZE)
         ax_ss.set_yticks(y_ticks)
@@ -545,7 +562,8 @@ class SleepInfo:
 
         self.extractEpochs()
         if show_spec: self.extractSpectogram(nw=2)
-        if show_sc: self.extractSleepCycles()
+        if show_sc: 
+            self.extractSleepCycles()
 
         fig_path = f'{self.folder_cache}/{self.sample_name}.jpg'
         #fig_path = f'{Config.FOLDER_PROCESSED_DATA}/temp2/{self.sample_name}.jpg'

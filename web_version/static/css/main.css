@@ -32,6 +32,10 @@ textarea {
     resize: none;
 }
 
+#status_textarea {
+    min-height: 100px;
+}
+
 .h-5 {
     height: 5%;
 }

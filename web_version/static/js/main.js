@@ -16,20 +16,18 @@ setSampleFileType = () => {
 enableLoadButton = () => {
     if(document.getElementById("sample_file_path").files.length > 0) {
         document.getElementById("sample_file_path_proxy").value = document.getElementById("sample_file_path").files[0].name;
-        document.getElementById('load_btn').className = replaceClass(document.getElementById('load_btn').className, 'disabled', '');
+        enableElement(document.getElementById('load_btn'));
     }
     else {
         document.getElementById("sample_file_path_proxy").value = "No file chosen";
-        document.getElementById('load_btn').className = addClass(document.getElementById('load_btn').className, 'disabled');
+        disableElement(document.getElementById('load_btn'));
     }
 }
 
 loadData = () => {
 
     for(var id in arr=['configure_btn', 'execute_btn', 'download_btn']){
-        let ele = document.getElementById(arr[id]);
-        let regexp = new RegExp("\\b" + 'disabled' + "\\b");
-        if(ele.className.search(regexp) == -1) ele.className += ' disabled';
+        disableElement(document.getElementById(arr[id]));
     }
 
     for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
@@ -77,7 +75,7 @@ loadData = () => {
             showStatus(msg);
             if(status == 'Failed') return;
             for(var id in arr=['configure_btn', 'execute_btn']){
-                document.getElementById(arr[id]).className = replaceClass(document.getElementById(arr[id]).className, 'disabled', '');
+                enableElement(document.getElementById(arr[id]));
             }
         
             for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
@@ -91,14 +89,141 @@ gotoConfigPage = () => {
     window.open(`/scvis/config/${job_id}`);
 }
 
+showExecutionResults = (result) => {
+
+    var status = result['status'];
+    var msg = result['msg'];
+
+    if(status == 'Failed'){
+        showStatus(msg);
+        document.getElementById('vis_image').src = `${assets_folder}/failed.jpg`;
+        return
+    }
+
+    showStatus('Output files generated')
+    
+    let src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
+    let src_sc_data = `${data_folder}/${msg}_sc.txt`
+    let src_st_data = `${data_folder}/${msg}_st.txt`
+
+    document.getElementById('vis_image').src = src_viz;
+    if(document.getElementById('vis_image_1')) document.getElementById('vis_image_1').src = src_viz;
+
+    tabulateData = data => {
+        let data_tab = [];
+        data.split('\n').forEach((row, index) => {
+            data_tab.push(row.split('\t'));
+        })
+        return data_tab
+    }
+
+    getCombinedTable = (data_tab1, data_tab2) => {
+
+        makeHTMLRow = (last_epoch, i, data_comb) => {
+            let html_row = '';
+            if(i != last_epoch)
+                html_row = `<td>${last_epoch}-${i}</td>`;
+            else
+                html_row = `<td>${last_epoch}</td>`;
+            data_comb.forEach((col) => {
+                html_row += `<td>${col}</td>`
+            })
+            return html_row;
+        }
+
+        isEqArr = (array1, array2) => {
+            return (array1.length == array2.length) && array1.every(function(element, index) {
+                                                                return element === array2[index]; 
+            });
+        }
+
+        var html = '';
+        for(var i=0; i < data_tab1.length; i++)
+        {
+            if(i==0 || !isEqArr(data_comb, [...data_tab1[i], ...data_tab2[i]])){
+                if(i > 0){
+                    html += ('<tr>' + makeHTMLRow(last_epoch, i, data_comb) + '</tr>');
+                }
+                data_comb = [...data_tab1[i], ...data_tab2[i]];
+                last_epoch = i+1
+            }
+            if(i == (data_tab1.length-1)){
+                html += ('<tr>' + makeHTMLRow(last_epoch, i+1, data_comb) + '</tr>');
+            }
+        }
+
+        return html;
+    }
+
+    $.get(src_sc_data, function(data) {
+        let data_tab1 = tabulateData(data);
+        $.get(src_st_data, function(data) {   
+            let data_tab2 = tabulateData(data);
+            document.getElementById('sc_st_table_content').innerHTML = getCombinedTable(data_tab1, data_tab2)
+        }, 'text');
+    }, 'text');
+
+    enableElement(document.getElementById('download_btn'));
+
+    if(result['cut_options'] && result['cut_options'].length > 0){
+
+        let cut_options = result['cut_options'];
+        let cut_options_selected = result['cut_options_selected'];
+
+        $.get(src_sc_data, function(data) {
+            let data_tab = tabulateData(data);
+            let html = '';
+            for(let i=0; i < cut_options.length; i++){
+                let checked = '';
+                if (cut_options_selected.find(x => x == cut_options[i]) != undefined)
+                    checked = 'checked';
+                let epoch = parseInt(cut_options[i]);
+                let sc_index = data_tab[epoch][0]
+                let start, end;
+                for(start=epoch; start >= 0 && sc_index == data_tab[start][0]; start--);
+                for(end=epoch; end < data_tab.length && sc_index == data_tab[end][0]; end++);
+                html += `<tr><td>${start+2}-${end}</td><td>${sc_index}</td><td>${cut_options[i]}</td><td>\
+                    <input class="form-check-input" type="checkbox" name="nremp_cut_options_chk" value="${epoch}" ${checked}>\
+                    </td></tr>`
+            }
+            document.getElementById('nremp_cut_options_table_content').innerHTML = html;
+        }, 'text');
+        let msg = 'We have found cut options for long NREM cycle. Please \
+            <a class="link-primary" href="#" onclick="activateTab(\'nremp_cut_options\');">click here</a>\
+                to show the options.'
+        document.getElementById('nremp_cut_option_msg').innerHTML = 
+            `<div class="alert alert-info alert-dismissible fade show text-center" style="font-size:0.8rem">\
+                ${msg}\
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>\
+            </div>`;
+
+        showElement(document.getElementById('nremp_cut_options_tab'));
+    }
+    else {
+        activateTab('visualization');
+        document.getElementById('nremp_cut_option_msg').innerHTML = '';
+        document.getElementById('nremp_cut_options_table_content').innerHTML = '';
+        hideElement(document.getElementById('nremp_cut_options_tab'));
+    }
+} 
+
 execute = () => {
 
     showStatus('Executing...');
     document.getElementById('vis_image').src = `${assets_folder}/loading.jpg`;
+    if(document.getElementById('vis_image_1')) document.getElementById('vis_image_1').src = `${assets_folder}/loading.jpg`;
     document.getElementById('sc_st_table_content').innerHTML = '';
 
     let myform = document.getElementById("exec_form");
     let fd = new FormData(myform);
+
+    let save_cut_options = document.getElementsByName('nremp_cut_options_chk');
+    if(save_cut_options){
+        for(let i=0; i < save_cut_options.length; i++){
+            if(save_cut_options[i].checked)
+                fd.append('nremp_cut_options_selected', save_cut_options[i].value);
+        }
+    }
     
     $.ajax({
         url: `/scvis/execute/${job_id}`,
@@ -108,78 +233,7 @@ execute = () => {
         contentType: false,
         type: 'POST',
         success: function (result) {
-            var status = result[0];
-            var msg = result[1];
-
-            if(status == 'Failed'){
-                showStatus(msg);
-                document.getElementById('vis_image').src = `${assets_folder}/failed.jpg`;
-                return
-            }
-
-            showStatus('Output files generated')
-            
-            let src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
-            let src_sc_data = `${data_folder}/${msg}_sc.txt`
-            let src_st_data = `${data_folder}/${msg}_st.txt`
-
-            document.getElementById('vis_image').src = src_viz;
-
-            tabulateData = data => {
-                let data_tab = [];
-                data.split('\n').forEach((row, index) => {
-                    data_tab.push(row.split('\t'));
-                })
-                return data_tab
-            }
-        
-            getCombinedTable = (data_tab1, data_tab2) => {
-        
-                makeHTMLRow = (last_epoch, i, data_comb) => {
-                    let html_row = '';
-                    if(i != last_epoch)
-                        html_row = `<td>${last_epoch}-${i}</td>`;
-                    else
-                        html_row = `<td>${last_epoch}</td>`;
-                    data_comb.forEach((col) => {
-                        html_row += `<td>${col}</td>`
-                    })
-                    return html_row;
-                }
-        
-                isEqArr = (array1, array2) => {
-                    return (array1.length == array2.length) && array1.every(function(element, index) {
-                                                                        return element === array2[index]; 
-                    });
-                }
-        
-                var html = '';
-                for(var i=0; i < data_tab1.length; i++)
-                {
-                    if(i==0 || !isEqArr(data_comb, [...data_tab1[i], ...data_tab2[i]])){
-                        if(i > 0){
-                            html += ('<tr>' + makeHTMLRow(last_epoch, i, data_comb) + '</tr>');
-                        }
-                        data_comb = [...data_tab1[i], ...data_tab2[i]];
-                        last_epoch = i+1
-                    }
-                    if(i == (data_tab1.length-1)){
-                        html += ('<tr>' + makeHTMLRow(last_epoch, i+1, data_comb) + '</tr>');
-                    }
-                }
-        
-                return html;
-            }
-        
-            $.get(src_sc_data, function(data) {
-                let data_tab1 = tabulateData(data);
-                $.get(src_st_data, function(data) {   
-                    let data_tab2 = tabulateData(data);
-                    document.getElementById('sc_st_table_content').innerHTML = getCombinedTable(data_tab1, data_tab2)
-                }, 'text');
-            }, 'text');
-
-            document.getElementById('download_btn').className = replaceClass(document.getElementById('download_btn').className, 'disabled', '' );
+            showExecutionResults(result);
         }
     });
 };
@@ -271,10 +325,10 @@ showSleepStageAnnots = (value, event) => {
 
     for(var i=0; i < event.srcElement.options.length; i++){
         if(event.srcElement.options[i].value == value){
-            document.getElementById(value).className = document.getElementById(value).className.replace( /(?:^|\s)d-none(?!\S)/g , '' );
+            showElement(document.getElementById(value));
         }
         else{
-            document.getElementById(event.srcElement.options[i].value).className += " d-none";
+            hideElement(document.getElementById(value));
         }
     }
 }
@@ -437,6 +491,22 @@ showStatus = msg => {
     status_area.scrollTop = status_area.scrollHeight;
 }
 
+showElement = (ele) => {
+    ele.className = replaceClass(ele.className, 'd-none', '');
+}
+
+hideElement = (ele) => {
+    ele.className = addClass(ele.className, 'd-none');
+}
+
+enableElement = (ele) => {
+    ele.className = replaceClass(ele.className, 'disabled', '');
+}
+
+disableElement = (ele) => {
+    ele.className = addClass(ele.className, 'disabled');
+}
+
 replaceClass = (class_str, class_to_replace, class_to_replace_with) => {
     let regexp = new RegExp("\\b" + class_to_replace + "\\b");
     return class_str.replace(regexp, class_to_replace_with);
@@ -446,4 +516,8 @@ addClass = (class_str, class_to_add) => {
     let regexp = new RegExp("\\b" + class_to_add + "\\b");
     if(class_str.search(regexp) == -1) class_str += ' ' + class_to_add;
     return class_str
+}
+
+activateTab = (tab) => {
+    $('.nav-tabs a[href="#' + tab + '"]').tab('show');
 }
