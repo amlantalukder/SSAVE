@@ -103,8 +103,8 @@ showExecutionResults = (result) => {
     showStatus('Output files generated')
     
     let src_viz = `${data_folder}/${msg}.jpg?dummy=${Date.now()}`
-    let src_sc_data = `${data_folder}/${msg}_sc.txt`
-    let src_st_data = `${data_folder}/${msg}_st.txt`
+    let src_sc_data = `${data_folder}/${msg}_sc.txt?dummy=${Date.now()}`
+    let src_st_data = `${data_folder}/${msg}_st.txt?dummy=${Date.now()}`
 
     document.getElementById('vis_image').src = src_viz;
     if(document.getElementById('vis_image_1')) document.getElementById('vis_image_1').src = src_viz;
