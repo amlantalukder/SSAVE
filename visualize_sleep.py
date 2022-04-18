@@ -491,7 +491,7 @@ class SleepInfo:
             index_overlay_anchor = None
 
             for i in range(len(self.sleep_cycles)):
-                cycle, stage_sc = self.sleep_cycles[i]
+                sc_index, stage_sc = self.sleep_cycles[i]
 
                 if index_overlay_anchor is None: index_overlay_anchor = i
 
@@ -502,9 +502,9 @@ class SleepInfo:
                         ax_ss.plot(x_sc, [sc_levels[stage_sc]]*len(x_sc), color=sleep_stage_colors[self.sleep_stages_epoch_wise[i]], marker='o', markersize=3)
                         x_sc = []
 
-                if (i == len(self.sleep_cycles)-1) or (stage_sc != self.sleep_cycles[i+1][1]):
-                    if stage_sc != 'NA':
-                        if stage_sc == 'NREMP':
+                if (i == len(self.sleep_cycles)-1) or (sc_index != self.sleep_cycles[i+1][0]):
+                    if sc_index != 'NA':
+                        if sc_index % 2:
                             overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level, fill=True, color='darkgrey', alpha=0.5)
                         else:
                             overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level, fill=True, color='darkgrey', alpha=0.3)    
