@@ -23,7 +23,6 @@ thead {
 
 body {
     margin: 20;
-    font-family: custom;
 }
 
 div.container {
@@ -32,6 +31,10 @@ div.container {
     max-width: 1200px;
     margin-top:-2px;
     /*height: 828px;*/
+}
+
+div.container, div.container input {
+    font-family: custom;
 }
 
 div#sleep_cycles_stages {
