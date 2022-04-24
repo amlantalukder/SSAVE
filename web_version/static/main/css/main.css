@@ -9,14 +9,28 @@
     /*src: url(Spectral/Spectral-Medium.ttf)*/
 }
 
+.header {
+    background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%)
+}
+
+.header h1 {
+    color: white;
+}
+
+thead {
+    background-color: #0382b6bf;
+}
+
 body {
     margin: 20;
     font-family: custom;
 }
 
 div.container {
-    padding-top: 1rem;
+    /*padding-top: 1rem;*/
     padding-bottom: 1rem;
+    max-width: 1200px;
+    margin-top:-2px;
     /*height: 828px;*/
 }
 

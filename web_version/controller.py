@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 import os, sys, re
 import numpy as np
 import pdb
@@ -60,38 +61,42 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def loadSleepData(self, view):
 
-        try:
+        #try:
             
-            file_type = self.validate(view.form.get('file_type'), 'file_type')
-            f = view.files.get('sample_file_path')
-            if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
-            input_file_path = os.path.join(self.FOLDER_INPUT, f.filename)
-            f.save(input_file_path)
-            input_file_path = self.validate(input_file_path, 'input_file_path')
+        file_type = self.validate(view.form.get('file_type'), 'file_type')
+        f = view.files.get('sample_file_path')
+        if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
+        input_file_path = os.path.join(self.FOLDER_INPUT, f.filename)
+        f.save(input_file_path)
+        input_file_path = self.validate(input_file_path, 'input_file_path')
 
-            if(input_file_path is None) or (file_type is None): raise Exception
+        if(input_file_path is None) or (file_type is None): raise Exception
 
-            scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type)
+        scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type)
 
-            other_data = {'sample_name':scv_obj.sample_name, 'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
+        other_data = {'sample_name':scv_obj.sample_name, 'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
 
-            if file_type == 'edf':
-                if scv_obj.eeg_data is None: scv_obj.loadEEG()
-                other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
-                other_data['channels_all'] = scv_obj.eeg_data.info['ch_names']
-                if len(other_data['channels_all']) == 0: print('No channels found !!!')
-                other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
-                other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
-                other_data['FILTERS'] = scv.Config.FILTERS
-                other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
+        if file_type == 'edf':
 
-            other_data['state_changed'] = True
+            if scv_obj.eeg_data is None: scv_obj.loadEEG()
 
-            if not os.path.exists(self.FOLDER_OTHER_DATA): os.makedirs(self.FOLDER_OTHER_DATA)
-            np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
+            other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
+            other_data['channels_all'] = scv_obj.eeg_data.info['ch_names']
+
+            if len(other_data['channels_all']) == 0: print('No channels found !!!')
+
+            other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
+            other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
+            other_data['FILTERS'] = scv.Config.FILTERS
+            other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
+        
+        other_data['state_changed'] = True
+
+        if not os.path.exists(self.FOLDER_OTHER_DATA): os.makedirs(self.FOLDER_OTHER_DATA)
+        np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
             
-        except Exception as error:
-            return ('Error', f"Data loading failed, {str(error)}")
+        #except Exception as error:
+        #    return ('Error', f"Data loading failed, {str(error)}")
 
         return ('Success', "Loaded sleep data successfully")
 
@@ -152,41 +157,44 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def execute(self, view):
         
-        try:
+        #try:
 
-            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+        other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+
+        if other_data['apply_filter'] != (view.form.get('apply_filter') == 'on'):
+            other_data['apply_filter'] = (view.form.get('apply_filter') == 'on')
+            self.app.logger.info(f'Apply filter: {other_data["apply_filter"]}')
+            other_data['state_changed'] = True
         
-            scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
-            scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
-            scv.Config.FILTERS = other_data['FILTERS']
-            scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
+        if ('cut_options_selected' not in other_data) or (other_data['cut_options_selected'] != view.form.getlist('nremp_cut_options_selected')):
+            other_data['cut_options_selected'] = view.form.getlist('nremp_cut_options_selected')
+            self.app.logger.info(f'Cut options selected: {other_data["cut_options_selected"]}')
+            other_data['state_changed'] = True
 
-            if other_data['apply_filter'] != (view.form.get('apply_filter') == 'on'):
-                other_data['apply_filter'] = (view.form.get('apply_filter') == 'on')
-                self.app.logger.info(f'Apply filter: {other_data["apply_filter"]}')
-                other_data['state_changed'] = True
-            
-            if ('cut_options_selected' not in other_data) or (other_data['cut_options_selected'] != view.form.getlist('nremp_cut_options_selected')):
-                other_data['cut_options_selected'] = view.form.getlist('nremp_cut_options_selected')
-                self.app.logger.info(f'Cut options selected: {other_data["cut_options_selected"]}')
-                other_data['state_changed'] = True
+        self.app.logger.info(f'State changed: {self.state_changed}')
+        if other_data['state_changed']:
+            scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'])
+            scv_obj.cut_options_selected = list(np.array(other_data['cut_options_selected'], dtype=np.int64))
 
-            self.app.logger.info(f'State changed: {self.state_changed}')
-            if other_data['state_changed']:
-                scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'], other_data['apply_filter'])
-                scv_obj.cut_options_selected = list(np.array(other_data['cut_options_selected'], dtype=np.int64))
+            if other_data['file_type'] == 'edf':
+                scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
+                scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
+                scv.Config.FILTERS = other_data['FILTERS']
+                scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
+                
                 self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
                 self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
                 self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
-                self.app.logger.info('Removing old output files')
-                self.removeOutputFiles(scv_obj)
-                scv_obj.clearSleepData()
-                scv.extractSleepStages(scv_obj)
-                other_data['cut_options'] = scv_obj.cut_options
-                other_data['state_changed'] = False
 
-        except Exception as error:
-            return ('Failed', f"Execution failed, {str(error)}")
+            self.app.logger.info('Removing old output files')
+            self.removeOutputFiles(scv_obj)
+            scv_obj.clearSleepData()
+            scv.extractSleepStages(scv_obj, other_data['apply_filter'])
+            other_data['cut_options'] = scv_obj.cut_options
+            other_data['state_changed'] = False
+
+        #except Exception as error:
+        #    return ('Failed', f"Execution failed, {str(error)}")
 
         return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), other_data['sample_name']), \
                 other_data['cut_options'], other_data['cut_options_selected'])
@@ -236,12 +244,23 @@ class WebUIController(Controller):
     # --------------------------------------------------------------------------
     def getSleepStageSettings(self, other_data):
 
-        annots_left_settings = []
-        for i in range(len(other_data['annotations_all'])):
-            annot_name = other_data['annotations_all'][i]
-            if annot_name.lower() not in other_data['sleep_stage_event_to_id_mapping']:
-                annots_left_settings.append(annot_name)
+        def hasKeyword(x):
+            for kw in sleep_stage_keywords:
+                if x.lower().find(kw) >= 0:
+                    return True
+            return False
 
+        def compare(x, y):
+            if hasKeyword(x) and not hasKeyword(y): return -1
+            if not hasKeyword(x) and hasKeyword(y): return 1
+            return x > y
+
+        sleep_stage_keywords = {'sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
+                    'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
+                    'stage 1', 'stage 2', 'stage 3'}
+        
+        annots_all_settings = sorted(other_data['annotations_all'], key=cmp_to_key(compare))
+            
         annots_right_settings = {sleep_stage:[] for sleep_stage in scv.Config.SLEEP_STAGE_ALL_NAMES}
 
         for annot_name in other_data['annotations_all']:
@@ -250,16 +269,31 @@ class WebUIController(Controller):
                     if other_data['sleep_stage_event_to_id_mapping'][annot_name.lower()] == scv.Config.SLEEP_STAGES_ALL[st_stage_ind]:
                         annots_right_settings[scv.Config.SLEEP_STAGE_ALL_NAMES[st_stage_ind]].append(annot_name)
 
-        return annots_left_settings, annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
+        return annots_all_settings, annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
 
     # --------------------------------------------------------------------------
     def getFilterSettings(self, other_data):
 
         filter_settings = {key:value for key, value in other_data['FILTERS'].items() if key in ['notch', 'bandpass', 'amplitude_max', 'flat_signal']}
 
+        bad_annot_keywords = {'bathroom', 'restroom', 'breakout box', 'snoring', 'cough', 'snoring', 'snore', 'movement'}
+
+        def hasKeyword(x):
+            for kw in bad_annot_keywords:
+                if x.lower().find(kw) >= 0:
+                    return True
+            return False
+
+        def compare(x, y):
+            if hasKeyword(x) and not hasKeyword(y): return -1
+            if not hasKeyword(x) and hasKeyword(y): return 1
+            return x > y
+
+
+        all_annots = sorted(other_data['annotations_all'], key=cmp_to_key(compare))
         bad_annots = set(other_data['FILTERS']['bad_annots'])
         bad_annot_settings = []
-        for annot in other_data['annotations_all']:
+        for annot in all_annots:
             if annot in bad_annots:
                 bad_annot_settings.append([annot, 'checked'])
             else:

@@ -24,7 +24,7 @@ class SleepInfo:
     sleep_stages_epoch_wise = None
     sleep_cycles = None
     spectogram = None
-    epoch_size = None
+    epoch_size = Config.EPOCH_SIZE
     enable_cache = False
     use_cache = True
     #folder_cache = f'{Config.FOLDER_PROCESSED_DATA}/sleep_data_epoch_wise_shifted'
@@ -76,11 +76,9 @@ class SleepInfo:
         # --------------------------------------------------------------------------
         # Read eeg signal data
         # --------------------------------------------------------------------------
-        self.epoch_size = Config.EPOCH_SIZE
         self.eeg_data = mne.io.read_raw_edf(self.edf_file_path, verbose=False)
         
         self.sampling_freq = float(self.eeg_data.info['sfreq'])
-
         self.ch_names = list(Config.CHANNELS_SELECTED[np.in1d(Config.CHANNELS_SELECTED, self.eeg_data.info['ch_names'])])
         print(f'Selected channels: {", ".join(self.ch_names)}')
 
@@ -290,7 +288,10 @@ class SleepInfo:
 
         # --------------------------------------------------------------------------
         def durationInEpoch(duration_in_minute):
-            return duration_in_minute * (60/self.epoch_size)
+            try:
+                return duration_in_minute * (60/self.epoch_size)
+            except:
+                pdb.set_trace()
 
         # --------------------------------------------------------------------------
         # f. If a sleep cycle (usually NC) is longer than 120 minutes (240 epoch), 
@@ -426,8 +427,14 @@ class SleepInfo:
             else:
                 self.sleep_cycles.append(['NA', 'NA'])
 
+        # ----------------------------------------------------
+        # Get the cut option epochs for long NREM cycle 
+        # ----------------------------------------------------
         self.setCutOptions()
         
+        # ----------------------------------------------------
+        # Apply selected cut epoch options on the sleep cycles 
+        # ----------------------------------------------------
         if len(self.cut_options_selected) > 0:
             self.cut_options_selected = sorted(self.cut_options_selected)
             sc_index_inc = j = 0
@@ -484,8 +491,10 @@ class SleepInfo:
             max_level = max(list(sleep_stage_levels.values()))
             sc_labels = sorted(set([stage_sc for _, stage_sc in self.sleep_cycles if stage_sc != 'NA']))
             sc_levels = {sc_label:max_level + 1 + i for i, sc_label in enumerate(sc_labels)}
-            y_ticklabels += sc_labels
-            y_ticks += sorted(sc_levels.values())
+            sc_index_label = 'SC Index'
+            sc_index_level = max(sc_levels.values()) + 1
+            y_ticklabels += (sc_labels + [sc_index_label])
+            y_ticks += (sorted(sc_levels.values()) + [sc_index_level])
 
             x_sc = []
             index_overlay_anchor = None
@@ -509,8 +518,13 @@ class SleepInfo:
                         else:
                             overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level, fill=True, color='darkgrey', alpha=0.3)    
                         plt.gca().add_patch(overlay)
-                    index_overlay_anchor = i
 
+                        ax_ss.text((i+index_overlay_anchor)//2, sc_index_level, sc_index, 
+                                fontsize=Config.PLOT_TICKLABEL_FONT_SIZE, fontweight='bold',
+                                ha='center', va='center')
+
+                    index_overlay_anchor = i
+                    
             #if 'NREMP' in sc_levels: ax_ss.vlines(self.getCutOptions(), 0, sc_levels['NREMP'], linestyles='dashed', colors='black')
 
         ax_ss.tick_params(axis='x', labelsize=Config.PLOT_TICKLABEL_FONT_SIZE)
@@ -519,7 +533,7 @@ class SleepInfo:
         #ax_ss.set_xlabel('Epochs', fontsize=Config.PLOT_LABEL_FONT_SIZE)
         ax_ss.set_ylim(min(y_ticks)-0.5, max(y_ticks)+0.5)
         ax_ss.set_ylabel('Sleep Stages', fontsize=Config.PLOT_LABEL_FONT_SIZE)
-        ax_ss.grid(True)
+        ax_ss.grid(False)
         
         if not (self.spectogram is None):
             ax_spec = fig.add_subplot(gs[1], sharex=ax_ss)
@@ -591,7 +605,7 @@ def printDec(msg):
     print("")
 
 # --------------------------------------------------------------------------
-def loadSleepData(input_file_path, output_folder_path, input_file_type="edf", apply_filter=False):
+def loadSleepData(input_file_path, output_folder_path, input_file_type="edf"):
 
     edf_file_path, annot_file_path = None, None
 
@@ -619,9 +633,10 @@ def loadSleepData(input_file_path, output_folder_path, input_file_type="edf", ap
     return sleep_obj
 
 # --------------------------------------------------------------------------
-def extractSleepStages(sleep_obj):
+def extractSleepStages(sleep_obj, apply_filter=False):
 
-    if sleep_obj.input_file_type == 'edf': 
+    if sleep_obj.input_file_type == 'edf':
+        sleep_obj.apply_filter = apply_filter
         sleep_obj.visualize(show_sc=True, show_spec=True)
     elif sleep_obj.input_file_type == 'annot':
         sleep_obj.visualize(show_sc=True, show_spec=False)

@@ -1,20 +1,20 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>Sleep Cycle Visualization Tool</title>
+<title>SCVIS - Sleep Cycle Visualization Tool</title>
 {% endblock %}
 
 {% block body %}
 <div id="main" class="container">
-  <div class="row h-5">
-    <div class="col p-2 text-center">
-      <h4>SCVIS - Sleep Cycle Visualization Tool</h4>
+  <div class="header row h-5">
+    <div class="col pt-3 text-center">
+      <h1>SCVIS - Sleep Cycle Visualization Tool</h1>
     </div>
   </div>
   <div class="row">
     <div id="status_area" class="col"></div>
   </div>
-  <div id="content" class="row p-2 h-95">
+  <div id="content" class="row h-95">
     <div id="input_panel" class="col-md-5 d-flex flex-column">
       <div class="row flex-grow-1 border border-5">
         <div class="col d-flex flex-column">
@@ -116,7 +116,9 @@
                     </div>
                   </div>
                   <div class="row">
-                    <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                    <div class="col">
+                      <img id="vis_image" class="rounded mx-auto d-block" width=100% src="{{url_for('static', filename='assets/dummy.jpg')}}">
+                    </div>
                   </div>
                 </div>
                 <div id="nremp_cut_options" class="tab-pane">

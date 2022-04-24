@@ -14,7 +14,7 @@ def home():
     
     app.logger.info(f'Job id assigned, job id: {job_id}')
     
-    return render_template('index.html', job_id=job_id)
+    return render_template('index.html', job_id=job_id, title='Testing Site')
 
 @app.route('/config/<job_id>', methods=['GET'])
 def config(job_id):
@@ -24,7 +24,7 @@ def config(job_id):
     controller = WebUIController(app, job_id)
     status, response, data = controller.getConfig()
     channel_settings, \
-    annots_left_settings, annots_right_settings, sleep_stages, \
+    annots_all_settings, annots_right_settings, sleep_stages, \
     filter_settings, bad_annot_settings, \
     epoch_size = data
 
@@ -32,7 +32,7 @@ def config(job_id):
 
     return render_template('config.html', job_id = job_id, \
                                             channel_settings=channel_settings, 
-                                            annots_left_settings=annots_left_settings,
+                                            annots_all_settings=annots_all_settings,
                                             annots_right_settings=annots_right_settings,
                                             sleep_stages=sleep_stages,
                                             filter_settings=filter_settings,

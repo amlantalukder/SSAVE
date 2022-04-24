@@ -324,11 +324,12 @@ selectAllChannels = (value) => {
 showSleepStageAnnots = (value, event) => {
 
     for(var i=0; i < event.srcElement.options.length; i++){
+        var option_val = event.srcElement.options[i].value;
         if(event.srcElement.options[i].value == value){
-            showElement(document.getElementById(value));
+            showElement(document.getElementById(option_val));
         }
         else{
-            hideElement(document.getElementById(value));
+            hideElement(document.getElementById(option_val));
         }
     }
 }
@@ -340,12 +341,9 @@ moveAnnotsToRightPanel = () => {
     var checkboxes_selected = $('input[name="annot_checkbuttons_left"]:checked');
     for(var i=0; i<checkboxes_selected.length; i++){
         let annot = checkboxes_selected[i].value;
-        annots_left_settings.splice(annots_left_settings.findIndex(val => val === annot), 1)
         annots_right_settings[sleep_stage_selected].push(annot)
     }
 
-    annots_left_settings.sort();
-    annots_right_settings[sleep_stage_selected].sort();
     loadSleepStageSettings();
 }
 
@@ -356,35 +354,64 @@ moveAnnotsToLeftPanel = () => {
     var checkboxes_selected = $('input[name="annot_checkbuttons_right"]:checked');
     for(var i=0; i<checkboxes_selected.length; i++){
         let annot = checkboxes_selected[i].value;
-        annots_left_settings.push(annot)
         annots_right_settings[sleep_stage_selected].splice(annots_right_settings[sleep_stage_selected].findIndex(val => val === annot), 1)
     }
 
-    annots_left_settings.sort();
-    annots_right_settings[sleep_stage_selected].sort();
     loadSleepStageSettings();
 }
 
 loadSleepStageSettings = () => {
 
-    var html = '';
-    
-    for(var i in annots_left_settings) {
-        annot = annots_left_settings[i];
-        html += 
-        `<div class="row"> \
-            <div class="col-1"> \
-                <input class="form-check-input" type="checkbox" name="annot_checkbuttons_left" value="${annot}"> \
-            </div> \
-            <div class="col"> \
-                <label class="form-check-label" for="${annot}">${annot}</label> \
-            </div> \
-        </div>`
+    hasKeyword = (x) => {
+        for(var i in keywords)
+            if(x.toLowerCase().search(keywords[i]) >= 0) return true
+        return false
     }
 
-    document.getElementById('annotations').innerHTML = html;
+    var keywords = ['sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
+                    'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
+                    'stage 1', 'stage 2', 'stage 3'];
+        
+    var html_relevant = '', html_nonrelevant = '';
 
-    sleep_stage_selected = document.getElementById('sleep_stages').value;
+    annots_all_settings.sort();
+    
+    for(var i in annots_all_settings) {
+        annot = annots_all_settings[i];
+        
+        if(Object.values(annots_right_settings).find(annots => {
+            for(var i in annots)
+                if(annots[i] == annot) return true
+            return false
+        }) != undefined) continue;
+
+        var html = `<div class="row"> \
+                        <div class="col-1"> \
+                            <input class="form-check-input" type="checkbox" name="annot_checkbuttons_left" value="${annot}"> \
+                        </div> \
+                        <div class="col"> \
+                            <label class="form-check-label" for="${annot}">${annot}</label> \
+                        </div> \
+                    </div>`
+
+        if(hasKeyword(annot))
+            html_relevant += html;
+        else
+            html_nonrelevant += html;
+    }
+    if(html_relevant == '')
+        html_relevant = '<label class="pb-1">No relevant sleep stage annotations</label>';
+    else
+        html_relevant = '<label class="pb-1">Relevant sleep stage annotations</label>' + html_relevant;
+    
+    if(html_nonrelevant != '')
+        html_nonrelevant = '<label class="pb-1">Other annotations</label>' + html_nonrelevant;
+
+    document.getElementById('annotations_relevant').innerHTML = html_relevant;
+    document.getElementById('annotations_nonrelevant').innerHTML = html_nonrelevant;
+
+    var sleep_stage_selected = document.getElementById('sleep_stages').value;
+    annots_right_settings[sleep_stage_selected].sort();
     document.getElementById('annotations_selected').innerHTML = '';
 
     for(const [sleep_stage, annots] of Object.entries(annots_right_settings)) {

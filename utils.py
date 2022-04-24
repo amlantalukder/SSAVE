@@ -81,7 +81,7 @@ class Config:
     SLEEP_STAGES_ALL = [WAKE_STAGE, REM_STAGE, N1_STAGE, N2_STAGE, N3_STAGE]#, U_STAGE]#, 'O', 'NA']
     SLEEP_STAGE_ANNOTS_ALL = {WAKE_STAGE:5, REM_STAGE:4, N1_STAGE:3, N2_STAGE:2, N3_STAGE:1}#, U_STAGE:0}#, 'O':6, 'NA':7}
     FILTERS = {'notch': 60.,  # [Hz]
-        'bandpass': [0.5, 20.],  # [Hz]
+        'bandpass': [0.05, 30.],  # [Hz]
         'amplitude_max': 500,
         'flat_signal': [5, 0.2, 1.],
         'bad_annots': []

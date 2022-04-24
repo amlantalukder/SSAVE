@@ -6,11 +6,11 @@
 
 {% block body %}
 <div id="settings" class="container border">
-  <div class="row ">
-    <div class="col text-center">
-      <h4>
-        SCVis - Settings
-      </h4>
+  <div class="header row">
+    <div class="col pt-3 text-center">
+      <h1>
+        SCVIS - Settings
+      </h1>
     </div>
   </div>
   <div class="row">
@@ -67,7 +67,10 @@
                           </div>
                         </div>
                         <div class="row" style="height:94%">
-                          <div id="annotations" class="col overflow-auto border pt-1 pb-1 h-100"></div>
+                          <div class="col overflow-auto border pt-1 pb-1 h-100">
+                            <div id="annotations_relevant" class="border-bottom pb-1"></div>
+                            <div id="annotations_nonrelevant" class="pt-1"></div>
+                          </div>
                         </div>
                       </div>
                       <div class="col-auto">
@@ -111,7 +114,7 @@
                               </div>
                             </div>
                             <div class="row ps-3 pe-3">
-                              <div id="annotations_selected" class="col overflow-auto border pt-1" style="height:80%"></div>
+                              <div id="annotations_selected" class="col overflow-auto pt-1" style="height:80%"></div>
                             </div>
                           </div>
                         </div>
@@ -264,7 +267,7 @@
   const job_id = "{{job_id}}";
   const sleep_stages = JSON.parse('{{ sleep_stages|tojson }}');
   var channel_settings = JSON.parse('{{ channel_settings|tojson }}');
-  var annots_left_settings = JSON.parse('{{ annots_left_settings|tojson }}');
+  var annots_all_settings = JSON.parse('{{ annots_all_settings|tojson }}');
   var annots_right_settings = JSON.parse('{{ annots_right_settings|tojson }}');
   loadSettings();
 </script>
