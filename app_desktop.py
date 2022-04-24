@@ -32,7 +32,7 @@ class Dialog:
   
         # Set font
         self.font_name = 'Default'
-        self.font_size = 14
+        self.font_size = 15
         self.defaultFont = font.nametofont("TkDefaultFont")
         self.defaultFont.configure(family=self.font_name, size=self.font_size)
 
@@ -376,9 +376,9 @@ class MainDialog(Dialog):
 
         master = Tk()
         master.title('SCVIS - Sleep Cycle Visualization Tool')
-        master.geometry("1000x1000+400+50")
+        master.geometry("900x1000+450+50")
 
-        super().__init__(master, 1000, 1000)
+        super().__init__(master, 900, 1000)
 
         self.controller = controller
 
@@ -412,14 +412,10 @@ class MainDialog(Dialog):
 
         ttk.Label(group_panel1, text="Sample Path:", width=12, anchor='e').grid(row=0, column=0, padx=10, sticky='nse', pady=5)
 
-        group_panel1_col = ttk.Frame(group_panel1, borderwidth=1, relief='solid')
-        group_panel1_col.grid(row=0, column=1)
-        self.sample_path_entry = ttk.Entry(group_panel1_col, textvariable='file_path_sample', font=(self.font_name, self.font_size))
-        self.sample_path_entry.pack(expand=1, fill=tk.X)
+        self.sample_path_entry = ttk.Entry(group_panel1, width=35, textvariable='file_path_sample', font=(self.font_name, self.font_size))
+        self.sample_path_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        ttk.Button(group_panel1, text='Browse', command=self.browseInputFile).grid(row=0, column=2)
-
-        group_panel1.grid_columnconfigure((0, 1, 2), weight=2)
+        ttk.Button(group_panel1, text='Browse', command=self.browseInputFile).grid(row=0, column=2, padx=10)
 
         group_panel = ttk.Frame(input_panel)
         group_panel.pack(fill=tk.X)
@@ -459,11 +455,10 @@ class MainDialog(Dialog):
 
         ttk.Label(output_path_panel, text="Output Path:", width=12, anchor='e').grid(row=0, column=0, padx=10, sticky='nse', pady=5)
 
-        self.output_path_entry = ttk.Entry(output_path_panel, width=25, textvariable='folder_path_output', font=(self.font_name, self.font_size))
+        self.output_path_entry = ttk.Entry(output_path_panel, width=35, textvariable='folder_path_output', font=(self.font_name, self.font_size))
         self.output_path_entry.grid(row=0, column=1, padx=10, pady=5)
 
-        output_path_btn = ttk.Button(output_path_panel, text='Browse', command=self.browseOutputFolder)
-        output_path_btn.grid(row=0, column=2, padx=10)
+        ttk.Button(output_path_panel, text='Browse', command=self.browseOutputFolder).grid(row=0, column=2, padx=10)
 
         self.status_textarea = scrolledtext.ScrolledText(input_panel, borderwidth=1, state=tk.DISABLED, relief='groove')
         self.status_textarea.pack(fill='both')
@@ -479,47 +474,35 @@ class MainDialog(Dialog):
         tab_control.pack(expand=True, fill='both')
 
         style = ttk.Style()
-        style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=('Calibri', 11)) # Modify the font of the body
-        style.configure("mystyle.Treeview.Heading", font=('Calibri', 13,'bold')) # Modify the font of the headings
+        style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
+        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size,'bold')) # Modify the font of the headings
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
 
         self.output_plot = tk.Canvas(tab_control, borderwidth=1, relief='solid')
         self.output_sc_st = ttk.Treeview(tab_control, selectmode='browse', style="mystyle.Treeview")
-        self.output_sc_st.pack(side='left')
-        self.output_st = ttk.Treeview(tab_control, style="mystyle.Treeview")
-        self.output_st.pack(side='left')
+        #self.output_sc_st.pack(side='left')
+        self.output_ct = ttk.Treeview(tab_control, style="mystyle.Treeview")
+        #self.output_ct.pack(side='left')
 
         # Constructing vertical scrollbar
         # with treeview
-        verscrlbar1 = ttk.Scrollbar(self.output_sc_st,
+        verscrlbar = ttk.Scrollbar(self.output_sc_st,
                                 orient ="vertical",
                                 command = self.output_sc_st.yview)
         
         # Calling pack method w.r.to vertical
         # scrollbar
-        verscrlbar1.pack(side ='right', fill ='y')
+        verscrlbar.pack(side ='right', fill ='y')
         # Configuring treeview
-        self.output_sc_st.configure(yscrollcommand = verscrlbar1.set)
+        self.output_sc_st.configure(yscrollcommand = verscrlbar.set)
         self.output_sc_st.tag_configure('odd', background='#E8E8E8')
         self.output_sc_st.tag_configure('even', background='#DFDFDF')
 
-        # Constructing vertical scrollbar
-        # with treeview
-        verscrlbar2 = ttk.Scrollbar(self.output_st,
-                                orient ="vertical",
-                                command = self.output_st.yview)
-        
-        # Calling pack method w.r.to vertical
-        # scrollbar
-        verscrlbar2.pack(side ='right', fill ='y')
-        # Configuring treeview
-        self.output_st.configure(yscrollcommand = verscrlbar2.set)
-        self.output_st.tag_configure('odd', background='#E8E8E8')
-        self.output_st.tag_configure('even', background='#DFDFDF')
-
         tab_control.add(self.output_plot, text='Visualization')
         tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
-        tab_control.add(self.output_st, text='Sleep Stages')
+        tab_control.add(self.output_ct, text='NREM Cut Options')
+
+        #self.output_ct.pack_forget()
 
     # --------------------------------------------------------------------------
     def browseInputFile(self):
@@ -623,7 +606,7 @@ class MainDialog(Dialog):
             for i, v in enumerate(data_combined):
                 self.output_sc_st.insert(parent='', index='end', iid=i, text='', values=tuple(v), tags=('odd' if i % 2 else "even"))
 
-        self.clearTree(self.output_st)
+        #self.output_ct.pack(side='left')
 
 # --------------------------------------------------------------------------
 class CLIInterface():
