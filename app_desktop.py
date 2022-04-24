@@ -470,19 +470,17 @@ class MainDialog(Dialog):
         output_panel.pack(padx=10)
         output_panel.pack_propagate(0)
 
-        tab_control = ttk.Notebook(output_panel)
-        tab_control.pack(expand=True, fill='both')
+        self.tab_control = ttk.Notebook(output_panel)
+        self.tab_control.pack(expand=True, fill='both')
 
         style = ttk.Style()
         style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
         style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size,'bold')) # Modify the font of the headings
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
 
-        self.output_plot = tk.Canvas(tab_control, borderwidth=1, relief='solid')
-        self.output_sc_st = ttk.Treeview(tab_control, selectmode='browse', style="mystyle.Treeview")
-        #self.output_sc_st.pack(side='left')
-        self.output_ct = ttk.Treeview(tab_control, style="mystyle.Treeview")
-        #self.output_ct.pack(side='left')
+        self.output_plot = tk.Canvas(self.tab_control, borderwidth=1, relief='solid')
+        self.output_sc_st = ttk.Treeview(self.tab_control, selectmode='browse', style="mystyle.Treeview")
+        self.ct_options = ttk.Frame(self.tab_control)
 
         # Constructing vertical scrollbar
         # with treeview
@@ -498,11 +496,11 @@ class MainDialog(Dialog):
         self.output_sc_st.tag_configure('odd', background='#E8E8E8')
         self.output_sc_st.tag_configure('even', background='#DFDFDF')
 
-        tab_control.add(self.output_plot, text='Visualization')
-        tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
-        tab_control.add(self.output_ct, text='NREM Cut Options')
+        self.tab_control.add(self.output_plot, text='Visualization')
+        self.tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
+        self.tab_control.add(self.ct_options, text='NREM Cut Options')
 
-        #self.output_ct.pack_forget()
+        self.tab_control.forget(self.ct_options)
 
     # --------------------------------------------------------------------------
     def browseInputFile(self):
@@ -606,7 +604,30 @@ class MainDialog(Dialog):
             for i, v in enumerate(data_combined):
                 self.output_sc_st.insert(parent='', index='end', iid=i, text='', values=tuple(v), tags=('odd' if i % 2 else "even"))
 
-        #self.output_ct.pack(side='left')
+        if len(self.controller.scv_obj.cut_options) > 0:
+            self.tab_control.add(self.ct_options, text='NREM Cut Options')
+            ttk.Label(self.ct_options, text="We have found cut options for long NREM cycle. Please select the options you like and click 'Execute'.", anchor='e').grid(row=0, column=0, padx=10, sticky='nse', pady=5)
+            
+            style = ttk.Style()
+            style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
+            style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size,'bold')) # Modify the font of the headings
+            style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
+            
+            ct_table = ttk.Treeview(self.tab_control, style="mystyle.Treeview")
+
+            self.output_sc_st['columns']= ('NREMP EPOCH RANGE', 'SLEEP CYCLE INDEX','CUT POINT EPOCH', 'SELECT')
+            self.output_sc_st.column("#0", width=0,  stretch=tk.NO)
+            self.output_sc_st.column("EPOCH", anchor=tk.CENTER, width=80)
+            self.output_sc_st.column("SLEEP CYCLE INDEX", anchor=tk.CENTER, width=80)
+            self.output_sc_st.column("SLEEP CYCLE", anchor=tk.CENTER, width=80)
+            self.output_sc_st.column("SLEEP STAGE", anchor=tk.CENTER, width=80)
+
+            self.output_sc_st.heading("#0", text="", anchor=tk.CENTER)
+            self.output_sc_st.heading("EPOCH", text="EPOCH",anchor=tk.CENTER)
+            self.output_sc_st.heading("SLEEP CYCLE INDEX", text="SLEEP CYCLE INDEX", anchor=tk.CENTER)
+            self.output_sc_st.heading("SLEEP CYCLE", text="SLEEP CYCLE", anchor=tk.CENTER)
+            self.output_sc_st.heading("SLEEP STAGE", text="SLEEP STAGE", anchor=tk.CENTER)
+
 
 # --------------------------------------------------------------------------
 class CLIInterface():
