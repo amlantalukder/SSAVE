@@ -65,7 +65,7 @@ textarea {
     color:white;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 400px) {
     #output_panel {
       margin-top:10pt;
     }
@@ -74,10 +74,6 @@ textarea {
     }
     body, a.btn, .form-control, select.form-select{
         font-size: 10px;
-    }
-
-    div.container {
-        height: 100vh;
     }
 
     #input_panel, #output_panel {

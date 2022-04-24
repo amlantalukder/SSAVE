@@ -475,7 +475,7 @@ class MainDialog(Dialog):
 
         style = ttk.Style()
         style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
-        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size,'bold')) # Modify the font of the headings
+        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size, 'bold')) # Modify the font of the headings
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
 
         self.output_plot = tk.Canvas(self.tab_control, borderwidth=1, relief='solid')
@@ -498,9 +498,6 @@ class MainDialog(Dialog):
 
         self.tab_control.add(self.output_plot, text='Visualization')
         self.tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
-        self.tab_control.add(self.ct_options, text='NREM Cut Options')
-
-        self.tab_control.forget(self.ct_options)
 
     # --------------------------------------------------------------------------
     def browseInputFile(self):
@@ -551,7 +548,13 @@ class MainDialog(Dialog):
 
         self.output_plot.delete('all')
         x, y = self.output_plot.winfo_width()//2, self.output_plot.winfo_height()//2
-        self.output_plot.create_text(x, y, text="Generating Visualization...", fill="black", font=('Courier 40 bold'))
+        self.output_plot.create_text(x, y, text="Generating Visualization...", fill="black", font=(f'{self.font_name} {self.font_size+10} bold'))
+
+        if len(self.controller.scv_obj.cut_options) > 0:
+
+        else:
+            self.tab_control.forget(self.ct_options)
+
         self.master.update()
         self.controller.execute(self)
 
@@ -563,10 +566,11 @@ class MainDialog(Dialog):
             bg = ImageTk.PhotoImage(img)
             self.output_plot.create_image(int(w//2), int(h//2), image = bg, anchor = tk.CENTER)
             self.output_plot.image = bg
+            if 
         else:
             self.output_plot.delete('all')
             x, y = self.output_plot.winfo_width()//2, self.output_plot.winfo_height()//2
-            self.output_plot.create_text(x, y, text="Failed to generate visualization", fill="black", font=('Helvetica 40 bold'))
+            self.output_plot.create_text(x, y, text="Failed to generate visualization", fill="black", font=(f'{self.font_name} {self.font_size+10} bold'))
 
         self.clearTree(self.output_sc_st)
 
@@ -605,29 +609,50 @@ class MainDialog(Dialog):
                 self.output_sc_st.insert(parent='', index='end', iid=i, text='', values=tuple(v), tags=('odd' if i % 2 else "even"))
 
         if len(self.controller.scv_obj.cut_options) > 0:
+
+            cut_options, cut_options_selected = self.controller.scv_obj.cut_options, self.controller.scv_obj.cut_options_selected
+
             self.tab_control.add(self.ct_options, text='NREM Cut Options')
-            ttk.Label(self.ct_options, text="We have found cut options for long NREM cycle. Please select the options you like and click 'Execute'.", anchor='e').grid(row=0, column=0, padx=10, sticky='nse', pady=5)
+            ttk.Label(self.ct_options, text="We have found cut options for long NREM cycle. Please select the options you like and click 'Execute'.", anchor='e').pack()
             
             style = ttk.Style()
             style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
             style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size,'bold')) # Modify the font of the headings
             style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
-            
-            ct_table = ttk.Treeview(self.tab_control, style="mystyle.Treeview")
 
-            self.output_sc_st['columns']= ('NREMP EPOCH RANGE', 'SLEEP CYCLE INDEX','CUT POINT EPOCH', 'SELECT')
-            self.output_sc_st.column("#0", width=0,  stretch=tk.NO)
-            self.output_sc_st.column("EPOCH", anchor=tk.CENTER, width=80)
-            self.output_sc_st.column("SLEEP CYCLE INDEX", anchor=tk.CENTER, width=80)
-            self.output_sc_st.column("SLEEP CYCLE", anchor=tk.CENTER, width=80)
-            self.output_sc_st.column("SLEEP STAGE", anchor=tk.CENTER, width=80)
+            ct_table = ttk.Treeview(self.ct_options, selectmode='browse', style="mystyle.Treeview")
+            ct_table.pack(expand=1, fill=tk.X, pady=10)
 
-            self.output_sc_st.heading("#0", text="", anchor=tk.CENTER)
-            self.output_sc_st.heading("EPOCH", text="EPOCH",anchor=tk.CENTER)
-            self.output_sc_st.heading("SLEEP CYCLE INDEX", text="SLEEP CYCLE INDEX", anchor=tk.CENTER)
-            self.output_sc_st.heading("SLEEP CYCLE", text="SLEEP CYCLE", anchor=tk.CENTER)
-            self.output_sc_st.heading("SLEEP STAGE", text="SLEEP STAGE", anchor=tk.CENTER)
+            ct_table.tag_configure('odd', background='#E8E8E8')
+            ct_table.tag_configure('even', background='#DFDFDF')
 
+            ct_table['columns']= ('NREMP EPOCH RANGE', 'SLEEP CYCLE INDEX','CUT POINT EPOCH', 'SELECT')
+            ct_table.column("#0", width=0,  stretch=tk.NO)
+            ct_table.column("NREMP EPOCH RANGE", anchor=tk.CENTER, width=80)
+            ct_table.column("SLEEP CYCLE INDEX", anchor=tk.CENTER, width=80)
+            ct_table.column("CUT POINT EPOCH", anchor=tk.CENTER, width=80)
+            ct_table.column("SELECT", anchor=tk.CENTER, width=80)
+
+            ct_table.heading("#0", text="", anchor=tk.CENTER)
+            ct_table.heading("NREMP EPOCH RANGE", text="NREMP EPOCH RANGE",anchor=tk.CENTER)
+            ct_table.heading("SLEEP CYCLE INDEX", text="SLEEP CYCLE INDEX", anchor=tk.CENTER)
+            ct_table.heading("CUT POINT EPOCH", text="CUT POINT EPOCH", anchor=tk.CENTER)
+            ct_table.heading("SELECT", text="SELECT", anchor=tk.CENTER)
+
+            for i, epoch in enumerate(cut_options):
+                checked = (epoch in cut_options_selected)
+                sc_index = data_sc[epoch][0]
+
+                for start in range(epoch, -1, -1):
+                    if sc_index != data_sc[start][0]: break
+                for end in range(epoch, len(data_sc)):
+                    if sc_index != data_sc[end][0]: break
+
+                epoch_range = f'{start}-{end}'
+                ct_table.insert(parent='', index='end', iid=i, text='', values=(epoch_range, sc_index, epoch+1, checked), tags=('odd' if i % 2 else "even"))
+
+            cut_plot = tk.Canvas(self.ct_options, borderwidth=1, relief='solid')
+            cut_plot.pack(expand=1, fill=tk.BOTH, pady=10)         
 
 # --------------------------------------------------------------------------
 class CLIInterface():
