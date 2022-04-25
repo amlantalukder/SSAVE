@@ -194,7 +194,7 @@ class SleepInfo:
         # --------------------------------------------------------------------------
         # Save annotations and signal data
         # --------------------------------------------------------------------------
-        writeDataTableAsText(self.sleep_stages_epoch_wise[:, None], sleep_stage_path)
+        writeDataTableAsText([[i+1, v] for i, v in enumerate(self.sleep_stages_epoch_wise)], sleep_stage_path)
         if self.enable_cache:
             np.save(eeg_data_path, self.eeg_data_epoch_wise)
 
@@ -202,13 +202,13 @@ class SleepInfo:
     # Load epoch wise data from the annotation path provided
     # --------------------------------------------------------------------------
     def extractEpochsFromTextAnnots(self):
-        self.sleep_stages_epoch_wise = [item[0] for item in readFileInTable(self.annot_file_path)]
+        self.sleep_stages_epoch_wise = [item[1] for item in readFileInTable(self.annot_file_path)]
 
         # --------------------------------------------------------------------------
         # Save annotations
         # --------------------------------------------------------------------------
         sleep_stage_path = f'{self.folder_cache}/{self.sample_name}_st.txt'
-        writeDataTableAsText(np.array(self.sleep_stages_epoch_wise)[:, None], sleep_stage_path)
+        writeDataTableAsText([[i+1, v] for i, v in enumerate(self.sleep_stages_epoch_wise)], sleep_stage_path)
 
     # --------------------------------------------------------------------------
     # Extract epoch wise data
@@ -220,7 +220,7 @@ class SleepInfo:
   
         if self.use_cache and (os.path.exists(eeg_data_path) and os.path.exists(sleep_stage_path)):
             self.eeg_data_epoch_wise = np.load(eeg_data_path)
-            self.sleep_stages_epoch_wise = [item[0] for item in readFileInTable(sleep_stage_path)]
+            self.sleep_stages_epoch_wise = [item[1] for item in readFileInTable(sleep_stage_path)]
             return
 
         printDec('Extracting epoch wise data')
@@ -333,7 +333,7 @@ class SleepInfo:
 
         sleep_cycles_path = f'{self.folder_cache}/{self.sample_name}_sc.txt'
         if self.use_cache and os.path.exists(sleep_cycles_path):
-            self.sleep_cycles = readFileInTable(sleep_cycles_path)
+            self.sleep_cycles = [item[1:] for item in readFileInTable(sleep_cycles_path)]
             return
 
         printDec('Extracting sleep cycles')
@@ -444,7 +444,7 @@ class SleepInfo:
                     j += 1
                 if self.sleep_cycles[i][0] != 'NA': self.sleep_cycles[i][0] += sc_index_inc
         
-        writeDataTableAsText(self.sleep_cycles, sleep_cycles_path)
+        writeDataTableAsText([[i+1] + v for i, v in enumerate(self.sleep_cycles)], sleep_cycles_path)
 
     # --------------------------------------------------------------------------
     # Generate visualization plots

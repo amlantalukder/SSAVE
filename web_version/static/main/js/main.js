@@ -112,7 +112,7 @@ showExecutionResults = (result) => {
     tabulateData = data => {
         let data_tab = [];
         data.split('\n').forEach((row, index) => {
-            data_tab.push(row.split('\t'));
+            data_tab.push(row.split('\t').slice(1));
         })
         return data_tab
     }
