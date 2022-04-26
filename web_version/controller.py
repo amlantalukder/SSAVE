@@ -98,7 +98,7 @@ class WebUIController(Controller):
         #except Exception as error:
         #    return ('Error', f"Data loading failed, {str(error)}")
 
-        return ('Success', "Loaded sleep data successfully")
+        return ('Success', "Loaded sleep data successfully", file_type)
 
     # --------------------------------------------------------------------------
     def saveSettings(self, view):

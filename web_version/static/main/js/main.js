@@ -74,13 +74,18 @@ loadData = () => {
             var msg = result[1];
             showStatus(msg);
             if(status == 'Failed') return;
-            for(var id in arr=['configure_btn', 'execute_btn']){
-                enableElement(document.getElementById(arr[id]));
+            var file_type = result[2];
+            if(file_type == 'edf'){
+                for(var id in arr=['configure_btn', 'execute_btn']){
+                    enableElement(document.getElementById(arr[id]));
+                }
+            
+                for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
+                    document.getElementById(arr[id]).disabled = false;
+                }
             }
-        
-            for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
-                document.getElementById(arr[id]).disabled = false;
-            }
+            else
+                enableElement(document.getElementById('execute_btn'));
         }
       });
 };

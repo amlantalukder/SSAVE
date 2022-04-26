@@ -79,9 +79,13 @@ class DesktopUIController(Controller):
     # --------------------------------------------------------------------------
     def execute(self, view):
 
-        if self.scv_obj.apply_filter != view.apply_filter.get(): 
-            self.state_changed = True
+        if self.scv_obj.apply_filter != view.apply_filter.get():
             self.scv_obj.apply_filter = view.apply_filter.get()
+            self.state_changed = True
+        
+        if self.scv_obj.cut_options_selected != view.cut_table.get():
+            self.scv_obj.cut_options_selected = view.cut_table.get()
+            self.state_changed = True
 
         if self.state_changed:
             self.removeOutputFiles()

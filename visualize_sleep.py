@@ -436,6 +436,7 @@ class SleepInfo:
         # Apply selected cut epoch options on the sleep cycles 
         # ----------------------------------------------------
         if len(self.cut_options_selected) > 0:
+            print('Applying selected cut options:', self.cut_options_selected)
             self.cut_options_selected = sorted(self.cut_options_selected)
             sc_index_inc = j = 0
             for i in range(self.cut_options_selected[j]-1, len(self.sleep_cycles)):
