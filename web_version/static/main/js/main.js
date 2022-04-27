@@ -373,9 +373,11 @@ loadSleepStageSettings = () => {
         return false
     }
 
-    var keywords = ['sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
-                    'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
-                    'stage 1', 'stage 2', 'stage 3'];
+    var keywords = ['sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 'wake', 
+                    'n1 stage', 'stage n1', 'nrem 1', 'n1', 'stage1', 'stage 1', 'n 1', 
+                    'n2 stage', 'stage n2', 'nrem 2', 'n2', 'stage2', 'stage 2', 'n 2', 
+                    'n3 stage', 'stage n3', 'nrem 3', 'n3', 'stage3', 'stage 3', 'n 3',
+                    'rem', 'r stage', 'stage r'];
         
     var html_relevant = '', html_nonrelevant = '';
 

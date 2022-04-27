@@ -14,7 +14,7 @@ def home():
     
     app.logger.info(f'Job id assigned, job id: {job_id}')
     
-    return render_template('index.html', job_id=job_id, title='Testing Site')
+    return render_template('index.html', job_id=job_id)
 
 @app.route('/config/<job_id>', methods=['GET'])
 def config(job_id):
@@ -95,3 +95,7 @@ def download(job_id):
     app.logger.info(f'Download response: {response}, job id: {job_id}')
     
     return jsonify(response)
+
+@app.route('/doc', methods=['GET'])
+def doc():
+    return render_template('doc.html')

@@ -31814,7 +31814,7 @@ input[type="reset"].ui.reset.button {
 }
 
 h1 {
-    font-family: "Rokkitt", serif;
+    /*font-family: "Rokkitt", serif;*/
     font-weight: 400;
     color: #4c4c4c;
     font-size: 40px;
