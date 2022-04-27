@@ -251,8 +251,8 @@ class WebUIController(Controller):
                 for st_stage_ind in range(len(scv.Config.SLEEP_STAGE_ALL_NAMES)):
                     if other_data['sleep_stage_event_to_id_mapping'][annot_name.lower()] == scv.Config.SLEEP_STAGES_ALL[st_stage_ind]:
                         annots_right_settings[scv.Config.SLEEP_STAGE_ALL_NAMES[st_stage_ind]].append(annot_name)
-
-        return other_data['annotations_all'], annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
+                        
+        return list(other_data['annotations_all']), annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
 
     # --------------------------------------------------------------------------
     def getFilterSettings(self, other_data):
