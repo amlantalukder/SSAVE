@@ -556,7 +556,7 @@ class SettingsDialog(Dialog):
                     return True
             return False
 
-        st_keywords = {'central', 'obstructive', 'event', 'sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
+        st_keywords = {'sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
                     'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
                     'stage 1', 'stage 2', 'stage 3'}
 
