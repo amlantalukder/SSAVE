@@ -243,23 +243,6 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def getSleepStageSettings(self, other_data):
-
-        def hasKeyword(x):
-            for kw in sleep_stage_keywords:
-                if x.lower().find(kw) >= 0:
-                    return True
-            return False
-
-        def compare(x, y):
-            if hasKeyword(x) and not hasKeyword(y): return -1
-            if not hasKeyword(x) and hasKeyword(y): return 1
-            return x > y
-
-        sleep_stage_keywords = {'sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
-                    'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
-                    'stage 1', 'stage 2', 'stage 3'}
-        
-        annots_all_settings = sorted(other_data['annotations_all'], key=cmp_to_key(compare))
             
         annots_right_settings = {sleep_stage:[] for sleep_stage in scv.Config.SLEEP_STAGE_ALL_NAMES}
 
@@ -269,7 +252,7 @@ class WebUIController(Controller):
                     if other_data['sleep_stage_event_to_id_mapping'][annot_name.lower()] == scv.Config.SLEEP_STAGES_ALL[st_stage_ind]:
                         annots_right_settings[scv.Config.SLEEP_STAGE_ALL_NAMES[st_stage_ind]].append(annot_name)
 
-        return annots_all_settings, annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
+        return other_data['annotations_all'], annots_right_settings, scv.Config.SLEEP_STAGE_ALL_NAMES
 
     # --------------------------------------------------------------------------
     def getFilterSettings(self, other_data):

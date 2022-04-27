@@ -123,7 +123,7 @@ class DesktopUIController(Controller):
         flat_signal_duration = self.validate(view.flat_signal_duration_entry.get(), 'time', input_name='Flat Signal Duration')
         freq_std_min = self.validate(view.freq_std_min_flat_entry.get(), 'frequency', input_name='Minimum frequency standard deviation in flat signal duration')
         freq_std_max = self.validate(view.freq_std_min_epoch_entry.get(), 'frequency', input_name='Minimum frequency standard deviation in an epoch')
-        bad_annots = [view.bad_annots_list.get(i) for i in view.bad_annots_list.curselection()]
+        bad_annots = [annot for annot, var in view.bad_annots_sel.items() if var.get() == True]
         epoch_size = self.validate(view.epoch_size_entry.get(), 'time', input_name='Epoch Size')
 
         if len(channels_selected) == 0:

@@ -8,7 +8,7 @@ import pdb
 from utils import readFileInTable
 from PIL import ImageTk, Image
 from controller import DesktopUIController, CLIController
-from functools import partial
+from functools import cmp_to_key
 
 class CbTreeview(ttk.Treeview):
     def __init__(self, master, font_name, font_size, **kw):
@@ -80,7 +80,8 @@ class CbTreeview(ttk.Treeview):
                 values.append(int(self.item(item, 'values')[2]))
         return values
 
-def motion_handler(tree, event):
+def wrap_rows(tree, parent, index, iid, values, tags):
+
     f = font.Font(font='TkDefaultFont')
     # A helper function that will wrap a given value based on column width
     def adjust_newlines(val, width, pad=10):
@@ -88,6 +89,7 @@ def motion_handler(tree, event):
             return val
         else:
             words = val.split()
+
             lines = [[],]
             for word in words:
                 line = lines[-1] + [word,]
@@ -100,19 +102,28 @@ def motion_handler(tree, event):
             if isinstance(lines[-1], list):
                 lines[-1] = ' '.join(lines[-1])
 
-            return '\n'.join(lines)
+            return lines
 
-    if (event is None) or (tree.identify_region(event.x, event.y) == "separator"):
-        # You may be able to use this to only adjust the two columns that you care about
-        # print(tree.identify_column(event.x))
+    col_widths = [tree.column(cid)['width'] for cid in tree['columns']]
 
-        col_widths = [tree.column(cid)['width'] for cid in tree['columns']]
+    split_rows, max_row = [], 0
+    for (v,w) in zip(values, col_widths):
+        words_split = adjust_newlines(v, w, pad=0)
+        max_row = max(max_row, len(words_split))
+        split_rows.append(words_split)
 
-        for iid in tree.get_children():
-            new_vals = []
-            for (v,w) in zip(tree.item(iid)['values'], col_widths):
-                new_vals.append(adjust_newlines(v, w))
-            tree.item(iid, values=new_vals)
+    for i in range(max_row):
+        new_row = []
+        for words_split in split_rows:
+            if i >= len(words_split):
+                new_row.append('')
+            else:
+                new_row.append(words_split[i])
+
+        tree.insert(parent=parent, index=index, iid=iid, text='', values=new_row, tags=tags)
+        iid += 1
+
+    return iid
 
 '''
 root = tk.Tk()
@@ -247,9 +258,8 @@ class SettingsDialog(Dialog):
 
         tk.Label(self.st_sel, text='These are the events found in your EDF file. Please select those that are sleep stages.', font=(self.font_name, self.font_size, 'bold')).pack(pady=(10, 0))
 
-        annotation_panel_left = tk.Frame(self.st_sel, width=300, borderwidth=1, relief='solid')
-        annotation_panel_left.pack(side="left", fill=tk.Y, padx=10, pady=10)
-        annotation_panel_left.pack_propagate(0)
+        annotation_panel_left = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
+        annotation_panel_left.pack(side="left", fill=tk.Y, padx=10, pady=10, expand=True)
 
         tk.Label(annotation_panel_left, text='All Annotations', bg="#717a82", fg='white').pack(fill=tk.X)
 
@@ -257,27 +267,42 @@ class SettingsDialog(Dialog):
         container1.pack(fill=tk.BOTH, expand=True)
         container2 = tk.Frame(container1)
         container2.pack(side='top', fill='both', expand=True)
-        canvas = tk.Canvas(container2, width=270)
-        canvas.pack(side="left", fill=tk.Y)
-        canvas.pack_propagate(0)
+        canvas = tk.Canvas(container2)
+        canvas.pack(side="left", fill=tk.BOTH)
         vscrollbar = ttk.Scrollbar(container2, orient="vertical", command=canvas.yview)
         vscrollbar.pack(side="right", fill=tk.Y)
         hscrollbar = ttk.Scrollbar(container1, orient="horizontal", command=canvas.xview)
         hscrollbar.pack(side="bottom", fill="x")
         
-        self.st_panel_left = tk.Frame(canvas)
-        self.st_panel_left.pack(fill=tk.BOTH)
+        st_panel_left = tk.Frame(canvas)
+        st_panel_left.pack(fill=tk.BOTH)
         
-        self.st_panel_left.bind(
+        st_panel_left.bind(
             "<Configure>",
             lambda e: canvas.configure(
                 scrollregion=canvas.bbox("all")
             )
         )
 
-        canvas.create_window((0, 0), window=self.st_panel_left, anchor="nw")
+        canvas.create_window((0, 0), window=st_panel_left, anchor="nw")
         canvas.configure(xscrollcommand=hscrollbar.set)
         canvas.configure(yscrollcommand=vscrollbar.set)
+
+        self.relevant_annotation_label = tk.Label(st_panel_left, text='', anchor='w')
+        self.relevant_annotation_label.pack(fill=tk.X)
+
+        self.annotations_relevant = tk.Frame(st_panel_left)
+        self.annotations_relevant.pack(fill=tk.X)
+
+        divider = tk.Frame(st_panel_left, height=2, borderwidth=1, relief='solid')
+        divider.pack(fill=tk.X)
+        divider.pack_propagate(0)
+
+        self.nonrelevant_annotation_label = tk.Label(st_panel_left, text='', anchor='w')
+        self.nonrelevant_annotation_label.pack(fill=tk.X)
+
+        self.annotations_nonrelevant = tk.Frame(st_panel_left)
+        self.annotations_nonrelevant.pack()
 
         move_btn_panel = tk.Frame(self.st_sel, width=40)
         move_btn_panel.pack(side="left", fill=tk.Y, padx=10, pady=10)
@@ -342,8 +367,8 @@ class SettingsDialog(Dialog):
         tk.Label(annotation_st_sel, text="The following events are assigned to the sleep stages", font=(self.font_name, self.font_size, 'bold')).pack(padx=10, pady=10)
 
         style = ttk.Style()
-        style.configure("mystyle.Treeview", highlightthickness=0, bd=0) # Modify the font of the body
-        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size, 'bold')) # Modify the font of the headings
+        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size, 'bold'), rowheight=int(self.font_size*2.5)) # Modify the font of the headings
+        style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=(self.font_name, self.font_size-2, ), rowheight=int((self.font_size-2)*2.5)) # Modify the font of the body
         style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
 
         self.st_annotations = ttk.Treeview(annotation_st_sel, style="mystyle.Treeview")
@@ -351,8 +376,8 @@ class SettingsDialog(Dialog):
 
         self.st_annotations['columns']= ('SLEEP STAGES', 'SELECTED SLEEP STAGES')
         self.st_annotations.column("#0", width=0,  stretch=tk.NO)
-        self.st_annotations.column("SLEEP STAGES", anchor=tk.CENTER, width=20)
-        self.st_annotations.column("SELECTED SLEEP STAGES", anchor=tk.CENTER, width=80)
+        self.st_annotations.column("SLEEP STAGES", anchor=tk.CENTER, width=120)
+        self.st_annotations.column("SELECTED SLEEP STAGES", anchor=tk.CENTER, width=230)
 
         self.st_annotations.heading("#0", text="", anchor=tk.CENTER)
         self.st_annotations.heading("SLEEP STAGES", text="SLEEP STAGES",anchor=tk.CENTER)
@@ -361,8 +386,18 @@ class SettingsDialog(Dialog):
         self.st_annotations.tag_configure('odd', background='#E8E8E8')
         self.st_annotations.tag_configure('even', background='#DFDFDF')
 
-        self.st_annotations.bind('<B1-Motion>', partial(motion_handler, self.st_annotations))
-        motion_handler(self.st_annotations, None)
+        # Constructing vertical scrollbar
+        # with treeview
+        verscrlbar = ttk.Scrollbar(self.st_annotations,
+                                orient ="vertical",
+                                command = self.st_annotations.yview)
+        
+        # Calling pack method w.r.to vertical
+        # scrollbar
+        verscrlbar.pack(side ='right', fill ='y')
+
+        # Configuring treeview
+        self.st_annotations.configure(yscrollcommand = verscrlbar.set)
 
         self.annot_values, self.annot_checkbuttons_left, self.annot_checkbuttons_right = {}, {}, {}
         for i in range(len(self.controller.annotations_all)):
@@ -437,21 +472,48 @@ class SettingsDialog(Dialog):
         container1.pack(fill=tk.BOTH, expand=True)
         container2 = tk.Frame(container1)
         container2.pack(side="top", fill=tk.BOTH, expand=True)
-        self.bad_annots_list = tk.Listbox(container2, selectmode="multiple", font=(self.font_name, self.font_size-2))
-        self.bad_annots_list.pack(side="left", fill=tk.BOTH, expand=True)
-        vscrollbar1 = ttk.Scrollbar(container2, orient="vertical", command=self.bad_annots_list.yview)
-        vscrollbar1.pack(side="right", fill="y")
-        hscrollbar1 = ttk.Scrollbar(container1, orient="horizontal", command=self.bad_annots_list.xview)
-        hscrollbar1.pack(side="bottom", fill="x")
+        canvas = tk.Canvas(container2)
+        canvas.pack(side="left", fill="both")
+        vscrollbar = ttk.Scrollbar(container2, orient="vertical", command=canvas.yview)
+        vscrollbar.pack(side="right", fill="y")
+        hscrollbar = ttk.Scrollbar(container1, orient="horizontal", command=canvas.xview)
+        hscrollbar.pack(side="bottom", fill="x")
         
-        self.bad_annots_list.configure(xscrollcommand=hscrollbar1.set)
-        self.bad_annots_list.configure(yscrollcommand=vscrollbar1.set)
+        bad_annots_list = tk.Frame(canvas)
+        bad_annots_list.pack(fill=tk.BOTH)
+        
+        bad_annots_list.bind(
+            "<Configure>",
+            lambda e: canvas.configure(
+                scrollregion=canvas.bbox("all")
+            )
+        )
+
+        canvas.create_window((0, 0), window=bad_annots_list, anchor="nw")
+        canvas.configure(xscrollcommand=hscrollbar.set)
+        canvas.configure(yscrollcommand=vscrollbar.set)
+
+        bad_annot_keywords = {'bathroom', 'restroom', 'breakout box', 'snoring', 'cough', 'snoring', 'snore', 'movement'}
+
+        def hasKeyword(x):
+            for kw in bad_annot_keywords:
+                if x.lower().find(kw) >= 0:
+                    return True
+            return False
+
+        def compare(x, y):
+            if hasKeyword(x) and not hasKeyword(y): return -1
+            if not hasKeyword(x) and hasKeyword(y): return 1
+            return x > y
         
         if self.controller.annotations_all is not None:
+            all_annots = sorted(self.controller.annotations_all, key=cmp_to_key(compare))
             bad_annots = set(config.FILTERS['bad_annots'])
-            for i, annot in enumerate(self.controller.annotations_all):
-                self.bad_annots_list.insert(tk.END, annot)
-                if annot in bad_annots: self.bad_annots_list.set(i)
+            self.bad_annots_sel = {}
+            for i, annot in enumerate(all_annots):
+                self.bad_annots_sel[annot] = tk.BooleanVar()
+                tk.Checkbutton(bad_annots_list, text=annot, variable=self.bad_annots_sel[annot], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2)).grid(row=i, column=0, padx=5, pady=5, sticky='nw')
+                self.bad_annots_sel[annot].set(value=(annot in bad_annots))
 
     # --------------------------------------------------------------------------
     def setEpochSizePanel(self):
@@ -480,18 +542,46 @@ class SettingsDialog(Dialog):
 
         self.clearTree(self.st_annotations)
         config = self.controller.getConfig()
+        iid = 0
         for st_stage_ind, st_name in enumerate(config.SLEEP_STAGE_ALL_NAMES):
             annots = ', '.join(sorted(self.annot_checkbuttons_right[st_stage_ind].keys()))
-            self.st_annotations.insert(parent='', index='end', iid=st_stage_ind, text='', values=(st_name, annots), tags=('odd' if st_stage_ind % 2 else "even"))
+            iid = wrap_rows(self.st_annotations, '', 'end', iid, (st_name, annots), ('odd' if st_stage_ind % 2 else "even"))
 
     # --------------------------------------------------------------------------
     def loadAnnotsLeftPanel(self):
 
+        def hasKeyword(x):
+            for kw in st_keywords:
+                if x.lower().find(kw) >= 0:
+                    return True
+            return False
+
+        st_keywords = {'central', 'obstructive', 'event', 'sleep stage', 'wake stage', 'stage wake', 'w stage', 'stage w', 
+                    'n1 stage', 'stage n1', 'n2 stage', 'stage n2', 'n3 stage', 'stage n3',
+                    'stage 1', 'stage 2', 'stage 3'}
+
+        found_relevant_annots, found_nonrelevant_annots = False, False
         for i, annot_name in enumerate(sorted(list(self.annot_values.keys()))):
             if annot_name in self.annot_checkbuttons_left and self.annot_checkbuttons_left[annot_name] is not None:
-                self.annot_checkbuttons_left[annot_name] = tk.Checkbutton(self.st_panel_left, text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2))
+                if hasKeyword(annot_name):
+                    parent_widget = self.annotations_relevant
+                    found_relevant_annots = True
+                else:
+                    parent_widget = self.annotations_nonrelevant
+                    found_nonrelevant_annots = True
+                self.annot_checkbuttons_left[annot_name] = tk.Checkbutton(parent_widget, text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2))
                 self.annot_checkbuttons_left[annot_name].grid(row=i, column=0, padx=5, pady=5, sticky='nw')
                 self.annot_values[annot_name].set(False)
+
+        if found_relevant_annots: 
+            self.relevant_annotation_label.configure(text='Relevant sleep stage annotations')
+        else:
+            self.relevant_annotation_label.configure(text='No relevant sleep stage annotations')
+
+        if found_nonrelevant_annots: 
+            self.nonrelevant_annotation_label.configure(text='Other annotations')
+        else:
+            self.nonrelevant_annotation_label.configure(text='')
 
     # --------------------------------------------------------------------------
     def loadAnnotsRightPanel(self, event=None):
