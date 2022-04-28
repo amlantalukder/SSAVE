@@ -33,7 +33,7 @@
               <a href="#select_channels" class="nav-link active" data-bs-toggle="tab">Select Channels</a>
             </li>
             <li class="nav-item">
-              <a href="#select_sleep_stages" class="nav-link" data-bs-toggle="tab">Select Sleep Stages</a>
+              <a href="#select_sleep_stages" class="nav-link" data-bs-toggle="tab">Select Sleep Stage Events</a>
             </li>
             <li class="nav-item">
               <a href="#set_filters" class="nav-link" data-bs-toggle="tab">Set Filters</a>
@@ -66,13 +66,14 @@
                       <div class="col" style="height: 530px;">
                         <div class="row bg-secondary bg-gradient" style="height:6%">
                           <div class="col m-auto text-center">
-                            <span class="lead">All Annotations</span>
+                            <span class="lead">All Events</span>
                           </div>
                         </div>
                         <div class="row" style="height:94%">
                           <div class="col overflow-auto border pt-1 pb-1 h-100">
-                            <div id="annotations_relevant" class="border-bottom pb-1"></div>
-                            <div id="annotations_nonrelevant" class="pt-1"></div>
+                            <div id="annotations_relevant"></div>
+                            <hr>
+                            <div id="annotations_nonrelevant"></div>
                           </div>
                         </div>
                       </div>
@@ -98,7 +99,7 @@
                       <div class="col">
                         <div class="row bg-secondary bg-gradient" style="height:6%">
                           <div class="col m-auto text-center">
-                            <span class="lead">Assigned Annotations</span>
+                            <span class="lead">Assigned Events</span>
                           </div>
                         </div>
                         <div class="row border border-1" style="height:45%;">
@@ -128,7 +129,7 @@
                               <thead>
                                 <tr>
                                   <td style="width:25%">SLEEP STAGES</td>
-                                  <td>SELECTED ANNOTATIONS</td>
+                                  <td>SELECTED EVENTS</td>
                                 </tr>
                               </thead>
                               <tbody>
@@ -220,7 +221,7 @@
                       <div class="row border p-1 mt-1 border-3">
                         <div class="col">
                           <div class="row">
-                            <h5>Annotations to remove from consideration</h5>
+                            <h5>Events to remove from consideration</h5>
                           </div>
                           <div class="row">
                             <div id="bad_annotations" class="col d-flex flex-column">

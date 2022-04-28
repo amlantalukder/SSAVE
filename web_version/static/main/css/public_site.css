@@ -38620,7 +38620,7 @@ input[type=button].ui.button:-moz-focusring {
     content: ' ';
     display: block;
     padding-top: 50px;
-    margin-top: -50px
+    /*margin-top: -50px*/
 }
 
 #skip-navigation:target::before {

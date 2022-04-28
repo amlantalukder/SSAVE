@@ -283,7 +283,7 @@ saveSettings = () => {
     for(const [sleep_stage, annots] of Object.entries(annots_right_settings)) {
         if(annots.length == 0){
             $('a[href="#select_sleep_stages"]').tab('show');
-            return showStatusMessage(`No annotations selected for ${sleep_stage}.`, type='error');
+            return showStatusMessage(`No events selected for ${sleep_stage}.`, type='error');
         }
         for(var i in annots){
             fd.append(sleep_stage, annots[i])
@@ -407,12 +407,12 @@ loadSleepStageSettings = () => {
             html_nonrelevant += html;
     }
     if(html_relevant == '')
-        html_relevant = '<label class="pb-1">No relevant sleep stage annotations</label>';
+        html_relevant = '<label class="pb-1">No relevant sleep stage available for selection</label>';
     else
-        html_relevant = '<label class="pb-1">Relevant sleep stage annotations</label>' + html_relevant;
+        html_relevant = '<label class="pb-1">Relevant sleep stage events</label>' + html_relevant;
     
     if(html_nonrelevant != '')
-        html_nonrelevant = '<label class="pb-1">Other annotations</label>' + html_nonrelevant;
+        html_nonrelevant = '<label class="pb-1">Other events</label>' + html_nonrelevant;
 
     document.getElementById('annotations_relevant').innerHTML = html_relevant;
     document.getElementById('annotations_nonrelevant').innerHTML = html_nonrelevant;
