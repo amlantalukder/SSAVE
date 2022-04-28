@@ -156,6 +156,8 @@
                 <p>After selecting the input file the user needs to click the "Load" button to load the sleep data. 
                     When the data is loaded the "Configure" and "Execute" buttons will be enabled.</p>
                 
+                <h4>Execution</h4>
+
                 <p>The execution of SCVIS begins after clicking the "Execute" button. Once the execution is done, 
                     the user can see the resulted visualization and the extracted sleep cycles and stages 
                     in the the two tabs of the output panel. The user interface panel will notify users with 
@@ -164,12 +166,30 @@
 
                 <p>The output files can be downloaded as a zipped folder by clicking the "Download" button at the top right corner of the output panel.</p>
 
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <a href="static/assets/ui_home_process_data_flow_web.jpg" target="_blank">
+                            <img src="static/assets/ui_home_process_data_flow_web.jpg" width="100%" alt="" class="img-responsive img-thumbnail">
+                        </a>
+                    </div>
+                </div>
+
                 <hr>
+
+                <h4>Spliting long NREM cycle</h4>
+
+                <p>
+                    Sometimes an NREM sleep cycle can be too long to be considered as a single cycle. In that case, the long NREM sleep cyle can be split into 
+                    two NREM cycles. SCVIS applies rules to determine the epoch numbers where a long NREM can be split. If it can find these splitting options,
+                    another tab named "NREM cut points" will be shown on the output panel. This panel will present the possible epoch numbers options to cut a 
+                    long NREM cycle. User can select the cut point options and click execute to apply them on the output. The spectrogram is also shown in this
+                    tab to help user determine the cut options.
+                </p>
 
                 <div class="row">
                     <div class="col-md-12 text-center">
-                        <a href="static/assets/process_data_flow_web.jpg" target="_blank">
-                            <img src="static/assets/process_data_flow_web.jpg" width="100%" alt="" class="img-responsive img-thumbnail">
+                        <a href="static/assets/ui_home_process_cut_flow_web.jpg" target="_blank">
+                            <img src="static/assets/ui_home_process_cut_flow_web.jpg" width="100%" alt="" class="img-responsive img-thumbnail">
                         </a>
                     </div>
                 </div>
