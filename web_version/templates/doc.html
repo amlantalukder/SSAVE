@@ -13,8 +13,9 @@
 
 {% block body %}
 <div class="container">
+    <a id="back2top" href="#top" title="Back to Top" class="infooter" style="display: inline;">Back<br>to Top</a>
     <div class="header row">
-        <div class="col pt-3 text-center">
+        <div class="col text-center">
             <h1>SCVIS - Documentation</h1>
             <!-- end title -->
         </div>
@@ -63,10 +64,10 @@
                                 </div>
 
                                 <hr>
-                                <div>
-                                    <p><strong>SCVIS</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
-                                        This documentation is to walk users through the both the web and desktop versions of the tool.</p>
-
+                                <p><strong>SCVIS</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
+                                This documentation is to walk users through the both the web and desktop versions of the tool.</p>
+                                <hr>
+                                <div class="para">
                                     <h4>Desktop version</h4>
                                     <p>The desktop version of SCVIS can be downloaded <a href="#">here</a>. 
                                         In order to use the desktop version, you will need to install the following tools and packages.</p>
@@ -74,7 +75,9 @@
                                         <li>1. Install python 3.6 or higher</li>
                                         <li>2. Install the following python packages: numpy, matplotlib, mne</li>
                                     </ol>
-
+                                </div>
+                                <hr>
+                                <div class="para">
                                     <h4>User interface</h4>
 
                                     <p>The user interface (UI) of SCVIS is similar for both web and desktop versions. 
@@ -113,26 +116,31 @@
                 <!-- end row -->
                 <div class="row">
                     <div class="col-md-12">
-                        <h4>Inputs</h4>
-                        <p>SCVIS takes two types of input files.</p>
-                        <ol class="ms-4">
-                            <li>1. EEG sleep data in EDF format.</li>
-                            <li>2. Epoch wise sleep stages in text format. This file must have at least two columns. 
-                                The first column will contain the epoch number and the second column will contain the 
-                                sleep stage labels assigned to that epoch according to following criteria,
-                                "W" for Wake stage, "N1" for N1 stage, "N2" for N2 stage, "N3" for N3 stage and "R" for REM stage. 
-                            </li>
-                        </ol>
-                        <h4>Outputs</h4>
-                        <p>SCVIS generates following outputs.</p>
-                        <ol class="ms-4">
-                            <li>1. An image file for the visualization in JPEG format. 
-                                The plot shows the sleep cycles, sleep stages and spectrogram. 
-                                If the input file is the epoch wise sleep stages, the plot will not show the spectrogram.</li>
-                            <li>2. Epoch wise sleep cycles in text format. 
-                                The file has three columns: epoch number, index for sleep cycle and sleep cycle name (NREMP or REMP).</li>
-                            <li>3. Epoch wise sleep stages in text format. The file has two column: epoch number and sleep stage.</li>
-                        </ol>
+                        <div class="para">
+                            <h4>Inputs</h4>
+                            <p>SCVIS takes two types of input files.</p>
+                            <ol class="ms-4">
+                                <li>1. EEG sleep data in EDF format.</li>
+                                <li>2. Epoch wise sleep stages in text format. This file must have at least two columns. 
+                                    The first column will contain the epoch number and the second column will contain the 
+                                    sleep stage labels assigned to that epoch according to following criteria,
+                                    "W" for Wake stage, "N1" for N1 stage, "N2" for N2 stage, "N3" for N3 stage and "R" for REM stage. 
+                                </li>
+                            </ol>
+                        </div>
+                        <hr>
+                        <div class="para">
+                            <h4>Outputs</h4>
+                            <p>SCVIS generates following outputs.</p>
+                            <ol class="ms-4">
+                                <li>1. An image file for the visualization in JPEG format. 
+                                    The plot shows the sleep cycles, sleep stages and spectrogram. 
+                                    If the input file is the epoch wise sleep stages, the plot will not show the spectrogram.</li>
+                                <li>2. Epoch wise sleep cycles in text format. 
+                                    The file has three columns: epoch number, index for sleep cycle and sleep cycle name (NREMP or REMP).</li>
+                                <li>3. Epoch wise sleep stages in text format. The file has two column: epoch number and sleep stage.</li>
+                            </ol>
+                        </div>
                     </div>
                     <!-- end col -->
                 </div>

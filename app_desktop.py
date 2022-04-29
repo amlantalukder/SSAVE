@@ -261,7 +261,7 @@ class SettingsDialog(Dialog):
         annotation_panel_left = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
         annotation_panel_left.pack(side="left", fill=tk.Y, padx=10, pady=10, expand=True)
 
-        tk.Label(annotation_panel_left, text='All Annotations', bg="#717a82", fg='white').pack(fill=tk.X)
+        tk.Label(annotation_panel_left, text='All Events', bg="#717a82", fg='white').pack(fill=tk.X)
 
         container1 = tk.Frame(annotation_panel_left)
         container1.pack(fill=tk.BOTH, expand=True)
@@ -327,7 +327,7 @@ class SettingsDialog(Dialog):
         annotation_panel_right = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
         annotation_panel_right.pack(side="left", fill=tk.BOTH, padx=10, pady=10, expand=True)
         
-        tk.Label(annotation_panel_right, text='Assigned Annotations', bg="#717a82", fg='white').pack(fill=tk.X)
+        tk.Label(annotation_panel_right, text='Assigned Events', bg="#717a82", fg='white').pack(fill=tk.X)
         
         annotation_st_panel = tk.Frame(annotation_panel_right)
         annotation_st_panel.pack(fill=tk.BOTH)
@@ -466,7 +466,7 @@ class SettingsDialog(Dialog):
         self.freq_std_min_epoch_entry.insert(tk.END, config.FILTERS['flat_signal'][2])
         self.freq_std_min_epoch_entry.grid(row=2, column=1, padx=10)
 
-        bad_annots_panel = tk.LabelFrame(self.filter_sel, text='Annotations to remove from consideration')
+        bad_annots_panel = tk.LabelFrame(self.filter_sel, text='Events to remove from consideration')
         bad_annots_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
         container1 = tk.Frame(bad_annots_panel)
         container1.pack(fill=tk.BOTH, expand=True)
@@ -574,12 +574,12 @@ class SettingsDialog(Dialog):
                 self.annot_values[annot_name].set(False)
 
         if found_relevant_annots: 
-            self.relevant_annotation_label.configure(text='Relevant sleep stage annotations')
+            self.relevant_annotation_label.configure(text='Relevant sleep stage events')
         else:
-            self.relevant_annotation_label.configure(text='No relevant sleep stage annotations')
+            self.relevant_annotation_label.configure(text='No relevant sleep stage events to select')
 
         if found_nonrelevant_annots: 
-            self.nonrelevant_annotation_label.configure(text='Other annotations')
+            self.nonrelevant_annotation_label.configure(text='Other events')
         else:
             self.nonrelevant_annotation_label.configure(text='')
 
@@ -730,7 +730,7 @@ class MainDialog(Dialog):
 
         self.file_type_entry = tk.StringVar()
         ttk.Radiobutton(sample_type_option_panel, text='EDF File', variable=self.file_type_entry, value='edf').grid(row=0, column=0, padx=10, sticky='nsw', pady=5)
-        ttk.Radiobutton(sample_type_option_panel, text='Annotation Epochs', variable=self.file_type_entry, value='annot').grid(row=1, column=0, padx=10, sticky='nsw', pady=5)
+        ttk.Radiobutton(sample_type_option_panel, text='Epoch-wise Sleep Stages', variable=self.file_type_entry, value='annot').grid(row=1, column=0, padx=10, sticky='nsw', pady=5)
         self.file_type_entry.set(value='edf')
 
         sample_type_panel.rowconfigure(0, weight=1)
@@ -828,8 +828,8 @@ class MainDialog(Dialog):
         self.cut_plot.bind("<Configure>", lambda event: self.showPlot(self.cut_plot))
 
         self.tab_control.add(self.output_plot, text='Visualization')
-        self.tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
         self.tab_control.add(self.ct_options, text='NREM Cut Options')
+        self.tab_control.add(self.output_sc_st, text='Sleep Cycles and Stages')
 
     # --------------------------------------------------------------------------
     def browseInputFile(self):

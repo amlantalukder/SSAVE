@@ -9,6 +9,11 @@
     /*src: url(Spectral/Spectral-Medium.ttf)*/
 }
 
+html, body, .container input {
+    font-family: custom !important;
+    font-size: 16px !important;
+}
+
 .header {
     background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%)
 }
@@ -18,15 +23,29 @@ input[type="radio"] {
 }
 
 .header h1 {
-    color: white;
+    color: white !important;
+    font-size: 32px !important;
+    line-height: 1 !important;
+    padding: 20px 0 20px 0 !important;
+    margin: 0 !important;
+}
+
+.footer {
+    line-height: 23px;
+}
+
+.footer ul{
+    margin-bottom: 0;
+}
+
+.footer .icon-links h3 {
+    padding: 0;
+    margin: 0 0 1rem 0;
+    line-height: 0.85;
 }
 
 thead {
     background-color: #0382b6bf;
-}
-
-body {
-    margin: 20;
 }
 
 div.container {
@@ -35,10 +54,6 @@ div.container {
     max-width: 1200px;
     margin-top:-2px;
     /*height: 828px;*/
-}
-
-div.container, div.container input {
-    font-family: custom;
 }
 
 div#sleep_cycles_stages {

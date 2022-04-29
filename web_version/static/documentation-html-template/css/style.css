@@ -39,7 +39,7 @@ h6 {
     position: relative;
     padding: 0 0 10px 0;
     font-weight: normal;
-    line-height: 1.8;
+    /*line-height: 1.8;*/
     color: #242424;
 }
 
@@ -77,7 +77,7 @@ h6 a {
 }
 
 p {
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: 400;
     line-height: 26px;
     letter-spacing: 0;
@@ -161,7 +161,7 @@ sub {
 }
 
 p {
-    padding: 0 0 20px 0;
+    padding: 0 0 5px 0;
 }
 
 .check li:before {
@@ -213,7 +213,7 @@ strong {
 }
 
 .dark-text {
-    font-size: 4.125rem;
+    font-size: 2rem;
     line-height: 4.063rem;
     font-weight: 300;
 }
