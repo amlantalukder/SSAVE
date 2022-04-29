@@ -186,8 +186,12 @@ p {
     padding-left: 0
 }
 
+section.welcome {
+    padding-bottom: 20px;
+}
+
 .section {
-    padding: 50px 0;
+    padding: 50px 0 20px 0;
     position: relative;
     display: block;
 }
@@ -218,12 +222,7 @@ strong {
     font-weight: 300;
 }
 
-h4 a {
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.dark-text a {
+.dark-text a, h4 a {
     font-size: 14px;
     font-weight: bold;
     padding-left: 20px;
