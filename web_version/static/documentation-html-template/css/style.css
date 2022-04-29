@@ -99,10 +99,6 @@ ul {
     list-style: none;
 }
 
-ul.nav {
-    font-size: 2rem;
-}
-
 ol li ul li {
     padding-left: 20px;
 }
