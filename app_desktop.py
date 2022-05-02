@@ -1,8 +1,6 @@
 import os, sys, re
 import tkinter as tk
 from tkinter import Tk, ttk, font, filedialog, scrolledtext, messagebox
-from matplotlib import widgets
-import numpy as np
 import pdb
 
 from utils import readFileInTable
