@@ -11,7 +11,13 @@
 
 html, body, .container input {
     font-family: custom !important;
-    font-size: 16px !important;
+}
+
+@media only screen and (min-width: 600px) {
+
+    html, body, .container input {
+        font-size: 16px !important;
+    }
 }
 
 .header {
@@ -84,15 +90,15 @@ textarea {
     color:white;
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 600px) {
     #output_panel {
       margin-top:10pt;
     }
     h5, span.lead {
-        font-size: 12px;
+        font-size: 12px !important;
     }
-    body, a.btn, .form-control, select.form-select{
-        font-size: 10px;
+    body, a.btn, .form-control, select.form-select, input{
+        font-size: 10px !important;
     }
 
     #input_panel, #output_panel {

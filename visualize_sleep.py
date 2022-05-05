@@ -348,20 +348,38 @@ class SleepInfo:
         # ----------------------------------------------------
         consecutive_epochs = []
         count_sc, current_cycle = 0, None
-        for i in range(len(sleep_stages_epoch_wise)):
+        i = 0
+        while i < len(sleep_stages_epoch_wise):
             count_sc += 1
-            if current_cycle is None: current_cycle = 'REMP' if sleep_stages_epoch_wise[i] == Config.REM_STAGE else 'NREMP'
-            if (i == len(sleep_stages_epoch_wise)-1) or (sleep_stages_epoch_wise[i] != sleep_stages_epoch_wise[i+1]):            
+
+            if current_cycle is None: 
+                if sleep_stages_epoch_wise[i] == Config.WAKE_STAGE: current_cycle = 'NA' 
+                elif sleep_stages_epoch_wise[i] == Config.REM_STAGE: current_cycle = 'REMP'
+                else: current_cycle = 'NREMP'
+             
+            if (i == len(sleep_stages_epoch_wise)-1) or (sleep_stages_epoch_wise[i] != sleep_stages_epoch_wise[i+1]):
+                count_next_w = 0
+                for j in range(i+1, len(sleep_stages_epoch_wise)):
+                    if sleep_stages_epoch_wise[j] != Config.WAKE_STAGE:
+                        break
+                    count_next_w += 1
+                
+                if count_next_w >= 10:
+                    consecutive_epochs.append((current_cycle, count_sc))
+                    count_sc, current_cycle = count_next_w, 'NA'
+                    i += count_next_w   
+                
                 if (i < len(sleep_stages_epoch_wise)-1):
-                    if current_cycle == "NREMP" and sleep_stages_epoch_wise[i+1] == Config.REM_STAGE:
+                    if current_cycle != "REMP" and sleep_stages_epoch_wise[i+1] == Config.REM_STAGE:
                         consecutive_epochs.append((current_cycle, count_sc))
                         count_sc, current_cycle = 0, 'REMP'
-                    elif current_cycle == "REMP" and (sleep_stages_epoch_wise[i+1] != Config.REM_STAGE and sleep_stages_epoch_wise[i+1] != Config.WAKE_STAGE):
+                    elif current_cycle != "NREMP" and (sleep_stages_epoch_wise[i+1] != Config.REM_STAGE and sleep_stages_epoch_wise[i+1] != Config.WAKE_STAGE):
                         consecutive_epochs.append((current_cycle, count_sc))
                         count_sc, current_cycle = 0, 'NREMP'
                 else:
-                    consecutive_epochs.append(('REMP' if (current_cycle == 'REMP') else 'NREMP', count_sc))
+                    consecutive_epochs.append((current_cycle, count_sc))
                     count_sc = 0
+            i += 1
     
         # ----------------------------------------------------
         # Get sleep cycles following a set of rules
@@ -371,61 +389,41 @@ class SleepInfo:
         # 3. For the first NREMP, the initial "W" stages are skipped
         # 4. For the last (N)REMP, the trailing "W" stages are skipped 
         # ----------------------------------------------------
-
-        sleep_cycles = []
-        is_first_rem = True
-        sc_index = 1
-        i = 0
-        while i < len(consecutive_epochs):
-            
-            stage_sc, count = consecutive_epochs[i]
-
-            if stage_sc == 'REMP' and (is_first_rem or count >= 10):
-                is_first_rem = False
-                sc = 'REMP'
-            else:
-                sc = 'NREMP'
-                
-            count_sc = 0
-            while i < len(consecutive_epochs):
-                stage_sc, count = consecutive_epochs[i]
-                count_sc += count
-        
-                if i >= len(consecutive_epochs)-1 or \
-                (consecutive_epochs[i+1][0] != sc and \
-                    (consecutive_epochs[i+1][1] > 10 or \
-                        (consecutive_epochs[i+1][0] == 'REMP' and is_first_rem))):
-                    i += 1
-                    break
-                i += 1
-
-            sleep_cycles += [[sc_index, sc]]*count_sc
-            sc_index += 1
-        
-        assert len(sleep_stages_epoch_wise) == len(sleep_cycles), "Sleep Cycle length does not match with hypnogram !!!"
-
-        # Remove initial wake stages
-        for i in range(len(sleep_stages_epoch_wise)):
-            if sleep_stages_epoch_wise[i] != Config.WAKE_STAGE: break
-            sleep_cycles[i] = ['NA', 'NA']
-        
-        # Remove final wake stages
-        for i in range(len(sleep_stages_epoch_wise)-1, -1, -1):
-            if sleep_stages_epoch_wise[i] != Config.WAKE_STAGE: break
-            sleep_cycles[i] = ['NA', 'NA']
-
-        # ----------------------------------------------------
-        # Add "NA" for non sleep stages to keep up with the 
-        # number of epochs  
-        # ----------------------------------------------------
         self.sleep_cycles = []
-        j = 0
-        for i in range(len(self.sleep_stages_epoch_wise)):
-            if self.sleep_stages_epoch_wise[i] in Config.SLEEP_STAGE_ANNOTS:
-                self.sleep_cycles.append(sleep_cycles[j][:])
-                j += 1
-            else:
-                self.sleep_cycles.append(['NA', 'NA'])
+        is_first_rem = True
+        sc_index = {'NREMP':0, 'REMP':0}
+
+        for i in range(len(consecutive_epochs)):
+
+            if (i == 0) or \
+                    (stage_sc != consecutive_epochs[i][0] and \
+                    (consecutive_epochs[i][1] > 10 or \
+                    (stage_sc == 'NREMP' and consecutive_epochs[i][0] == 'REMP' and is_first_rem) or \
+                    (stage_sc == 'NA') or 
+                    (consecutive_epochs[i][0] == 'NA'))):
+
+                if i > 0:
+                    if stage_sc == 'NA':
+                        self.sleep_cycles += [['NA', 'NA']]*count_sc
+                    else:
+                        if stage_sc == 'REMP': is_first_rem = False
+                        sc_index[stage_sc] += 1
+                        self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc]]*count_sc
+                
+                count_sc = 0
+                stage_sc = consecutive_epochs[i][0]
+            
+            count_sc += consecutive_epochs[i][1]
+
+            if i == len(consecutive_epochs)-1:
+                print(stage_sc, count_sc)
+                if stage_sc == 'NA':
+                    self.sleep_cycles += [['NA', 'NA']]*count_sc
+                else:
+                    sc_index[stage_sc] += 1
+                    self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc]]*count_sc
+
+        assert len(sleep_stages_epoch_wise) == len(self.sleep_cycles), "Sleep Cycle length does not match with hypnogram !!!"
 
         # ----------------------------------------------------
         # Get the cut option epochs for long NREM cycle 
@@ -443,7 +441,7 @@ class SleepInfo:
                 if j < len(self.cut_options_selected) and i == self.cut_options_selected[j]-1: 
                     sc_index_inc += 1
                     j += 1
-                if self.sleep_cycles[i][0] != 'NA': self.sleep_cycles[i][0] += sc_index_inc
+                if self.sleep_cycles[i][1] == 'NREMP': self.sleep_cycles[i][0] = self.sleep_cycles[i][0][:2] + str(int(self.sleep_cycles[i][0][2:]) + sc_index_inc)
         
         writeDataTableAsText([[i+1] + v for i, v in enumerate(self.sleep_cycles)], sleep_cycles_path)
 
@@ -489,42 +487,36 @@ class SleepInfo:
     
         if not (self.sleep_cycles is None):
             
-            max_level = max(list(sleep_stage_levels.values()))
             sc_labels = sorted(set([stage_sc for _, stage_sc in self.sleep_cycles if stage_sc != 'NA']))
-            sc_levels = {sc_label:max_level + 1 + i for i, sc_label in enumerate(sc_labels)}
-            sc_index_label = 'SC Index'
-            sc_index_level = max(sc_levels.values()) + 1
-            y_ticklabels += (sc_labels + [sc_index_label])
-            y_ticks += (sorted(sc_levels.values()) + [sc_index_level])
+            sc_levels = {sc_label:max(sleep_stage_levels.values()) + 1 + i for i, sc_label in enumerate(sc_labels)}
+            y_ticklabels += sc_labels
+            y_ticks += sorted(sc_levels.values())
+            max_level = max(sc_levels.values())
 
-            x_sc = []
+            sc_count = 1
             index_overlay_anchor = None
 
             for i in range(len(self.sleep_cycles)):
                 sc_index, stage_sc = self.sleep_cycles[i]
 
-                if index_overlay_anchor is None: index_overlay_anchor = i
-
-                if stage_sc != 'NA': 
-                    x_sc.append(i)
-                    if (i == len(self.sleep_stages_epoch_wise)-1) or (self.sleep_stages_epoch_wise[i] != self.sleep_stages_epoch_wise[i+1]):
-                        if (i < len(self.sleep_stages_epoch_wise)-1) and stage_sc == self.sleep_cycles[i+1][1]: x_sc.append(i+1)
-                        ax_ss.plot(x_sc, [sc_levels[stage_sc]]*len(x_sc), color=sleep_stage_colors[self.sleep_stages_epoch_wise[i]], marker='o', markersize=3)
-                        x_sc = []
-
-                if (i == len(self.sleep_cycles)-1) or (sc_index != self.sleep_cycles[i+1][0]):
-                    if sc_index != 'NA':
-                        if sc_index % 2:
-                            overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level, fill=True, color='darkgrey', alpha=0.5)
+                if stage_sc != 'NA':
+                    if index_overlay_anchor is None: index_overlay_anchor = i
+                    
+                    if (i == len(self.sleep_cycles)-1) or (sc_index != self.sleep_cycles[i+1][0]):
+                        
+                        if int(sc_count) % 2:
+                            overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level+1, fill=True, color='darkgrey', alpha=0.5)
                         else:
-                            overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level, fill=True, color='darkgrey', alpha=0.3)    
+                            overlay = Rectangle((index_overlay_anchor, 0), i-index_overlay_anchor, max_level+1, fill=True, color='darkgrey', alpha=0.3)    
                         plt.gca().add_patch(overlay)
 
-                        ax_ss.text((i+index_overlay_anchor)//2, sc_index_level, sc_index, 
-                                fontsize=Config.PLOT_TICKLABEL_FONT_SIZE, fontweight='bold',
+                        ax_ss.text((i+index_overlay_anchor)//2, sc_levels[stage_sc], sc_index, 
+                                fontsize=Config.PLOT_TICKLABEL_FONT_SIZE-4, fontweight='bold',
                                 ha='center', va='center')
 
-                    index_overlay_anchor = i
+                        sc_count += 1
+
+                        index_overlay_anchor = i if (i < len(self.sleep_cycles)-1 and self.sleep_cycles[i+1][0] != 'NA') else None
                     
             #if 'NREMP' in sc_levels: ax_ss.vlines(self.getCutOptions(), 0, sc_levels['NREMP'], linestyles='dashed', colors='black')
 

@@ -326,22 +326,9 @@ selectAllChannels = (value) => {
     select_all_or_none_btn.onclick = () => {selectAllChannels(!value)};
 }
 
-showSleepStageAnnots = (value, event) => {
-
-    for(var i=0; i < event.srcElement.options.length; i++){
-        var option_val = event.srcElement.options[i].value;
-        if(event.srcElement.options[i].value == value){
-            showElement(document.getElementById(option_val));
-        }
-        else{
-            hideElement(document.getElementById(option_val));
-        }
-    }
-}
-
 moveAnnotsToRightPanel = () => {
 
-    sleep_stage_selected = document.getElementById('sleep_stages').value;
+    var sleep_stage_selected = document.getElementById('settings_form').st_type.value;
 
     var checkboxes_selected = $('input[name="annot_checkbuttons_left"]:checked');
     for(var i=0; i<checkboxes_selected.length; i++){
@@ -354,15 +341,49 @@ moveAnnotsToRightPanel = () => {
 
 moveAnnotsToLeftPanel = () => {
 
-    sleep_stage_selected = document.getElementById('sleep_stages').value;
+    var sleep_stage_selected = document.getElementById('settings_form').st_type.value;
 
-    var checkboxes_selected = $('input[name="annot_checkbuttons_right"]:checked');
+    var checkboxes_selected = $(`input[name="annot_checkbuttons_right_${sleep_stage_selected}"]:checked`);
     for(var i=0; i<checkboxes_selected.length; i++){
         let annot = checkboxes_selected[i].value;
         annots_right_settings[sleep_stage_selected].splice(annots_right_settings[sleep_stage_selected].findIndex(val => val === annot), 1)
     }
 
     loadSleepStageSettings();
+}
+
+loadRightPanel = () => {
+
+    var sleep_stage_selected = document.getElementById('settings_form').st_type.value;
+    annots_right_settings[sleep_stage_selected].sort();
+    document.getElementById('annotations_selected').innerHTML = '';
+
+    for(const [sleep_stage, annots] of Object.entries(annots_right_settings)) {
+        var html = '';
+        var annots_selected = '';
+        for(var i in annots){
+            annot = annots[i];
+            let disabled = '';
+            if(sleep_stage != sleep_stage_selected)
+                disabled = 'disabled';
+            html += 
+            `<div class="row"> \
+                <div class="col-1"> \
+                    <input style="height:50%;width:80%;margin-top:0.32em" type="checkbox" name="annot_checkbuttons_right_${sleep_stage}" value="${annot}" ${disabled}> \
+                </div> \
+                <div class="col"> \
+                    <label class="form-check-label" for="annot_checkbuttons_right_${sleep_stage}">${annot}</label> \
+                </div> \
+            </div>`
+            if (annots_selected == '')
+                annots_selected = annot
+            else
+                annots_selected += (', ' + annot)
+        }
+        
+        document.getElementById(sleep_stage).innerHTML = html;
+        document.getElementById(`st_annot_td_${sleep_stage}`).innerHTML = annots_selected;
+    }
 }
 
 loadSleepStageSettings = () => {
@@ -417,38 +438,7 @@ loadSleepStageSettings = () => {
     document.getElementById('annotations_relevant').innerHTML = html_relevant;
     document.getElementById('annotations_nonrelevant').innerHTML = html_nonrelevant;
 
-    var sleep_stage_selected = document.getElementById('sleep_stages').value;
-    annots_right_settings[sleep_stage_selected].sort();
-    document.getElementById('annotations_selected').innerHTML = '';
-
-    for(const [sleep_stage, annots] of Object.entries(annots_right_settings)) {
-        var html = '';
-        var annots_selected = '';
-        for(var i in annots){
-            annot = annots[i];
-            html += 
-            `<div class="row"> \
-                <div class="col-1"> \
-                    <input class="form-check-input" type="checkbox" name="annot_checkbuttons_right" value="${annot}"> \
-                </div> \
-                <div class="col"> \
-                    <label class="form-check-label" for="${annot}">${annot}</label> \
-                </div> \
-            </div>`
-            if (annots_selected == '')
-                annots_selected = annot
-            else
-                annots_selected += (', ' + annot)
-        }
-        class_name = 'row';
-        if(sleep_stage != sleep_stage_selected)
-            class_name += ' d-none';
-        document.getElementById('annotations_selected').innerHTML += `<div id="${sleep_stage}" class="${class_name}">\
-                                                                    <div class="col">${html}</div>\
-                                                                   </div>`;
-
-        document.getElementById(`st_annot_td_${sleep_stage}`).innerHTML = annots_selected;
-    }
+    loadRightPanel()
 
 }
 

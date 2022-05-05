@@ -59,14 +59,16 @@
                   <div id="select_sleep_stages" class="tab-pane">
                     <div class="row m-2">
                       <h5 class="text-center">
-                        These are the events found in your EDF file. Please select those that are sleep stages.
+                        We have extracted the events found in your EDF file. The events already assigned to the sleep stages are shown on the right panel. 
+                        The rest of the unassigned events are shown on the left panel. If there is any unassigned events that may be relevant to sleep stages, 
+                        they are shown on top of the left panel. 
                       </h5>
                     </div>
                     <div class="row m-2">
                       <div class="col" style="height:530px;">
                         <div class="row bg-secondary bg-gradient" style="height:6%">
                           <div class="col m-auto text-center">
-                            <span class="lead">All Events</span>
+                            <span class="lead">Unassigned Events</span>
                           </div>
                         </div>
                         <div class="row" style="height:94%">
@@ -80,7 +82,7 @@
                       <div class="col-auto">
                         <div class="row" style="height:6%">
                         </div>
-                        <div class="row" style="height: 45%;">
+                        <div class="row" style="height: 94%;">
                           <div class="col m-auto">
                             <div class="row">
                               <div class="col-auto p-1 text-center">
@@ -94,7 +96,6 @@
                             </div>
                           </div>
                         </div>
-                        <div class="row"></div>
                       </div>
                       <div class="col" style="height:530px">
                         <div class="row bg-secondary bg-gradient" style="height:6%">
@@ -102,8 +103,36 @@
                             <span class="lead">Assigned Events</span>
                           </div>
                         </div>
-                        <div class="row border border-1" style="height:45%;">
-                          <div class="col">
+                        <div class="row" style="height:94%;">
+                          <div class="col border h-100">
+                            {% for i in range(sleep_stages|length) %}
+                            <div class="row border" style="height: 20%">
+                              <div class="col h-100 d-flex flex-column">
+                                <div class="row" style="background:#f1f3f4;">
+                                  <div class="col-auto">
+                                    {% if i == 0 %}
+                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();" checked>
+                                    {% else %}
+                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();">
+                                    {% endif %}
+                                  </div> 
+                                  <div class="col-auto">
+                                    <label for="st_type">{{sleep_stages[i]}}</label>
+                                  </div>
+                                </div>
+                                <div class="row overflow-auto flex-grow-1" style="font-size:0.7em;">
+                                  <div id="{{sleep_stages[i]}}" class="col" style="padding:0 40px"></div>
+                                </div>
+                              </div>
+                            </div>
+                            {% endfor %}
+                            <div class="row ps-3 pe-3" style="height:90%">
+                              <div id="annotations_selected" class="col overflow-auto pt-1 h-100"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row d-none" style="height:94%;">
+                          <div class="col border pt-1 pb-1 h-100">
                             <div class="row">
                               <div class="col">
                                 <select id="sleep_stages" class="form-select w-100" onchange="showSleepStageAnnots(value, event);">
@@ -117,12 +146,12 @@
                                 </select>
                               </div>
                             </div>
-                            <div class="row ps-3 pe-3" style="height:190px">
+                            <div class="row ps-3 pe-3" style="height:90%">
                               <div id="annotations_selected" class="col overflow-auto pt-1 h-100"></div>
                             </div>
                           </div>
                         </div>
-                        <div class="row mt-2 border border-1 text-center" style="height:48%">
+                        <div class="row mt-2 border border-1 text-center d-none" style="height:48%">
                           <span class="m-2">The following events are assigned to the sleep stages</span>
                           <div class="col overflow-auto" style="height:80%">
                             <table class="table table-bordered table-responsive-md text-center" style="font-size:0.7em">
