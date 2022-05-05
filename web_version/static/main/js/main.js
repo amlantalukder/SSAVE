@@ -304,6 +304,11 @@ saveSettings = () => {
             var status = result[0];
             var msg = result[1];
             showStatus(msg);
+            var remain_here_modal = new bootstrap.Modal(document.getElementById('remain_here_modal'), {
+                keyboard: false
+            });
+
+            remain_here_modal.show()
         }
     });
 };
@@ -382,7 +387,6 @@ loadRightPanel = () => {
         }
         
         document.getElementById(sleep_stage).innerHTML = html;
-        document.getElementById(`st_annot_td_${sleep_stage}`).innerHTML = annots_selected;
     }
 }
 

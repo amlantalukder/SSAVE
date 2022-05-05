@@ -131,47 +131,6 @@
                             </div>
                           </div>
                         </div>
-                        <div class="row d-none" style="height:94%;">
-                          <div class="col border pt-1 pb-1 h-100">
-                            <div class="row">
-                              <div class="col">
-                                <select id="sleep_stages" class="form-select w-100" onchange="showSleepStageAnnots(value, event);">
-                                  {% for i in range(sleep_stages|length) %}
-                                    {% if i == 0 %}
-                                    <option value="{{ sleep_stages[i] }}" selected>{{ sleep_stages[i] }}</option>
-                                    {% else %}
-                                    <option value="{{ sleep_stages[i] }}">{{ sleep_stages[i] }}</option>
-                                    {% endif %}
-                                    {% endfor %}
-                                </select>
-                              </div>
-                            </div>
-                            <div class="row ps-3 pe-3" style="height:90%">
-                              <div id="annotations_selected" class="col overflow-auto pt-1 h-100"></div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="row mt-2 border border-1 text-center d-none" style="height:48%">
-                          <span class="m-2">The following events are assigned to the sleep stages</span>
-                          <div class="col overflow-auto" style="height:80%">
-                            <table class="table table-bordered table-responsive-md text-center" style="font-size:0.7em">
-                              <thead>
-                                <tr>
-                                  <td style="width:25%">SLEEP STAGES</td>
-                                  <td>SELECTED EVENTS</td>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {% for i in range(sleep_stages|length) %}
-                                <tr>
-                                  <td style="vertical-align:middle">{{sleep_stages[i]}}</td>
-                                  <td id="st_annot_td_{{sleep_stages[i]}}"></td>
-                                </tr>
-                                {%endfor%}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -293,6 +252,22 @@
   <div class="row mt-3 mb-3">
     <div class="col text-center">
         <a class="btn btn-primary" onclick="saveSettings();">Save</a>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="remain_here_modal" aria-hidden="true" aria-labelledby="exampleModalToggleLabel" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalToggleLabel">Settings Saved</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Your new settings have been saved. You need to go back the home page tab and apply the settings.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+      </div>
     </div>
   </div>
 </div>

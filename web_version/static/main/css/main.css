@@ -20,6 +20,10 @@ html, body, .container input {
     }
 }
 
+.modal h5 {
+    font-size:1.25rem;
+}
+
 .header {
     background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%)
 }
