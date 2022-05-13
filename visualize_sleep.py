@@ -404,11 +404,11 @@ class SleepInfo:
 
                 if i > 0:
                     if stage_sc == 'NA':
-                        self.sleep_cycles += [['NA', 'NA']]*count_sc
+                        self.sleep_cycles += [['NA', 'NA'] for _ in range(count_sc)]
                     else:
                         if stage_sc == 'REMP': is_first_rem = False
                         sc_index[stage_sc] += 1
-                        self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc]]*count_sc
+                        self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc] for _ in range(count_sc)]
                 
                 count_sc = 0
                 stage_sc = consecutive_epochs[i][0]
@@ -418,10 +418,10 @@ class SleepInfo:
             if i == len(consecutive_epochs)-1:
                 print(stage_sc, count_sc)
                 if stage_sc == 'NA':
-                    self.sleep_cycles += [['NA', 'NA']]*count_sc
+                    self.sleep_cycles += [['NA', 'NA'] for _ in range(count_sc)]
                 else:
                     sc_index[stage_sc] += 1
-                    self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc]]*count_sc
+                    self.sleep_cycles += [[f'{stage_sc[0]}C{sc_index[stage_sc]}', stage_sc] for _ in range(count_sc)]
 
         assert len(sleep_stages_epoch_wise) == len(self.sleep_cycles), "Sleep Cycle length does not match with hypnogram !!!"
 
