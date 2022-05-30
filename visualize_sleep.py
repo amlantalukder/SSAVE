@@ -132,8 +132,8 @@ class SleepInfo:
         whole_segs_std = np.std(self.eeg_data_epoch_wise, axis=2)
         std_thres = np.sort(short_segs_std, axis=None)[int(len(short_segs_std)*0.1)]
         std_thres2 = np.sort(whole_segs_std, axis=None)[int(len(whole_segs_std)*0.1)]
-        flat2d = np.any(detrend(short_segs, axis=3).std(axis=3) <= std_thres, axis=2)
-        flat2d = np.logical_or(flat2d, np.std(self.eeg_data_epoch_wise, axis=2) <= std_thres2)
+        flat2d = np.any(short_segs_std <= std_thres, axis=2)
+        flat2d = np.logical_or(flat2d, whole_segs_std <= std_thres2)
         flat1d = np.where(np.any(flat2d, axis=1))[0]
         bad_epochs = np.r_[bad_epochs, flat1d]
         
