@@ -156,48 +156,51 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def execute(self, view):
+
+        num_filtered_epochs = 0
         
-        #try:
+        try:
 
-        other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
+            other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 
-        if other_data['apply_filter'] != (view.form.get('apply_filter') == 'on'):
-            other_data['apply_filter'] = (view.form.get('apply_filter') == 'on')
-            self.app.logger.info(f'Apply filter: {other_data["apply_filter"]}')
-            other_data['state_changed'] = True
-        
-        if ('cut_options_selected' not in other_data) or (other_data['cut_options_selected'] != view.form.getlist('nremp_cut_options_selected')):
-            other_data['cut_options_selected'] = view.form.getlist('nremp_cut_options_selected')
-            self.app.logger.info(f'Cut options selected: {other_data["cut_options_selected"]}')
-            other_data['state_changed'] = True
+            if other_data['apply_filter'] != (view.form.get('apply_filter') == 'on'):
+                other_data['apply_filter'] = (view.form.get('apply_filter') == 'on')
+                self.app.logger.info(f'Apply filter: {other_data["apply_filter"]}')
+                other_data['state_changed'] = True
+            
+            if ('cut_options_selected' not in other_data) or (other_data['cut_options_selected'] != view.form.getlist('nremp_cut_options_selected')):
+                other_data['cut_options_selected'] = view.form.getlist('nremp_cut_options_selected')
+                self.app.logger.info(f'Cut options selected: {other_data["cut_options_selected"]}')
+                other_data['state_changed'] = True
 
-        self.app.logger.info(f'State changed: {self.state_changed}')
-        if other_data['state_changed']:
-            scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'])
-            scv_obj.cut_options_selected = list(np.array(other_data['cut_options_selected'], dtype=np.int64))
+            self.app.logger.info(f'State changed: {self.state_changed}')
+            if other_data['state_changed']:
+                scv_obj = scv.loadSleepData(other_data['input_file_path'], self.FOLDER_OUTPUT, other_data['file_type'])
+                scv_obj.cut_options_selected = list(np.array(other_data['cut_options_selected'], dtype=np.int64))
 
-            if other_data['file_type'] == 'edf':
-                scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
-                scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
-                scv.Config.FILTERS = other_data['FILTERS']
-                scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
-                
-                self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
-                self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
-                self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
+                if other_data['file_type'] == 'edf':
+                    scv.Config.CHANNELS_SELECTED = other_data['CHANNELS_SELECTED']
+                    scv.Config.sleep_stage_event_to_id_mapping = other_data['sleep_stage_event_to_id_mapping']
+                    scv.Config.FILTERS = other_data['FILTERS']
+                    scv.Config.EPOCH_SIZE = other_data['EPOCH_SIZE']
+                    
+                    self.app.logger.info(f'Config.CHANNELS_SELECTED: {scv.Config.CHANNELS_SELECTED}')
+                    self.app.logger.info(f'Config.sleep_stage_event_to_id_mapping: {scv.Config.sleep_stage_event_to_id_mapping}')
+                    self.app.logger.info(f'Config.FILTERS: {scv.Config.FILTERS}')
 
-            self.app.logger.info('Removing old output files')
-            self.removeOutputFiles(scv_obj)
-            scv_obj.clearSleepData()
-            scv.extractSleepStages(scv_obj, other_data['apply_filter'])
-            other_data['cut_options'] = scv_obj.cut_options
-            other_data['state_changed'] = False
+                self.app.logger.info('Removing old output files')
+                self.removeOutputFiles(scv_obj)
+                scv_obj.clearSleepData()
+                scv.extractSleepStages(scv_obj, other_data['apply_filter'])
+                num_filtered_epochs = scv_obj.num_filtered_epochs
+                other_data['cut_options'] = scv_obj.cut_options
+                other_data['state_changed'] = False
 
-        #except Exception as error:
-        #    return ('Failed', f"Execution failed, {str(error)}")
+        except Exception as error:
+           return ('Failed', f"Execution failed, {str(error)}")
 
         return ('Success', os.path.join(os.path.basename(self.FOLDER_OUTPUT), other_data['sample_name']), \
-                other_data['cut_options'], other_data['cut_options_selected'])
+                other_data['cut_options'], other_data['cut_options_selected'], num_filtered_epochs)
 
     # --------------------------------------------------------------------------
     def getConfig(self):

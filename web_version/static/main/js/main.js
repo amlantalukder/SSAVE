@@ -79,10 +79,12 @@ loadData = () => {
                 for(var id in arr=['configure_btn', 'execute_btn']){
                     enableElement(document.getElementById(arr[id]));
                 }
-            
+
                 for(var id in arr=['apply_filter_btn', 'apply_filter_label']){
                     document.getElementById(arr[id]).disabled = false;
                 }
+
+                document.getElementById('apply_filter_btn').checked = false;
             }
             else
                 enableElement(document.getElementById('execute_btn'));
@@ -104,6 +106,9 @@ showExecutionResults = (result) => {
         document.getElementById('vis_image').src = `${assets_folder}/failed.jpg`;
         return
     }
+
+    if(result['num_filtered_epochs'])
+        showStatus(`${result['num_filtered_epochs']} epochs are filtered out`);
 
     showStatus('Output files generated')
     

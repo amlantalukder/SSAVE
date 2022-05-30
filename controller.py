@@ -83,7 +83,7 @@ class DesktopUIController(Controller):
             self.scv_obj.apply_filter = view.apply_filter.get()
             self.state_changed = True
         
-        if self.scv_obj.cut_options_selected != view.cut_table.get():
+        if view.cut_table and self.scv_obj.cut_options_selected != view.cut_table.get():
             self.scv_obj.cut_options_selected = view.cut_table.get()
             self.state_changed = True
 

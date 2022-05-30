@@ -61,16 +61,21 @@ def execute(job_id):
     
     app.logger.info(f'Execution response: {response}, job id: {job_id}')
     
-    status, msg, *cut_options_settings = response
+    status, msg, *cut_options_settings, num_filtered_epochs = response
+    
+    response = {'status':status, 'msg':msg}
 
     if cut_options_settings:
         cut_options, cut_options_selected = cut_options_settings
         cut_options = list(np.array(cut_options, dtype=str))
         cut_options_selected = list(np.array(cut_options_selected, dtype=str))
+        response['cut_options'] = cut_options
+        response['cut_options_selected'] = cut_options_selected
 
-        return jsonify({'status':status, 'msg':msg, 'cut_options':cut_options, 'cut_options_selected':cut_options_selected})
+    if num_filtered_epochs > 0:
+        response['num_filtered_epochs'] = num_filtered_epochs
     
-    return jsonify({'status':status, 'msg':msg})
+    return jsonify(response)
 
 @app.route('/savesettings/<job_id>', methods = ['POST'])
 def saveSettings(job_id):

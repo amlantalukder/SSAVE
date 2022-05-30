@@ -35,6 +35,7 @@ class SleepInfo:
     bad_epoch_indices = []
     cut_options = []
     cut_options_selected = []
+    num_filtered_epochs = 0
 
     # --------------------------------------------------------------------------
     # Initialize object with sample name and epoch size (optional)
@@ -127,6 +128,10 @@ class SleepInfo:
             
         a, b, c = self.eeg_data_epoch_wise.shape
         short_segs = self.eeg_data_epoch_wise.reshape(a, b, c//flat_length, flat_length)
+        short_segs_std = detrend(short_segs, axis=3).std(axis=3)
+        whole_segs_std = np.std(self.eeg_data_epoch_wise, axis=2)
+        std_thres = np.sort(short_segs_std, axis=None)[int(len(short_segs_std)*0.1)]
+        std_thres2 = np.sort(whole_segs_std, axis=None)[int(len(whole_segs_std)*0.1)]
         flat2d = np.any(detrend(short_segs, axis=3).std(axis=3) <= std_thres, axis=2)
         flat2d = np.logical_or(flat2d, np.std(self.eeg_data_epoch_wise, axis=2) <= std_thres2)
         flat1d = np.where(np.any(flat2d, axis=1))[0]
@@ -139,8 +144,9 @@ class SleepInfo:
         
         self.eeg_data_epoch_wise = self.eeg_data_epoch_wise[indices]
         self.sleep_stages_epoch_wise = self.sleep_stages_epoch_wise[indices]
-
-        print(f'{len(bad_epochs)} epochs were filtered out')
+        
+        self.num_filtered_epochs = len(bad_epochs)
+        print(f'{self.num_filtered_epochs} epochs were filtered out')
 
     # --------------------------------------------------------------------------
     # Extract epoch wise data from the event info of the eeg data
@@ -416,7 +422,6 @@ class SleepInfo:
             count_sc += consecutive_epochs[i][1]
 
             if i == len(consecutive_epochs)-1:
-                print(stage_sc, count_sc)
                 if stage_sc == 'NA':
                     self.sleep_cycles += [['NA', 'NA'] for _ in range(count_sc)]
                 else:
