@@ -83,7 +83,7 @@ class Config:
     FILTERS = {'notch': 60.,  # [Hz]
         'bandpass': [0.05, 30.],  # [Hz]
         'amplitude_max': 500,
-        'flat_signal': [5, 0.2, 1.],
+        'flat_signal': 5,
         'bad_annots': []
     }
 

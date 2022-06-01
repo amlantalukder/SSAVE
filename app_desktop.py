@@ -1,7 +1,4 @@
 import os, sys, re
-if os.name == 'nt':
-    from ctypes import windll
-    windll.shcore.SetProcessDpiAwareness(1)
 import tkinter as tk
 from tkinter import BOTH, Tk, ttk, font, filedialog, scrolledtext, messagebox
 import pdb
@@ -21,7 +18,7 @@ class CbTreeview(ttk.Treeview):
         self._im_checked = ImageTk.PhotoImage(Image.open(os.path.join(pwd, 'checked.png')))
         self._im_unchecked = ImageTk.PhotoImage(Image.open(os.path.join(pwd, 'unchecked.png'))) 
         # create checheckbox images
-        #self._im_checked = tk.PhotoImage('checked',
+        #self._im_checked = tk.PhotoImage('checked', 
         #                                 data=b'GIF89a\x0e\x00\x0e\x00\xf0\x00\x00\x00\x00\x00\x00\x00\x00!\xf9\x04\x01\x00\x00\x00\x00,\x00\x00\x00\x00\x0e\x00\x0e\x00\x00\x02#\x04\x82\xa9v\xc8\xef\xdc\x83k\x9ap\xe5\xc4\x99S\x96l^\x83qZ\xd7\x8d$\xa8\xae\x99\x15Zl#\xd3\xa9"\x15\x00;',
         #                                 master=self)
         #self._im_unchecked = tk.PhotoImage('unchecked',
@@ -265,150 +262,80 @@ class SettingsDialog(Dialog):
         ch_panel.grid_columnconfigure((0, 1, 2, 3, 4, 5), weight=1)
 
     # --------------------------------------------------------------------------
-    def setSleepStageSelectionPanel(self):
+    def getFrameWithScrollBars(self, parent):
 
-        tk.Label(self.st_sel, text='These are the events found in your EDF file. Please select those that are sleep stages.', font=(self.font_name, self.font_size, 'bold')).pack(pady=(10, 0))
-
-        annotation_panel_left = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
-        annotation_panel_left.pack(side="left", fill=tk.Y, padx=10, pady=10, expand=True)
-
-        tk.Label(annotation_panel_left, text='All Events', bg="#717a82", fg='white').pack(fill=tk.X)
-
-        container1 = tk.Frame(annotation_panel_left)
+        container1 = tk.Frame(parent)
         container1.pack(fill=tk.BOTH, expand=True)
         container2 = tk.Frame(container1)
-        container2.pack(side='top', fill='both', expand=True)
+        container2.pack(side='top', fill=tk.BOTH, expand=True)
         canvas = tk.Canvas(container2)
         canvas.pack(side="left", fill=tk.BOTH)
         vscrollbar = ttk.Scrollbar(container2, orient="vertical", command=canvas.yview)
         vscrollbar.pack(side="right", fill=tk.Y)
         hscrollbar = ttk.Scrollbar(container1, orient="horizontal", command=canvas.xview)
-        hscrollbar.pack(side="bottom", fill="x")
+        hscrollbar.pack(side="bottom", fill=tk.X)
         
-        st_panel_left = tk.Frame(canvas)
-        st_panel_left.pack(fill=tk.BOTH)
+        frame_with_scbar = tk.Frame(canvas)
+        frame_with_scbar.pack(fill=tk.BOTH)
         
-        st_panel_left.bind(
+        frame_with_scbar.bind(
             "<Configure>",
             lambda e: canvas.configure(
                 scrollregion=canvas.bbox("all")
             )
         )
 
-        canvas.create_window((0, 0), window=st_panel_left, anchor="nw")
+        canvas.create_window((0, 0), window=frame_with_scbar, anchor="nw")
         canvas.configure(xscrollcommand=hscrollbar.set)
         canvas.configure(yscrollcommand=vscrollbar.set)
 
-        self.relevant_annotation_label = tk.Label(st_panel_left, text='', anchor='w')
-        self.relevant_annotation_label.pack(fill=tk.X)
+        return frame_with_scbar
 
-        self.annotations_relevant = tk.Frame(st_panel_left)
-        self.annotations_relevant.pack(fill=tk.X)
+    # --------------------------------------------------------------------------
+    def setSleepStageSelectionPanel(self):
 
-        divider = tk.Frame(st_panel_left, height=2, borderwidth=1, relief='solid')
-        divider.pack(fill=tk.X)
-        divider.pack_propagate(0)
+        tk.Label(self.st_sel, text='These are the events found in your EDF file. Please select those that are sleep stages.', font=(self.font_name, self.font_size, 'bold')).pack(pady=(10, 0))
 
-        self.nonrelevant_annotation_label = tk.Label(st_panel_left, text='', anchor='w')
-        self.nonrelevant_annotation_label.pack(fill=tk.X)
+        annotation_panel_left = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
+        annotation_panel_left.pack(side="left", fill=tk.Y, padx=10, pady=10)
 
-        self.annotations_nonrelevant = tk.Frame(st_panel_left)
-        self.annotations_nonrelevant.pack()
+        tk.Label(annotation_panel_left, text='All Events', bg="#717a82", fg='white').pack(fill=tk.X)
+
+        self.st_panel_left = self.getFrameWithScrollBars(annotation_panel_left)
 
         move_btn_panel = tk.Frame(self.st_sel, width=40)
         move_btn_panel.pack(side="left", fill=tk.Y, padx=10, pady=10)
         move_btn_panel.pack_propagate(0)
-        
-        move_btn_group_panel = tk.Frame(move_btn_panel, height=160)
-        move_btn_group_panel.pack(fill=tk.X)
-        move_btn_group_panel.pack_propagate(0)
 
-        move_left_btn_panel = tk.Frame(move_btn_group_panel, bg="#ececec")
+        move_left_btn_panel = tk.Frame(move_btn_panel, bg="#ececec")
         move_left_btn_panel.pack(expand=True, fill=tk.Y)
         move_right_btn_panel = tk.Frame(move_btn_panel)
         move_right_btn_panel.pack(expand=True, fill=tk.Y)
         tk.Button(move_left_btn_panel, text='<<', command=self.moveAnnotsToLeftPanel).pack(side='bottom')
         tk.Button(move_right_btn_panel, text='>>', command=self.moveAnnotsToRightPanel).pack(side='top')
-
-        move_no_button_panel = tk.Frame(move_btn_panel)
-        move_no_button_panel.pack(fill=tk.Y, expand=True)
-
-        config = self.controller.getConfig()
         
         annotation_panel_right = tk.Frame(self.st_sel, borderwidth=1, relief='solid')
         annotation_panel_right.pack(side="left", fill=tk.BOTH, padx=10, pady=10, expand=True)
         
         tk.Label(annotation_panel_right, text='Assigned Events', bg="#717a82", fg='white').pack(fill=tk.X)
-        
-        annotation_st_panel = tk.Frame(annotation_panel_right)
-        annotation_st_panel.pack(fill=tk.BOTH)
 
-        self.st_options = ttk.Combobox(annotation_st_panel, values=config.SLEEP_STAGE_ALL_NAMES, state='readonly', font=(self.font_name, self.font_size))
-        self.st_options.bind('<<ComboboxSelected>>', self.loadAnnotsRightPanel)
-        self.st_options.pack(fill=tk.X, padx=10)
-        self.st_options.current(0)
-        container11 = tk.Frame(annotation_st_panel, borderwidth=1, relief='solid')
-        container11.pack(fill=tk.BOTH, padx=10, pady=(0, 10))
-        container21 = tk.Frame(container11)
-        container21.pack(side='top', fill='both', expand=True)
-        canvas1 = tk.Canvas(container21)
-        canvas1.pack(side="left", fill="both")
-        vscrollbar1 = ttk.Scrollbar(container21, orient="vertical", command=canvas1.yview)
-        vscrollbar1.pack(side="right", fill="y")
-        hscrollbar1 = ttk.Scrollbar(container11, orient="horizontal", command=canvas1.xview)
-        hscrollbar1.pack(side="bottom", fill="x")
-        
-        self.st_panel_right = tk.Frame(canvas1)
-        self.st_panel_right.pack(fill=tk.BOTH)
-        
-        self.st_panel_right.bind(
-            "<Configure>",
-            lambda e: canvas1.configure(
-                scrollregion=canvas1.bbox("all")
-            )
-        )
+        annotation_panel_st = tk.Frame(annotation_panel_right)
+        annotation_panel_st.pack(fill=tk.BOTH, expand=True)
 
-        canvas1.create_window((0, 0), window=self.st_panel_right, anchor="nw")
-        canvas1.configure(xscrollcommand=hscrollbar1.set)
-        canvas1.configure(yscrollcommand=vscrollbar1.set)
+        config = self.controller.getConfig()
 
-        annotation_st_sel = tk.Frame(annotation_panel_right, borderwidth=1, relief='solid')
-        annotation_st_sel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
-
-        tk.Label(annotation_st_sel, text="The following events are assigned to the sleep stages", font=(self.font_name, self.font_size, 'bold')).pack(padx=10, pady=10)
-
-        style = ttk.Style()
-        style.configure("mystyle.Treeview.Heading", font=(self.font_name, self.font_size, 'bold'), rowheight=int(self.font_size*2.5)) # Modify the font of the headings
-        style.configure("mystyle.Treeview", highlightthickness=0, bd=0, font=(self.font_name, self.font_size-2, ), rowheight=int((self.font_size-2)*2.5)) # Modify the font of the body
-        style.layout("mystyle.Treeview", [('mystyle.Treeview.treearea', {'sticky': 'nswe'})]) # Remove the borders
-
-        self.st_annotations = ttk.Treeview(annotation_st_sel, style="mystyle.Treeview")
-        self.st_annotations.pack(fill=tk.BOTH, expand=1)
-
-        self.st_annotations['columns']= ('SLEEP STAGES', 'SELECTED SLEEP STAGES')
-        self.st_annotations.column("#0", width=0,  stretch=tk.NO)
-        self.st_annotations.column("SLEEP STAGES", anchor=tk.CENTER, width=120)
-        self.st_annotations.column("SELECTED SLEEP STAGES", anchor=tk.CENTER, width=230)
-
-        self.st_annotations.heading("#0", text="", anchor=tk.CENTER)
-        self.st_annotations.heading("SLEEP STAGES", text="SLEEP STAGES",anchor=tk.CENTER)
-        self.st_annotations.heading("SELECTED SLEEP STAGES", text="SELECTED SLEEP STAGES", anchor=tk.CENTER)
-
-        self.st_annotations.tag_configure('odd', background='#E8E8E8')
-        self.st_annotations.tag_configure('even', background='#DFDFDF')
-
-        # Constructing vertical scrollbar
-        # with treeview
-        verscrlbar = ttk.Scrollbar(self.st_annotations,
-                                orient ="vertical",
-                                command = self.st_annotations.yview)
-        
-        # Calling pack method w.r.to vertical
-        # scrollbar
-        verscrlbar.pack(side ='right', fill ='y')
-
-        # Configuring treeview
-        self.st_annotations.configure(yscrollcommand = verscrlbar.set)
+        self.st_name_entry = tk.IntVar()
+        self.st_annots_selected_containers = []
+        for st_stage_ind, st_name in enumerate(config.SLEEP_STAGE_ALL_NAMES):
+            annotation_panel_st_header = tk.Frame(annotation_panel_st, borderwidth=1, relief='solid', bg='#e4e4e4')
+            annotation_panel_st_header.pack(fill=tk.X)
+            ttk.Radiobutton(annotation_panel_st_header, text='', variable=self.st_name_entry, value=st_stage_ind, command=self.switchSTPanel).pack(side='left')
+            ttk.Label(annotation_panel_st_header, text=st_name).pack()
+            annotation_panel_st_content = ttk.Frame(annotation_panel_st, height=80)
+            annotation_panel_st_content.pack(fill=tk.BOTH, padx=10, pady=10)
+            annotation_panel_st_content.pack_propagate(0)
+            self.st_annots_selected_containers.append(self.getFrameWithScrollBars(annotation_panel_st_content))
+        self.st_name_entry.set(0)
 
         self.annot_values, self.annot_checkbuttons_left, self.annot_checkbuttons_right = {}, {}, {}
         for i in range(len(self.controller.annotations_all)):
@@ -425,7 +352,6 @@ class SettingsDialog(Dialog):
 
         self.loadAnnotsLeftPanel()
         self.loadAnnotsRightPanel()
-        self.loadSTAnnotationTable()
 
     # --------------------------------------------------------------------------
     def setFilterSettingsPanel(self):
@@ -464,18 +390,8 @@ class SettingsDialog(Dialog):
         flat_signal_filter_panel.pack(fill=tk.X, padx=10, pady=10)
         tk.Label(flat_signal_filter_panel, text="Duration (seconds):", width=63, anchor='e', font=(self.font_name, self.font_size-2)).grid(row=0, column=0, padx=10, sticky='nse')
         self.flat_signal_duration_entry = ttk.Entry(flat_signal_filter_panel, font=(self.font_name, self.font_size), width=8, validate='all', validatecommand=(vcmd, '%P'))
-        self.flat_signal_duration_entry.insert(tk.END, config.FILTERS['flat_signal'][0])
+        self.flat_signal_duration_entry.insert(tk.END, config.FILTERS['flat_signal'])
         self.flat_signal_duration_entry.grid(row=0, column=1, padx=10)
-
-        tk.Label(flat_signal_filter_panel, text="Minimum frequency standard deviation in flat signal duration:", width=63, anchor='e', font=(self.font_name, self.font_size-2)).grid(row=1, column=0, padx=10, sticky='nse')
-        self.freq_std_min_flat_entry = ttk.Entry(flat_signal_filter_panel, font=(self.font_name, self.font_size), width=8, validate='all', validatecommand=(vcmd, '%P'))
-        self.freq_std_min_flat_entry.insert(tk.END, config.FILTERS['flat_signal'][1])
-        self.freq_std_min_flat_entry.grid(row=1, column=1, padx=10)
-
-        tk.Label(flat_signal_filter_panel, text="Minimum frequency standard deviation in an epoch:", width=63, anchor='e', font=(self.font_name, self.font_size-2)).grid(row=2, column=0, padx=10, sticky='nse')
-        self.freq_std_min_epoch_entry = ttk.Entry(flat_signal_filter_panel, font=(self.font_name, self.font_size), width=8, validate='all', validatecommand=(vcmd, '%P'))
-        self.freq_std_min_epoch_entry.insert(tk.END, config.FILTERS['flat_signal'][2])
-        self.freq_std_min_epoch_entry.grid(row=2, column=1, padx=10)
 
         bad_annots_panel = tk.LabelFrame(self.filter_sel, text='Events to remove from consideration')
         bad_annots_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
@@ -559,7 +475,35 @@ class SettingsDialog(Dialog):
             iid = wrap_rows(self.st_annotations, '', 'end', iid, (st_name, annots), ('odd' if st_stage_ind % 2 else "even"))
 
     # --------------------------------------------------------------------------
+    def switchSTPanel(self):
+        st_stage_ind_current = self.st_name_entry.get()
+        for st_stage_ind in self.annot_checkbuttons_right:
+            for annot_name in self.annot_checkbuttons_right[st_stage_ind]:
+                if self.annot_checkbuttons_right[st_stage_ind][annot_name] is not None:
+                    self.annot_checkbuttons_right[st_stage_ind][annot_name].config(state=tk.DISABLED if st_stage_ind != st_stage_ind_current else tk.NORMAL)
+                
+
+    # --------------------------------------------------------------------------
     def loadAnnotsLeftPanel(self):
+
+        for child in self.st_panel_left.winfo_children():
+            child.destroy()
+
+        relevant_annotation_label = tk.Label(self.st_panel_left, text='', anchor='w')
+        relevant_annotation_label.pack(fill=tk.X)
+
+        annotations_relevant = tk.Frame(self.st_panel_left)
+        annotations_relevant.pack(fill=tk.X)
+
+        divider = tk.Frame(self.st_panel_left, height=2, borderwidth=1, relief='solid')
+        divider.pack(fill=tk.X)
+        divider.pack_propagate(0)
+
+        nonrelevant_annotation_label = tk.Label(self.st_panel_left, text='', anchor='w')
+        nonrelevant_annotation_label.pack(fill=tk.X)
+
+        annotations_nonrelevant = tk.Frame(self.st_panel_left)
+        annotations_nonrelevant.pack()
 
         def hasKeyword(x):
             for kw in st_keywords:
@@ -575,67 +519,71 @@ class SettingsDialog(Dialog):
         for i, annot_name in enumerate(sorted(list(self.annot_values.keys()))):
             if annot_name in self.annot_checkbuttons_left and self.annot_checkbuttons_left[annot_name] is not None:
                 if hasKeyword(annot_name):
-                    parent_widget = self.annotations_relevant
+                    parent_widget = annotations_relevant
                     found_relevant_annots = True
                 else:
-                    parent_widget = self.annotations_nonrelevant
+                    parent_widget = annotations_nonrelevant
                     found_nonrelevant_annots = True
                 self.annot_checkbuttons_left[annot_name] = tk.Checkbutton(parent_widget, text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2))
                 self.annot_checkbuttons_left[annot_name].grid(row=i, column=0, padx=5, pady=5, sticky='nw')
                 self.annot_values[annot_name].set(False)
 
         if found_relevant_annots: 
-            self.relevant_annotation_label.configure(text='Relevant sleep stage events')
+            relevant_annotation_label.configure(text='Relevant sleep stage events')
         else:
-            self.relevant_annotation_label.configure(text='No relevant sleep stage events to select')
+            relevant_annotation_label.configure(text='No relevant sleep stage events to select')
 
         if found_nonrelevant_annots: 
-            self.nonrelevant_annotation_label.configure(text='Other events')
+            nonrelevant_annotation_label.configure(text='Other events')
         else:
-            self.nonrelevant_annotation_label.configure(text='')
+            nonrelevant_annotation_label.configure(text='')
 
     # --------------------------------------------------------------------------
-    def loadAnnotsRightPanel(self, event=None):
-        
-        st_stage_ind = self.st_options.current()
-        for child in self.st_panel_right.winfo_children():
+    def loadAnnotsRightPanel(self):
+
+        st_stage_ind_current = self.st_name_entry.get()
+        for child in self.st_annots_selected_containers[st_stage_ind_current].winfo_children():
             child.destroy()
 
         for i, annot_name in enumerate(sorted(list(self.annot_values.keys()))):
-            if annot_name in self.annot_checkbuttons_right[st_stage_ind] and self.annot_checkbuttons_right[st_stage_ind][annot_name] is not None:
-                self.annot_checkbuttons_right[st_stage_ind][annot_name] = tk.Checkbutton(self.st_panel_right, text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2))
-                self.annot_checkbuttons_right[st_stage_ind][annot_name].grid(row=i, column=0, padx=5, pady=5, sticky='nw')
-                self.annot_values[annot_name].set(False)   
+            for st_stage_ind in self.annot_checkbuttons_right:
+                if annot_name in self.annot_checkbuttons_right[st_stage_ind] and self.annot_checkbuttons_right[st_stage_ind][annot_name] is not None:
+                    if st_stage_ind != st_stage_ind_current:
+                        self.annot_checkbuttons_right[st_stage_ind][annot_name] = tk.Checkbutton(self.st_annots_selected_containers[st_stage_ind], text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2), state=tk.DISABLED)
+                    else:    
+                        self.annot_checkbuttons_right[st_stage_ind][annot_name] = tk.Checkbutton(self.st_annots_selected_containers[st_stage_ind], text=annot_name, variable=self.annot_values[annot_name], onvalue=True, offvalue=False, font=(self.font_name, self.font_size-2))
+                    self.annot_checkbuttons_right[st_stage_ind][annot_name].grid(row=i, column=0, padx=5, pady=5, sticky='nw')
+                    self.annot_values[annot_name].set(False)
 
     # --------------------------------------------------------------------------
     def moveAnnotsToLeftPanel(self):
 
-        st_stage_ind = self.st_options.current()
+        st_stage_ind = self.st_name_entry.get()
 
-        for annot_name in self.annot_values.keys():
+        for annot_name in self.annot_checkbuttons_right[st_stage_ind]:
             if self.annot_values[annot_name].get() == True:
-                if annot_name in self.annot_checkbuttons_right[st_stage_ind] and self.annot_checkbuttons_right[st_stage_ind][annot_name] is not None:
+                if self.annot_checkbuttons_right[st_stage_ind][annot_name] is not None:
                     self.annot_checkbuttons_right[st_stage_ind][annot_name].destroy()
                     self.annot_checkbuttons_right[st_stage_ind][annot_name] = None
                     self.annot_checkbuttons_left[annot_name] = 'TBD'
 
         self.loadAnnotsLeftPanel()
-        self.loadSTAnnotationTable()
+        self.loadAnnotsRightPanel()
 
     # --------------------------------------------------------------------------
     def moveAnnotsToRightPanel(self):
 
-        st_stage_ind = self.st_options.current()
+        st_stage_ind = self.st_name_entry.get()
 
-        for annot_name in self.annot_values.keys():
+        for annot_name in self.annot_checkbuttons_left:
             if self.annot_values[annot_name].get() == True:
-                if annot_name in self.annot_checkbuttons_left and self.annot_checkbuttons_left[annot_name] is not None:
+                if self.annot_checkbuttons_left[annot_name] is not None:
                     self.annot_checkbuttons_left[annot_name].destroy()
                     self.annot_checkbuttons_left[annot_name] = None
                     self.annot_checkbuttons_right[st_stage_ind][annot_name] = 'TBD'
                     
+        self.loadAnnotsLeftPanel()
         self.loadAnnotsRightPanel()
-        self.loadSTAnnotationTable()
 
     # --------------------------------------------------------------------------
     def selectAllChannels(self, select):
@@ -683,8 +631,8 @@ class MainDialog(Dialog):
         self.setInputPanel()
         self.setOutputPanel()
         
-        #sys.stdout = TextRedirector(self)
-        #sys.stderr = TextRedirector(self)
+        sys.stdout = TextRedirector(self)
+        sys.stderr = TextRedirector(self)
         master.configure(bg='white') 
         master.mainloop()
 

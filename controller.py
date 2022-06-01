@@ -92,7 +92,7 @@ class DesktopUIController(Controller):
             self.scv_obj.clearSleepData()
         
             try:
-                scv.extractSleepStages(self.scv_obj)
+                scv.extractSleepStages(self.scv_obj, self.scv_obj.apply_filter)
             except scv.SpecialError as error:
                 print(error.msg)
 
@@ -121,16 +121,13 @@ class DesktopUIController(Controller):
         bandpass_max_freq = self.validate(view.bandpass_max_freq_entry.get(), 'frequency', input_name='Bandpass Minimum Frequency')
         amplitude_max = self.validate(view.amplitude_max_entry.get(), 'amplitude', input_name='Maximum Amplitude')
         flat_signal_duration = self.validate(view.flat_signal_duration_entry.get(), 'time', input_name='Flat Signal Duration')
-        freq_std_min = self.validate(view.freq_std_min_flat_entry.get(), 'frequency', input_name='Minimum frequency standard deviation in flat signal duration')
-        freq_std_max = self.validate(view.freq_std_min_epoch_entry.get(), 'frequency', input_name='Minimum frequency standard deviation in an epoch')
         bad_annots = [annot for annot, var in view.bad_annots_sel.items() if var.get() == True]
         epoch_size = self.validate(view.epoch_size_entry.get(), 'time', input_name='Epoch Size')
 
         if len(channels_selected) == 0:
             return (False, "No channels selected")
 
-        if (notch_freq is None) or (bandpass_min_freq is None) or (bandpass_max_freq is None) or (amplitude_max is None) or \
-            (flat_signal_duration is None) or (freq_std_min is None) or (freq_std_max is None):
+        if (notch_freq is None) or (bandpass_min_freq is None) or (bandpass_max_freq is None) or (amplitude_max is None) or (flat_signal_duration is None):
             return (False, "Invalid filter input")
 
         if bandpass_max_freq < bandpass_min_freq:
@@ -142,7 +139,7 @@ class DesktopUIController(Controller):
         scv.Config.FILTERS['notch'] = notch_freq
         scv.Config.FILTERS['bandpass'] = [bandpass_min_freq, bandpass_max_freq]
         scv.Config.FILTERS['amplitude_max'] = amplitude_max
-        scv.Config.FILTERS['flat_signal'] = [flat_signal_duration, freq_std_min, freq_std_max]
+        scv.Config.FILTERS['flat_signal'] = flat_signal_duration
         scv.Config.FILTERS['bad_annots'] = bad_annots
         scv.Config.CHANNELS_SELECTED = channels_selected
         scv.Config.EPOCH_SIZE = epoch_size

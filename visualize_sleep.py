@@ -123,7 +123,7 @@ class SleepInfo:
         bad_epochs = np.r_[bad_epochs, amplitude_large1d]
 
         # if there is any flat signal with flat_length
-        flat_duration, std_thres, std_thres2 = Config.FILTERS['flat_signal']
+        flat_duration = Config.FILTERS['flat_signal']
         flat_length = int(round(flat_duration*self.sampling_freq))
             
         a, b, c = self.eeg_data_epoch_wise.shape

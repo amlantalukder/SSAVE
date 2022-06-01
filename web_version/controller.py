@@ -118,8 +118,6 @@ class WebUIController(Controller):
             bandpass_max_freq = self.validate(view.form.get('bandpass_max_freq_entry'), 'frequency', input_name='Bandpass Minimum Frequency')
             amplitude_max = self.validate(view.form.get('amplitude_max_entry'), 'amplitude', input_name='Maximum Amplitude')
             flat_signal_duration = self.validate(view.form.get('flat_signal_duration_entry'), 'time', input_name='Flat Signal Duration')
-            freq_std_min = self.validate(view.form.get('freq_std_min_flat_entry'), 'frequency', input_name='Minimum frequency standard deviation in flat signal duration')
-            freq_std_max = self.validate(view.form.get('freq_std_min_epoch_entry'), 'frequency', input_name='Minimum frequency standard deviation in an epoch')
             bad_annots = view.form.getlist('bad_annots_list')
 
             epoch_size = self.validate(view.form.get('epoch_size'), 'epoch_size')
@@ -127,8 +125,7 @@ class WebUIController(Controller):
             if len(channels_selected) == 0:
                 return (False, "No channels selected")
 
-            if (notch_freq is None) or (bandpass_min_freq is None) or (bandpass_max_freq is None) or (amplitude_max is None) or \
-                (flat_signal_duration is None) or (freq_std_min is None) or (freq_std_max is None):
+            if (notch_freq is None) or (bandpass_min_freq is None) or (bandpass_max_freq is None) or (amplitude_max is None) or (flat_signal_duration is None):
                 return (False, "Invalid input")
 
             if bandpass_max_freq < bandpass_min_freq:
@@ -141,7 +138,7 @@ class WebUIController(Controller):
             other_data['FILTERS']['notch'] = notch_freq
             other_data['FILTERS']['bandpass'] = [bandpass_min_freq, bandpass_max_freq]
             other_data['FILTERS']['amplitude_max'] = amplitude_max
-            other_data['FILTERS']['flat_signal'] = [flat_signal_duration, freq_std_min, freq_std_max]
+            other_data['FILTERS']['flat_signal'] = flat_signal_duration
             other_data['FILTERS']['bad_annots'] = bad_annots
             other_data['EPOCH_SIZE'] = epoch_size
 
