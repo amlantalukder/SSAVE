@@ -285,7 +285,7 @@ class SleepInfo:
             duration_non_w = 0
             for stage, duration in sleep_stage_durations:
                 if stage != Config.WAKE_STAGE: duration_non_w += duration
-                if ((stage == Config.WAKE_STAGE and duration >= durationInEpoch(1)) or (stage == Config.N1_STAGE and duration > durationInEpoch(3))) and \
+                if ((stage == Config.WAKE_STAGE and duration > durationInEpoch(1)) or (stage == Config.N1_STAGE and duration > durationInEpoch(3))) and \
                     ((stage == Config.WAKE_STAGE and duration_non_w > durationInEpoch(5) and (total_duration_non_w - duration_non_w) > durationInEpoch(5)) or \
                         (stage == Config.N1_STAGE and (duration_non_w - duration) > durationInEpoch(5) and (total_duration_non_w - duration_non_w) > durationInEpoch(5))):
                     cut_options.append(index+1)
@@ -345,6 +345,16 @@ class SleepInfo:
         printDec('Extracting sleep cycles')
 
         # ----------------------------------------------------
+        # Get sleep cycles following a set of rules
+        # 1. The first REM of any size is counted as REMP. 
+        #    Otherwise, (N)REMP is followed by more than 5 min (10 epochs) of (N)REM (Ex: 20-2386_F_48.6_1_di)
+        # 2. NREMP will always start with a NREM stage (N1, N2 or N3). (Ex: 19-0599_M_5.4_1_di)
+        # 3. (N)REMP will end at the encounter of at least 5 min (10 epochs) of W stages. 
+        # 3. For the first NREMP, the initial "W" stages are skipped
+        # 4. For the last (N)REMP, the trailing "W" stages are skipped 
+        # ----------------------------------------------------
+
+        # ----------------------------------------------------
         # Remove non sleep stages
         # ----------------------------------------------------
         sleep_stages_epoch_wise = [stage for stage in self.sleep_stages_epoch_wise if stage in Config.SLEEP_STAGE_ANNOTS]
@@ -387,14 +397,6 @@ class SleepInfo:
                     count_sc = 0
             i += 1
     
-        # ----------------------------------------------------
-        # Get sleep cycles following a set of rules
-        # 1. The first REM of any size is counted as REMP. 
-        #    Otherwise, (N)REMP is followed by more than 5 min (10 epochs) of (N)REM (Ex: 20-2386_F_48.6_1_di)
-        # 2. NREMP will always start with a NREM stage (N1, N2 or N3). (Ex: 19-0599_M_5.4_1_di)
-        # 3. For the first NREMP, the initial "W" stages are skipped
-        # 4. For the last (N)REMP, the trailing "W" stages are skipped 
-        # ----------------------------------------------------
         self.sleep_cycles = []
         is_first_rem = True
         sc_index = {'NREMP':0, 'REMP':0}

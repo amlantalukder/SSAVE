@@ -1,7 +1,7 @@
 import sys, os, logging, pdb
 from flask import Flask
 
-log_path = os.path.join(os.path.dirname(__file__), 'scvis.log')
+log_path = os.path.join(os.path.dirname(__file__), 'ssave.log')
 logging.basicConfig(filename=log_path, level=logging.INFO)
 
 class PrefixMiddleware(object):
@@ -21,6 +21,6 @@ class PrefixMiddleware(object):
             return ["This url does not belong to the app.".encode()]
 
 app = Flask(__name__)
-app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/scvis')
+app.wsgi_app = PrefixMiddleware(app.wsgi_app, prefix='/ssave')
 
 from web_version import routes

@@ -197,7 +197,7 @@ class SettingsDialog(Dialog):
     def __init__(self, master, controller):
         
         master = tk.Toplevel(master)
-        master.title('SCVIS - Settings')
+        master.title('SSAVE - Settings')
 
         super().__init__(master, 900, 800)
 
@@ -622,7 +622,7 @@ class MainDialog(Dialog):
     def __init__(self, controller) -> None:
 
         master = Tk()
-        master.title('SCVIS - Sleep Cycle Visualization Tool')
+        master.title('SSAVE - Sleep Cycle Visualization Tool')
 
         super().__init__(master, 900, 1000)
 

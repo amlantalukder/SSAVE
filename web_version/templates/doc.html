@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>SCVIS - Sleep Cycle Visualization Tool</title>
+<title>SSAVE - Sleep Cycle Visualization Tool</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/stroke.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/bootstrap.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/animate.css') }}">
@@ -16,7 +16,7 @@
     <a id="back2top" href="#top" title="Back to Top" class="infooter" style="display: inline;">Back<br>to Top</a>
     <div class="header row">
         <div class="col text-center">
-            <h1>SCVIS - Documentation</h1>
+            <h1>SSAVE - Documentation</h1>
             <!-- end title -->
         </div>
         <div class="col-auto m-auto">
@@ -56,7 +56,7 @@
                             <div class="col-md-12 full">
                                 <div class="intro1">
                                     <ul>
-                                        <li><strong>Item Name : </strong>Sleep Cycle Visualization (SCVIS) tool</li>
+                                        <li><strong>Item Name : </strong>Sleep Cycle Visualization (SSAVE) tool</li>
                                         <li><strong>Item Version : </strong> v 1.0</li>
                                         <li><strong>Author : </strong> <a href="https://www.niehs.nih.gov/research/atniehs/labs/bb/staff/index.cfm"
                                                 target="_blank">Leping Li and team</a></li>
@@ -64,12 +64,12 @@
                                 </div>
 
                                 <hr>
-                                <p><strong>SCVIS</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
+                                <p><strong>SSAVE</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
                                 This documentation is to walk users through the both the web and desktop versions of the tool.</p>
                                 <hr>
                                 <div class="para">
                                     <h4>Desktop version</h4>
-                                    <p>The desktop version of SCVIS can be downloaded <a href="#">here</a>. 
+                                    <p>The desktop version of SSAVE can be downloaded <a href="#">here</a>. 
                                         In order to use the desktop version, you will need to install the following tools and packages.</p>
                                     <ol>
                                         <li>1. Install python 3.6 or higher</li>
@@ -80,7 +80,7 @@
                                 <div class="para">
                                     <h4>User interface</h4>
 
-                                    <p>The user interface (UI) of SCVIS is similar for both web and desktop versions. 
+                                    <p>The user interface (UI) of SSAVE is similar for both web and desktop versions. 
                                         The <a href="{{url_for('home')}}">home page</a> UI has three main panels: 
                                     </p>
                                     <ol>
@@ -119,7 +119,7 @@
                     <div class="col-md-12">
                         <div class="para">
                             <h4>Inputs</h4>
-                            <p>SCVIS takes two types of input files.</p>
+                            <p>SSAVE takes two types of input files.</p>
                             <ol class="ms-4">
                                 <li>1. EEG sleep data in EDF format.</li>
                                 <li>2. Epoch wise sleep stages in text format. This file must have at least two columns. 
@@ -132,7 +132,7 @@
                         <hr>
                         <div class="para">
                             <h4>Outputs</h4>
-                            <p>SCVIS generates following outputs.</p>
+                            <p>SSAVE generates following outputs.</p>
                             <ol class="ms-4">
                                 <li>1. An image file for the visualization in JPEG format. 
                                     The plot shows the sleep cycles, sleep stages and spectrogram. 
@@ -172,7 +172,7 @@
 
                 <h4>Execution</h4>
 
-                <p>The execution of SCVIS begins after clicking the "Execute" button. Once the execution is done, 
+                <p>The execution of SSAVE begins after clicking the "Execute" button. Once the execution is done, 
                     the user can see the resulted visualization and the extracted sleep cycles and stages 
                     in the the two tabs of the output panel. The user interface panel will notify users with 
                     useful messages at every step.
@@ -194,7 +194,7 @@
 
                 <p>
                     Sometimes an NREM sleep cycle can be too long to be considered as a single cycle. In that case, the long NREM sleep cyle can be split into 
-                    two NREM cycles. SCVIS applies rules to determine the epoch numbers where a long NREM can be split. If it can find these splitting options,
+                    two NREM cycles. SSAVE applies rules to determine the epoch numbers where a long NREM can be split. If it can find these splitting options,
                     another tab named "NREM cut points" will be shown on the output panel. This panel will present the possible epoch numbers options to cut a 
                     long NREM cycle. User can select the cut point options and click execute to apply them on the output. The spectrogram is also shown in this
                     tab to help user determine the cut options.
@@ -247,7 +247,7 @@
                                 In the "Select Channels" tab, all the available EEG channels from the input EDF file are shown. 
                                 The following EEG channels are selected by default: F3, F4, C3, C4, O1, O2, M1 and M2. 
                                 User can change this configuration by selecting any channels of their liking. When processing data, 
-                                SCVIS will consider the average of all the selected channels.
+                                SSAVE will consider the average of all the selected channels.
                             </p>
                         </div>
                     </div>

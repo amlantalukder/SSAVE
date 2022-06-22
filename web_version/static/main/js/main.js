@@ -62,7 +62,7 @@ loadData = () => {
 
             return xhr;
         },
-        url: `/scvis/load/${job_id}`,
+        url: `/ssave/load/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
@@ -93,7 +93,7 @@ loadData = () => {
 };
 
 gotoConfigPage = () => {
-    window.open(`/scvis/config/${job_id}`);
+    window.open(`/ssave/config/${job_id}`);
 }
 
 showExecutionResults = (result) => {
@@ -236,7 +236,7 @@ execute = () => {
     }
     
     $.ajax({
-        url: `/scvis/execute/${job_id}`,
+        url: `/ssave/execute/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
@@ -253,7 +253,7 @@ downloadOutputs = () => {
     showStatus('Preparing files to download...');
     
     $.ajax({
-        url: `/scvis/download/${job_id}`,
+        url: `/ssave/download/${job_id}`,
         cache: false,
         processData: false,
         contentType: false,
@@ -299,7 +299,7 @@ saveSettings = () => {
     showStatus('Saving settings...');
     
     $.ajax({
-        url: `/scvis/savesettings/${job_id}`,
+        url: `/ssave/savesettings/${job_id}`,
         data: fd,
         cache: false,
         processData: false,
