@@ -1,10 +1,10 @@
-# SCVis
+# SSAVE
 
 Author: Amlan Talukder
 
 Date: Apr 6, 2022
 
-SCVis is a software used to detect and visualize sleep cycles from sleep data. It is developed by the Dr. Leping Li's group of BCBB branch NIH/NIEHS.
+SSAVE is a software used to detect and visualize sleep cycles from sleep data. It is developed by the Dr. Leping Li's group of BCBB branch NIH/NIEHS.
 
 INSTALLATION
 --------------------------------------------------------------------------------------------
