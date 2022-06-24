@@ -2,4 +2,5 @@
 .DS_Store
 Run.txt
 web_version/static/assets/temp
+web_version/static/assets/examples
 web_version/ssave.log

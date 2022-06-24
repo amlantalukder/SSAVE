@@ -1,14 +1,30 @@
+const examples = {
+    'EDF File 1' : ['19-2157_M_6.5_1_di_al.edf', 'Example EDF File 1.edf'],
+    'EDF File 2' : ['19-2183_F_8.3_1_di_al.edf', 'Example EDF File 2.edf'],
+    'EDF File 3' : ['19-2826_M_11.1_1_di_al.edf', 'Example EDF File 3.edf'],
+    'Sleep Stages File 1' : ['19-2157_M_6.5_1_di_al_st.txt', 'Example Sleep Stages File 1.txt'],
+    'Sleep Stages File 2' : ['19-2183_F_8.3_1_di_al_st.txt', 'Example Sleep Stages File 2.txt'],
+    'Sleep Stages File 3' : ['19-2826_M_11.1_1_di_al_st.txt', 'Example Sleep Stages File 3.txt']
+}
+
 setSampleFileType = () => {
 
     var file_type_options = document.getElementsByName("file_type");
+    var example_edf = document.getElementById('example_edf');
+    var example_annot = document.getElementById('example_annot');
+
     for(var i=0; i<file_type_options.length; i++){
         if(!file_type_options[i].checked) continue;
 
         if(file_type_options[i].value == 'annot'){
             $('#sample_file_path').attr('accept', '.txt');
+            hideElement(example_edf)
+            showElement(example_annot)
         }
         else {
             $('#sample_file_path').attr('accept', '.edf');
+            showElement(example_edf)
+            hideElement(example_annot)
         }
     }
 }
@@ -24,7 +40,7 @@ enableLoadButton = () => {
     }
 }
 
-loadData = () => {
+loadData = (example) => {
 
     for(var id in arr=['configure_btn', 'execute_btn', 'download_btn']){
         disableElement(document.getElementById(arr[id]));
@@ -37,11 +53,12 @@ loadData = () => {
     let myform = document.getElementById("input_form");
     let fd = new FormData(myform);
 
-    if(fd.get('sample_file_path').name == ''){
-        return showStatusMessage('No input file selected.', type='error');
+    if(example) {
+        document.getElementById('sample_file_path_proxy').value = examples[example][1];
+        fd.set('example', [examples[example][0], examples[example][1]]);
     }
-    if(fd.get('epoch_size') == ''){
-        return showStatusMessage('No epoch size selected.', type='error');
+    else if(fd.get('sample_file_path').name == ''){
+        return showStatusMessage('No input file selected.', type='error');
     }
 
     document.getElementById('status_area').innerHTML = '';

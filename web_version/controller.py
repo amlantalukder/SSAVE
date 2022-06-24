@@ -1,5 +1,5 @@
 from functools import cmp_to_key
-import os, sys, re
+import os, shutil
 import numpy as np
 import pdb
 
@@ -55,48 +55,57 @@ class WebUIController(Controller):
         self.job_id = job_id
         self.FOLDER_INPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/input_files')
         self.FOLDER_OUTPUT = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/output_files')
+        self.FOLDER_EXAMPLES = os.path.join(os.path.dirname(__file__), f'static/assets/examples')
         self.FOLDER_OTHER_DATA = os.path.join(os.path.dirname(__file__), f'static/assets/temp/{self.job_id}/other_data_files')
         print(self)
 
     # --------------------------------------------------------------------------
     def loadSleepData(self, view):
 
-        #try:
+        try:
             
-        file_type = self.validate(view.form.get('file_type'), 'file_type')
-        f = view.files.get('sample_file_path')
-        if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
-        input_file_path = os.path.join(self.FOLDER_INPUT, f.filename)
-        f.save(input_file_path)
-        input_file_path = self.validate(input_file_path, 'input_file_path')
-
-        if(input_file_path is None) or (file_type is None): raise Exception
-
-        scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type)
-
-        other_data = {'sample_name':scv_obj.sample_name, 'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
-
-        if file_type == 'edf':
-
-            if scv_obj.eeg_data is None: scv_obj.loadEEG()
-
-            other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
-            other_data['channels_all'] = scv_obj.eeg_data.info['ch_names']
-
-            if len(other_data['channels_all']) == 0: print('No channels found !!!')
-
-            other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
-            other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
-            other_data['FILTERS'] = scv.Config.FILTERS
-            other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
+            file_type = self.validate(view.form.get('file_type'), 'file_type')
         
-        other_data['state_changed'] = True
-
-        if not os.path.exists(self.FOLDER_OTHER_DATA): os.makedirs(self.FOLDER_OTHER_DATA)
-        np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
+            if view.form.get('example') is None:
+                f = view.files.get('sample_file_path')
+                if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
+                input_file_path = os.path.join(self.FOLDER_INPUT, f.filename)
+                f.save(input_file_path)
+            else:
+                file_name, input_file_name = view.form.get('example').split(',')
+                example_file_path = os.path.join(self.FOLDER_EXAMPLES, file_name)
+                if not os.path.exists(self.FOLDER_INPUT): os.makedirs(self.FOLDER_INPUT)
+                input_file_path = os.path.join(self.FOLDER_INPUT, input_file_name)
+                shutil.copyfile(example_file_path, input_file_path)
             
-        #except Exception as error:
-        #    return ('Error', f"Data loading failed, {str(error)}")
+            input_file_path = self.validate(input_file_path, 'input_file_path')
+            if(input_file_path is None) or (file_type is None): raise Exception
+
+            scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type)
+
+            other_data = {'sample_name':scv_obj.sample_name, 'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
+
+            if file_type == 'edf':
+
+                if scv_obj.eeg_data is None: scv_obj.loadEEG()
+
+                other_data['annotations_all'] = np.sort(np.unique(scv_obj.eeg_data._annotations.description))
+                other_data['channels_all'] = scv_obj.eeg_data.info['ch_names']
+
+                if len(other_data['channels_all']) == 0: print('No channels found !!!')
+
+                other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
+                other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
+                other_data['FILTERS'] = scv.Config.FILTERS
+                other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
+            
+            other_data['state_changed'] = True
+
+            if not os.path.exists(self.FOLDER_OTHER_DATA): os.makedirs(self.FOLDER_OTHER_DATA)
+            np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
+            
+        except Exception as error:
+            return ('Error', f"Data loading failed, {str(error)}")
 
         return ('Success', "Loaded sleep data successfully", file_type)
 
