@@ -20,7 +20,7 @@
             <!-- end title -->
         </div>
         <div class="col-auto m-auto">
-            <a class="text-white" href="{{url_for('home')}}" target="_blank">[Home]</a>
+            <a class="text-white" href="{{url_for('home')}}" target="_blank"><h2>[Home]</h2></a>
         </div>
         <!-- end 12 -->
     </div>
@@ -30,17 +30,18 @@
             <nav class="docs-sidebar affix" data-spy="affix" data-offset-top="300" data-offset-bottom="200"
                 role="navigation">
                 <ul class="nav">
-                    <li class=""><a href="#line1">Inputs and Outputs</a></li>
-                    <li class=""><a href="#line2">Process Data</a></li>
-                    <li class=""><a href="#line3">Change Configuration</a></li>
+                    <li class=""><a href="#line1">Download</a></li>
+                    <li class=""><a href="#line2">Inputs and Outputs</a></li>
+                    <li class=""><a href="#line3">Process Data</a></li>
+                    <li class=""><a href="#line4">Change Configuration</a></li>
                         <ul class="nav">
-                            <li class=""><a href="#line3_1">Select channels</a></li>
-                            <li class=""><a href="#line3_2">Select Sleep Stage Events</a></li>
-                            <li class=""><a href="#line3_3">Set Filters</a></li>
-                            <li class=""><a href="#line3_4">Set Epoch Size</a></li>
+                            <li class=""><a href="#line4_1">Select channels</a></li>
+                            <li class=""><a href="#line4_2">Select Sleep Stage Events</a></li>
+                            <li class=""><a href="#line4_3">Set Filters</a></li>
+                            <li class=""><a href="#line4_4">Set Epoch Size</a></li>
                         </ul>
                     </li>
-                    <li class=""><a href="#line4">Cite Us</a></li>
+                    <li class=""><a href="#line5">Cite Us</a></li>
                 </ul>
             </nav>
         </div>
@@ -56,10 +57,10 @@
                             <div class="col-md-12 full">
                                 <div class="intro1">
                                     <ul>
-                                        <li><strong>Item Name : </strong>Sleep Cycle Visualization (SSAVE) tool</li>
+                                        <li><strong>Item Name : </strong>Sleep Cycle and Spectrogram Analysis and Visualization for Electroencephalography Data (SSAVE)</li>
                                         <li><strong>Item Version : </strong> v 1.0</li>
-                                        <li><strong>Author : </strong> <a href="https://www.niehs.nih.gov/research/atniehs/labs/bb/staff/index.cfm"
-                                                target="_blank">Leping Li and team</a></li>
+                                        <li><strong>Author : </strong> <a href="https://www.linkedin.com/in/amlan-talukder-phd-5415a933/"
+                                                target="_blank">Amlan Talukder</a></li>
                                     </ul>
                                 </div>
 
@@ -67,9 +68,9 @@
                                 <p><strong>SSAVE</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
                                 This documentation is to walk users through the both the web and desktop versions of the tool.</p>
                                 <hr>
-                                <div class="para">
+                                <div id="line1" class="para">
                                     <h4>Desktop version</h4>
-                                    <p>The desktop version of SSAVE can be downloaded from <a href="https://github.com/amlantalukder/SSAVE_DESKTOP" target="_blank">here</a>. 
+                                    <p>The desktop version of <strong>SSAVE can be downloaded from <a href="https://github.com/amlantalukder/SSAVE_DESKTOP" target="_blank">here</a></strong>. 
                                         In order to use the desktop version, you will need to install the following tools and packages.</p>
                                     <ol>
                                         <li>1. Install python 3.6 or higher</li>
@@ -103,7 +104,7 @@
                 </div>
             </section>
 
-            <section id="line1" class="section">
+            <section id="line2" class="section">
 
                 <div class="row">
                     <div class="col left-align">
@@ -210,7 +211,7 @@
 
             </section>
             <!-- end section -->
-            <section id="line3" class="section">
+            <section id="line4" class="section">
 
                 <div class="row">
                     <div class="col left-align">
@@ -241,7 +242,7 @@
                     </div>
 
                     <div class="col-md-8 overflow-auto">
-                        <h4 id="line7_1">Select Channels <a href="#top">[Back to top]</a></h4>
+                        <h4 id="line4_1">Select Channels <a href="#top">[Back to top]</a></h4>
                         <div style="height: 200px;">
                             <p>The EDF file of the sleep data contains channels of several types such as EEG channels, EMG channels, EOG channels etc.
                                 In the "Select Channels" tab, all the available EEG channels from the input EDF file are shown. 
@@ -265,7 +266,7 @@
                     </div>
 
                     <div class="col-md-8 overflow-auto">
-                        <h4 id="line7_2">Select Sleep Stage Events <a href="#top">[Back to top]</a></h4>
+                        <h4 id="line4_2">Select Sleep Stage Events <a href="#top">[Back to top]</a></h4>
                         <div style="height: 200px;">
                             <p>The EDF file associates particular events at different timestamps. 
                                 The events assigned to a sleep stage help to annotate the corresponding timestamps of the EEG data to that sleep stage.
@@ -302,7 +303,7 @@
                     </div>
 
                     <div class="col-md-8">
-                        <h4 id="line7_3">Set Filters <a href="#top">[Back to top]</a></h4>
+                        <h4 id="line4_3">Set Filters <a href="#top">[Back to top]</a></h4>
                         <p>
                             This tab shows the frequency filters (notch filters and band pass filters) to apply on the EEG data. 
                             The notch filter frequecy value (default 60 Hz) help to reduce the line noise from the data. 
@@ -327,7 +328,7 @@
                     </div>
 
                     <div class="col-md-8">
-                        <h4 id="line7_4">Set Epoch Size <a href="#top">[Back to top]</a></h4>
+                        <h4 id="line4_4">Set Epoch Size <a href="#top">[Back to top]</a></h4>
                         <p>
                             For EDF file with epoch window size different from 30 seconds, the user can change the epoch size.
                         </p>
@@ -339,7 +340,7 @@
             </section>
             <!-- end section -->
 
-            <section id="line4" class="section">
+            <section id="line5" class="section">
 
                 <div class="row">
                     <div class="col left-align">

@@ -32,12 +32,24 @@ input[type="radio"] {
     margin-top: 4px;
 }
 
-.header h1 {
+a {
+    text-decoration: none;
+}
+
+.header h1, .header h2 {
     color: white !important;
-    font-size: 32px !important;
+    font: inherit;
     line-height: 1 !important;
     padding: 20px 0 20px 0 !important;
     margin: 0 !important;
+}
+
+.header h1 {
+    font-size: 32px !important;
+}
+
+.header h2 {
+    font-size: 25px !important;
 }
 
 .footer {

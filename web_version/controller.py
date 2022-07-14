@@ -202,6 +202,8 @@ class WebUIController(Controller):
                 other_data['cut_options'] = scv_obj.cut_options
                 other_data['state_changed'] = False
 
+                np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
+
         except Exception as error:
            return ('Failed', f"Execution failed, {str(error)}")
 

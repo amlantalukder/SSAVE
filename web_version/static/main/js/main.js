@@ -240,6 +240,7 @@ execute = () => {
     document.getElementById('vis_image').src = `${assets_folder}/loading.jpg`;
     if(document.getElementById('vis_image_1')) document.getElementById('vis_image_1').src = `${assets_folder}/loading.jpg`;
     document.getElementById('sc_st_table_content').innerHTML = '';
+    document.getElementById('nremp_cut_option_msg').innerHTML = '';
 
     let myform = document.getElementById("exec_form");
     let fd = new FormData(myform);
@@ -251,6 +252,8 @@ execute = () => {
                 fd.append('nremp_cut_options_selected', save_cut_options[i].value);
         }
     }
+
+    disableElement(document.getElementById('execute_btn'));
     
     $.ajax({
         url: `/ssave/execute/${job_id}`,
@@ -261,6 +264,7 @@ execute = () => {
         type: 'POST',
         success: function (result) {
             showExecutionResults(result);
+            enableElement(document.getElementById('execute_btn'));
         }
     });
 };
