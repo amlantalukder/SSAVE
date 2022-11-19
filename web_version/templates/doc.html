@@ -2,7 +2,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>SSAVE - Sleep Cycle Visualization Tool</title>
+<title>SSAVE - Sleep Period Visualization Tool</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/stroke.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/bootstrap.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='documentation-html-template/css/animate.css') }}">
@@ -57,7 +57,7 @@
                             <div class="col-md-12 full">
                                 <div class="intro1">
                                     <ul>
-                                        <li><strong>Item Name : </strong>Sleep Cycle and Spectrogram Analysis and Visualization for Electroencephalography Data (SSAVE)</li>
+                                        <li><strong>Item Name : </strong>Sleep Period and Spectrogram Analysis and Visualization for Electroencephalography Data (SSAVE)</li>
                                         <li><strong>Item Version : </strong> v 1.0</li>
                                         <li><strong>Author : </strong> <a href="https://www.linkedin.com/in/amlan-talukder-phd-5415a933/"
                                                 target="_blank">Amlan Talukder</a></li>
@@ -65,7 +65,7 @@
                                 </div>
 
                                 <hr>
-                                <p><strong>SSAVE</strong> is designed to extract, customize and visualize sleep cycles from EEG data. 
+                                <p><strong>SSAVE</strong> is designed to extract, customize and visualize sleep periods from EEG data. 
                                 This documentation is to walk users through the both the web and desktop versions of the tool.</p>
                                 <hr>
                                 <div id="line1" class="para">
@@ -136,10 +136,10 @@
                             <p>SSAVE generates following outputs.</p>
                             <ol class="ms-4">
                                 <li>1. An image file for the visualization in JPEG format. 
-                                    The plot shows the sleep cycles, sleep stages and spectrogram. 
+                                    The plot shows the sleep periods, sleep stages and spectrogram. 
                                     If the input file is the epoch wise sleep stages, the plot will not show the spectrogram.</li>
-                                <li>2. Epoch wise sleep cycles in text format. 
-                                    The file has three columns: epoch number, index for sleep cycle and sleep cycle name (NREMP or REMP).</li>
+                                <li>2. Epoch wise sleep periods in text format. 
+                                    The file has three columns: epoch number, index for sleep period and sleep period name (NREMP or REMP).</li>
                                 <li>3. Epoch wise sleep stages in text format. The file has two column: epoch number and sleep stage.</li>
                             </ol>
                         </div>
@@ -174,7 +174,7 @@
                 <h4>Execution</h4>
 
                 <p>The execution of SSAVE begins after clicking the "Execute" button. Once the execution is done, 
-                    the user can see the resulted visualization and the extracted sleep cycles and stages 
+                    the user can see the resulted visualization and the extracted sleep periods and stages 
                     in the the two tabs of the output panel. The user interface panel will notify users with 
                     useful messages at every step.
                 </p>
@@ -191,13 +191,13 @@
 
                 <hr>
 
-                <h4>Spliting long NREM cycle</h4>
+                <h4>Spliting long NREM period</h4>
 
                 <p>
-                    Sometimes an NREM sleep cycle can be too long to be considered as a single cycle. In that case, the long NREM sleep cyle can be split into 
-                    two NREM cycles. SSAVE applies rules to determine the epoch numbers where a long NREM can be split. If it can find these splitting options,
+                    Sometimes an NREM sleep period can be too long to be considered as a single period. In that case, the long NREM sleep cyle can be split into 
+                    two NREM periods. SSAVE applies rules to determine the epoch numbers where a long NREM can be split. If it can find these splitting options,
                     another tab named "NREM cut points" will be shown on the output panel. This panel will present the possible epoch numbers options to cut a 
-                    long NREM cycle. User can select the cut point options and click execute to apply them on the output. The spectrogram is also shown in this
+                    long NREM period. User can select the cut point options and click execute to apply them on the output. The spectrogram is also shown in this
                     tab to help user determine the cut options.
                 </p>
 
@@ -353,7 +353,7 @@
                 <hr style="height:2px">
                 <!-- end row -->
 
-                <p>Talukder A., Li Y., Yeung D., Umbach M.D., Zheng F., Li L. (2022) <strong>SSAVE: Sleep Cycle and Spectrogram Analysis and Visualization for Electroencephalography Data</strong>. <i>Journal</i> Volume(Issue) [pages]</p>
+                <p>Talukder A., Li Y., Yeung D., Umbach M.D., Zheng F., Li L. (2022) <strong>SSAVE: Sleep Period and Spectrogram Analysis and Visualization for Electroencephalography Data</strong>. <i>Journal</i> Volume(Issue) [pages]</p>
                 
                 <!-- end row -->
 

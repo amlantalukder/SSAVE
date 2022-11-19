@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>SSAVE - Sleep Cycle Visualization Tool</title>
+<title>SSAVE - Sleep Period Visualization Tool</title>
 {% endblock %}
 
 {% block body %}
 <div id="main" class="container">
   <div class="header row">
     <div class="col text-center">
-      <h1>SSAVE - Sleep Cycle Visualization Tool</h1>
+      <h1>SSAVE - Sleep Period Visualization Tool</h1>
     </div>
     <div class="col-auto m-auto text-white">
       <div class="row">
@@ -121,7 +121,7 @@
                   <a class="nav-link" href="#nremp_cut_options" data-bs-toggle="tab">NREMP cut points</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#sleep_cycles_stages" data-bs-toggle="tab">Sleep Cycles and Stages</a>
+                  <a class="nav-link" href="#sleep_periods_stages" data-bs-toggle="tab">Sleep Periods and Stages</a>
                 </li>
                 <li class="flex-grow-1">
                   <a id="download_btn" class="btn btn-primary float-end disabled" onclick="downloadOutputs()">Download</a>
@@ -147,23 +147,25 @@
                   <div class="row m-1">
                     <div class="col text-center m-auto">
                       <span style="font-size: 0.8rem;">
-                        We have found the following cut options for longer NREM Cycle. Please select the options you like and click "Execute".
+                        We have found the following cut options for longer NREM Period. Please select the options you like and click "Execute".
                       </span>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col">
-                      <table class="table table-bordered table-responsive-md text-center" style="font-size: 0.8rem;">
-                        <thead>
-                          <tr>
-                            <td>NREMP EPOCH RANGE</td>
-                            <td>SLEEP CYCLE INDEX</td>
-                            <td>CUT POINT EPOCH</td>
-                            <td>SELECT</td>
-                          </tr>
-                        </thead>
-                        <tbody id="nremp_cut_options_table_content"></tbody>
-                      </table>
+                      <div id="nremp_cut_options_container" class="overflow-auto border">
+                        <table class="table table-bordered table-responsive-md text-center" style="font-size: 0.8rem;">
+                          <thead>
+                            <tr>
+                              <td>NREMP EPOCH RANGE</td>
+                              <td>SLEEP PERIOD INDEX</td>
+                              <td>CUT POINT EPOCH</td>
+                              <td>SELECT</td>
+                            </tr>
+                          </thead>
+                          <tbody id="nremp_cut_options_table_content"></tbody>
+                        </table>
+                      </div>
                     </div>
                   </div>
                   <div class="row">
@@ -172,13 +174,13 @@
                     </div>
                   </div>
                 </div>
-                <div id="sleep_cycles_stages" class="tab-pane overflow-auto">
+                <div id="sleep_periods_stages" class="tab-pane overflow-auto">
                   <table class="table table-bordered table-responsive-md text-center">
                     <thead>
                       <tr>
                         <td>EPOCH</td>
-                        <td>SLEEP CYCLE INDEX</td>
-                        <td>SLEEP CYCLE</td>
+                        <td>SLEEP PERIOD INDEX</td>
+                        <td>SLEEP PERIOD</td>
                         <td>SLEEP STAGE</td>
                       </tr>
                     </thead>

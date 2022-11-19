@@ -215,7 +215,7 @@ showExecutionResults = (result) => {
             }
             document.getElementById('nremp_cut_options_table_content').innerHTML = html;
         }, 'text');
-        let msg = 'We have found cut options for long NREM cycle. Please \
+        let msg = 'We have found cut options for long NREM period. Please \
             <a class="link-primary" href="#" onclick="activateTab(\'nremp_cut_options\');">click here</a>\
                 to show the options.'
         document.getElementById('nremp_cut_option_msg').innerHTML = 

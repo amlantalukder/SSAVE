@@ -80,7 +80,11 @@ div.container {
     /*height: 828px;*/
 }
 
-div#sleep_cycles_stages {
+div#nremp_cut_options_container {
+    height: 150px;
+}
+
+div#sleep_periods_stages {
     height: 500px;
 }
 
