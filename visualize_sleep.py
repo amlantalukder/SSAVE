@@ -67,7 +67,10 @@ class SleepInfo:
         eeg_channels = [ch for ch, ch_type in zip(self.eeg_data.info['ch_names'], self.eeg_data.get_channel_types()) if ch_type.lower() == 'eeg']
         self.ch_names = list(Config.CHANNELS_SELECTED[np.in1d(Config.CHANNELS_SELECTED, eeg_channels)])
         self.logger._print(f'Selected channels: {", ".join(self.ch_names)}')
-        self.eeg_data_raw = self.eeg_data.get_data(picks=self.ch_names)
+        try:
+            self.eeg_data_raw = self.eeg_data.get_data(picks=self.ch_names)
+        except:
+            self.eeg_data_raw = self.eeg_data.get_data()
 
         '''
         self.eeg_data_raw *= 1e6

@@ -102,7 +102,11 @@ class WebUIController(Controller):
 
             scv_obj = scv.loadSleepData(input_file_path, self.FOLDER_OUTPUT, file_type, app_logger=self.app.logger)
 
-            other_data = {'sample_name': scv_obj.sample_name, 'input_file_path': input_file_path, 'file_type': file_type, 'apply_filter': False}
+            other_data = {'sample_name': scv_obj.sample_name, 'input_file_path': input_file_path,
+                          'file_type': file_type, 'apply_filter': False, 'annotations_all': [],
+                          'channels_all': [], 'CHANNELS_SELECTED': [],
+                          'sleep_stage_event_to_id_mapping': scv.Config.sleep_stage_event_to_id_mapping,
+                          'FILTERS': scv.Config.FILTERS, 'EPOCH_SIZE': scv.Config.EPOCH_SIZE, 'status_changed': True}
 
             if file_type == 'edf':
 
@@ -116,18 +120,13 @@ class WebUIController(Controller):
                     print('No channels found !!!')
 
                 other_data['CHANNELS_SELECTED'] = scv.Config.CHANNELS_SELECTED[np.in1d(scv.Config.CHANNELS_SELECTED, other_data['channels_all'])]
-                other_data['sleep_stage_event_to_id_mapping'] = scv.Config.sleep_stage_event_to_id_mapping
-                other_data['FILTERS'] = scv.Config.FILTERS
-                other_data['EPOCH_SIZE'] = scv.Config.EPOCH_SIZE
-
-            other_data['state_changed'] = True
 
             if not os.path.exists(self.FOLDER_OTHER_DATA):
                 os.makedirs(self.FOLDER_OTHER_DATA)
             np.save(f'{self.FOLDER_OTHER_DATA}/other_data.npy', other_data)
 
         except Exception as error:
-            return ('Error', f"Data loading failed, {str(error)}")
+            return ('Failed', f"Data loading failed, {str(error)}")
 
         return ('Success', "Loaded sleep data successfully", file_type)
 
