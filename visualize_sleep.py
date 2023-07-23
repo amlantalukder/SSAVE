@@ -148,7 +148,7 @@ class SleepInfo:
         eeg_data_path = f'{self.folder_cache}/{self.sample_name}_eeg.npy'
         sleep_stage_path = f'{self.folder_cache}/{self.sample_name}_st.txt'
 
-        self.annotations = self.eeg_data._annotations
+        self.annotations = mne.read_annotations(self.edf_file_path)
 
         if len(self.annotations.onset) == 0 or len(self.annotations.duration) == 0 or len(self.annotations.description) == 0:
             raise SpecialError("No annotations found in the EEG file")
