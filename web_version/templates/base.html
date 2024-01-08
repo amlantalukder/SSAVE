@@ -1,21 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.0.2-dist/css/bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main/css/public_site.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main/css/main.css') }}">
-    {% block head %}{% endblock %}
-</head>
-<body>
+<html
+  lang="en"
+  dir="ltr"
+  prefix="content: http://purl.org/rss/1.0/modules/content/  dc: http://purl.org/dc/terms/  foaf: http://xmlns.com/foaf/0.1/  og: http://ogp.me/ns#  rdfs: http://www.w3.org/2000/01/rdf-schema#  schema: http://schema.org/  sioc: http://rdfs.org/sioc/ns#  sioct: http://rdfs.org/sioc/types#  skos: http://www.w3.org/2004/02/skos/core#  xsd: http://www.w3.org/2001/XMLSchema# "
+  class="js"
+>
+  <head>
+    <!-- ~~~Beginning of header meta (DO NOT DELETE)~~~-->
+    <meta charset="utf-8" />
+    <link rel="canonical" href="https://www.niehs.nih.gov/research/atniehs" />
+    <meta
+      name="description"
+      content="The mission of the National Institute of Environmental Health Sciences is to discover how the environment affects people in order to promote healthier lives."
+    />
+    <meta property="og:site_name" content="National Institute of Environmental Health Sciences" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.niehs.nih.gov/research/atniehs" />
+    <meta property="og:title" content="Research at NIEHS" />
+    <meta
+      property="og:description"
+      content="The mission of the National Institute of Environmental Health Sciences is to discover how the environment affects people in order to promote healthier lives."
+    />
+    <meta property="og:image" content="https://www.niehs.nih.gov/sites/default/files/research/atniehs/assets/images/researcherjpg.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:site" content="@NIEHS" />
+    <meta
+      name="twitter:description"
+      content="The mission of the National Institute of Environmental Health Sciences is to discover how the environment affects people in order to promote healthier lives."
+    />
+    <meta name="twitter:title" content="Research at NIEHS" />
+    <meta name="twitter:creator" content="@NIEHS" />
+    <meta name="twitter:url" content="https://www.niehs.nih.gov/research/atniehs" />
+    <meta name="twitter:image" content="https://www.niehs.nih.gov/sites/default/files/research/atniehs/assets/images/researcherjpg.jpg" />
+    <meta name="Generator" content="Drupal 9 (https://www.drupal.org)" />
+    <meta name="MobileOptimized" content="width" />
+    <meta name="HandheldFriendly" content="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="contentId" content="60108" />
+    <meta name="lastModDate" content="2023-02-01" />
+    <meta name="twitter:alt" content="Researcher" />
+    <link rel="icon" href="https://www.niehs.nih.gov/themes/custom/niehs_cms/favicon.ico" type="image/vnd.microsoft.icon" />
+    <script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-CSLL4ZEK4L&amp;l=dataLayer&amp;cx=c"></script>
+    <script type="text/javascript" async="" src="https://www.google-analytics.com/analytics.js"></script>
+    <script src="https://www.googletagmanager.com/gtm.js?id=GTM-M2B8CZJ" async=""></script>
+    <script src="https://www.niehs.nih.gov/sites/default/files/google_tag/gtm_m2b8czj/google_tag.script.js?s6y5tr" defer=""></script>
+
+    <!-- ~~~End of header meta (DO NOT DELETE)~~~-->
+    <!-- ~~~Beginning of page assets (DO NOT DELETE)~~~-->
+    <title>National Institute of Environmental Health Sciences: SSAVE</title>
+    <link rel="stylesheet" media="all" href="https://www.niehs.nih.gov/sites/default/files/css/css__2aFAdhge1vD6XfVD5br72vZytN9Trdxl_9sKy0myYs.css" />
+    <link rel="stylesheet" media="all" href="https://www.niehs.nih.gov/sites/default/files/css/css_85rMtkhzzOChGnvDm6OskcE5TiwSunNbc2CgfPPMptM.css" />
+    <link rel="stylesheet" media="print" href="https://www.niehs.nih.gov/sites/default/files/css/css_oXRaHAqBBb67ySiF0zh9TQBJeEocbWRRIMPOnetN-Zc.css" />
+    <link rel="stylesheet" media="all" href="https://www.niehs.nih.gov/sites/default/files/css/css_ZDXY8ao7IQgv6HUVPz26spvrQI7wNur_TlED_Z1aBZQ.css" />
+
+    <!-- ~~~End of page assets (DO NOT DELETE)~~~-->
+    <link href="https://www.niehs.nih.gov/themes/custom/niehs_cms/web-resources/styles/stand_alones/semantic/semantic.css" rel="stylesheet" type="text/css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=G-CSLL4ZEK4L"></script>
+    <script src="https://www.niehs.nih.gov/themes/custom/niehs_cms/web-resources/javascript/modules/form-niehs-validate.js" type="text/javascript" async=""></script>
+  </head>
+  <body>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap-5.0.2-dist/css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='main/css/main.css') }}" />
     <script src="{{ url_for('static', filename='main/js/main.js') }}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+      integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="{{ url_for('static', filename='bootstrap-5.0.2-dist/js/bootstrap.bundle.min.js') }}"></script>
-    {% include "header.html" %}
-    {% block body %}{% endblock %}
-    {% include "footer.html" %}
-</body>
+    {% include "header.html" %} {% block body %}{% endblock %} {% include "footer.html" %}
+  </body>
 </html>

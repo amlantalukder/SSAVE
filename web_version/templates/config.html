@@ -1,16 +1,8 @@
-{% extends 'base.html' %}
-
-{% block head %}
-<title>SSAVE - Settings</title>
-{% endblock %}
-
-{% block body %}
+{% extends 'base.html' %} {% block body %}
 <div id="settings" class="container border">
   <div class="header row">
     <div class="col text-center">
-      <h1>
-        SSAVE - Settings
-      </h1>
+      <h1>SSAVE - Settings</h1>
     </div>
     <div class="col-auto m-auto text-white">
       <div class="row">
@@ -32,7 +24,7 @@
     <div class="col">
       <div class="row">
         <div class="col">
-          <textarea id="status_textarea" class="form-control w-100" style="height:80px" readonly></textarea>
+          <textarea id="status_textarea" class="form-control w-100" style="height: 80px" readonly></textarea>
         </div>
       </div>
       <div class="row">
@@ -57,9 +49,9 @@
                 <div class="tab-content border">
                   <div id="select_channels" class="tab-pane active">
                     <div class="row m-2">
-                        <div class="col text-center">
-                            <a id="select_all_or_none" class="btn btn-info" onclick="selectAllChannels(true);">Select All</a>
-                        </div>
+                      <div class="col text-center">
+                        <a id="select_all_or_none" class="btn btn-info" onclick="selectAllChannels(true);">Select All</a>
+                      </div>
                     </div>
                     <div class="row m-2">
                       <div id="channels" class="col"></div>
@@ -68,30 +60,29 @@
                   <div id="select_sleep_stages" class="tab-pane">
                     <div class="row m-2">
                       <h5 class="text-center">
-                        We have extracted the events found in your EDF file. The events already assigned to the sleep stages are shown on the right panel. 
-                        The rest of the unassigned events are shown on the left panel. If there is any unassigned events that may be relevant to sleep stages, 
-                        they are shown on top of the left panel. 
+                        We have extracted the events found in your EDF file. The events already assigned to the sleep stages are shown on the right panel. The rest of the
+                        unassigned events are shown on the left panel. If there is any unassigned events that may be relevant to sleep stages, they are shown on top of the left
+                        panel.
                       </h5>
                     </div>
                     <div class="row m-2">
-                      <div class="col" style="height:530px;">
-                        <div class="row bg-secondary bg-gradient" style="height:6%">
+                      <div class="col" style="height: 530px">
+                        <div class="row bg-secondary bg-gradient" style="height: 6%">
                           <div class="col m-auto text-center">
                             <span class="lead">Unassigned Events</span>
                           </div>
                         </div>
-                        <div class="row" style="height:94%">
+                        <div class="row" style="height: 94%">
                           <div class="col overflow-auto border pt-1 pb-1 h-100">
                             <div id="annotations_relevant"></div>
-                            <hr>
+                            <hr />
                             <div id="annotations_nonrelevant"></div>
                           </div>
                         </div>
                       </div>
                       <div class="col-auto">
-                        <div class="row" style="height:6%">
-                        </div>
-                        <div class="row" style="height: 94%;">
+                        <div class="row" style="height: 6%"></div>
+                        <div class="row" style="height: 94%">
                           <div class="col m-auto">
                             <div class="row">
                               <div class="col-auto p-1 text-center">
@@ -106,36 +97,36 @@
                           </div>
                         </div>
                       </div>
-                      <div class="col" style="height:530px">
-                        <div class="row bg-secondary bg-gradient" style="height:6%">
+                      <div class="col" style="height: 530px">
+                        <div class="row bg-secondary bg-gradient" style="height: 6%">
                           <div class="col m-auto text-center">
                             <span class="lead">Assigned Events</span>
                           </div>
                         </div>
-                        <div class="row" style="height:94%;">
+                        <div class="row" style="height: 94%">
                           <div class="col border h-100">
                             {% for i in range(sleep_stages|length) %}
                             <div class="row border" style="height: 20%">
                               <div class="col h-100 d-flex flex-column">
-                                <div class="row" style="background:#f1f3f4;">
+                                <div class="row" style="background: #f1f3f4">
                                   <div class="col-auto">
                                     {% if i == 0 %}
-                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();" checked>
+                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();" checked />
                                     {% else %}
-                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();">
+                                    <input type="radio" name="st_type" value="{{sleep_stages[i]}}" onchange="loadRightPanel();" />
                                     {% endif %}
-                                  </div> 
+                                  </div>
                                   <div class="col-auto">
                                     <label for="st_type">{{sleep_stages[i]}}</label>
                                   </div>
                                 </div>
-                                <div class="row overflow-auto flex-grow-1" style="font-size:0.7em;">
-                                  <div id="{{sleep_stages[i]}}" class="col" style="padding:0 40px"></div>
+                                <div class="row overflow-auto flex-grow-1" style="font-size: 0.7em">
+                                  <div id="{{sleep_stages[i]}}" class="col" style="padding: 0 40px"></div>
                                 </div>
                               </div>
                             </div>
                             {% endfor %}
-                            <div class="row ps-3 pe-3" style="height:90%">
+                            <div class="row ps-3 pe-3" style="height: 90%">
                               <div id="annotations_selected" class="col overflow-auto pt-1 h-100"></div>
                             </div>
                           </div>
@@ -150,7 +141,7 @@
                           <label class="float-end" for="notch_freq_entry">Notch filter frequency (Hz):</label>
                         </div>
                         <div class="col-3">
-                          <input type="text" class="form-control form-control-sm" name="notch_freq_entry" value="{{filter_settings['notch']}}">
+                          <input type="text" class="form-control form-control-sm" name="notch_freq_entry" value="{{filter_settings['notch']}}" />
                         </div>
                       </div>
                       <div class="row border border-3">
@@ -163,7 +154,7 @@
                               <label class="float-end" for="bandpass_min_freq_entry">Minimum frequency (Hz):</label>
                             </div>
                             <div class="col-3">
-                              <input type="text" class="form-control form-control-sm" name="bandpass_min_freq_entry" value="{{filter_settings['bandpass'][0]}}">
+                              <input type="text" class="form-control form-control-sm" name="bandpass_min_freq_entry" value="{{filter_settings['bandpass'][0]}}" />
                             </div>
                           </div>
                           <div class="row border border-light m-1">
@@ -171,7 +162,7 @@
                               <label class="float-end" for="bandpass_max_freq_entry">Maximum frequency (Hz):</label>
                             </div>
                             <div class="col-3">
-                              <input type="text" class="form-control form-control-sm" name="bandpass_max_freq_entry" value="{{filter_settings['bandpass'][1]}}">
+                              <input type="text" class="form-control form-control-sm" name="bandpass_max_freq_entry" value="{{filter_settings['bandpass'][1]}}" />
                             </div>
                           </div>
                         </div>
@@ -181,7 +172,7 @@
                           <label class="float-end" for="amplitude_max_entry">Maximum amplitude (micro Volt):</label>
                         </div>
                         <div class="col-3">
-                          <input type="text" class="form-control form-control-sm" name="amplitude_max_entry" value="{{filter_settings['amplitude_max']}}">
+                          <input type="text" class="form-control form-control-sm" name="amplitude_max_entry" value="{{filter_settings['amplitude_max']}}" />
                         </div>
                       </div>
                       <div class="row border border-3">
@@ -194,7 +185,7 @@
                               <label class="float-end" for="flat_signal_duration_entry">Duration (seconds):</label>
                             </div>
                             <div class="col-3">
-                              <input type="text" class="form-control form-control-sm" name="flat_signal_duration_entry" value="{{filter_settings['flat_signal']}}">
+                              <input type="text" class="form-control form-control-sm" name="flat_signal_duration_entry" value="{{filter_settings['flat_signal']}}" />
                             </div>
                           </div>
                         </div>
@@ -207,14 +198,14 @@
                           <div class="row">
                             <div id="bad_annotations" class="col d-flex flex-column">
                               <div class="row flex-grow-1 border border-light overflow-auto">
-                              {% for annot, checked in bad_annot_settings %}
+                                {% for annot, checked in bad_annot_settings %}
                                 <div class="row border border-light">
                                   <div class="col">
-                                    <input class="form-check-input" type="checkbox" name="bad_annots_list" value="{{ annot }}" {{ checked }}>
+                                    <input class="form-check-input" type="checkbox" name="bad_annots_list" value="{{ annot }}" {{ checked }} />
                                     <label class="form-check-label ms-2" for="{{ annot }}">{{ annot }}</label>
                                   </div>
                                 </div>
-                              {% endfor %}
+                                {% endfor %}
                               </div>
                             </div>
                           </div>
@@ -229,7 +220,7 @@
                           <label class="float-end" for="epoch_size">Epoch Size (Seconds):</label>
                         </div>
                         <div class="col-md-3">
-                          <input type="text" class="form-control form-control-sm" name="epoch_size" value="{{epoch_size}}">
+                          <input type="text" class="form-control form-control-sm" name="epoch_size" value="{{epoch_size}}" />
                         </div>
                       </div>
                     </div>
@@ -244,7 +235,7 @@
   </div>
   <div class="row mt-3 mb-3">
     <div class="col text-center">
-        <a class="btn btn-primary" onclick="saveSettings();">Save</a>
+      <a class="btn btn-primary" onclick="saveSettings();">Save</a>
     </div>
   </div>
 </div>
@@ -255,9 +246,7 @@
         <h5 class="modal-title" id="exampleModalToggleLabel">Settings Saved</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        Your new settings have been saved. You need to go back the home page tab and apply the settings.
-      </div>
+      <div class="modal-body">Your new settings have been saved. You need to go back the home page tab and apply the settings.</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
       </div>
@@ -266,10 +255,10 @@
 </div>
 <script type="text/javascript">
   const job_id = "{{job_id}}";
-  const sleep_stages = JSON.parse('{{ sleep_stages|tojson }}');
-  var channel_settings = JSON.parse('{{ channel_settings|tojson }}');
-  var annots_all_settings = JSON.parse('{{ annots_all_settings|tojson }}');
-  var annots_right_settings = JSON.parse('{{ annots_right_settings|tojson }}');
+  const sleep_stages = JSON.parse("{{ sleep_stages|tojson }}");
+  var channel_settings = JSON.parse("{{ channel_settings|tojson }}");
+  var annots_all_settings = JSON.parse("{{ annots_all_settings|tojson }}");
+  var annots_right_settings = JSON.parse("{{ annots_right_settings|tojson }}");
   loadSettings();
 </script>
 {% endblock %}

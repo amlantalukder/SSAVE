@@ -1,133 +1,114 @@
 @font-face {
-    font-family: custom;
-    /*src: url(Alegreya/Alegreya-VariableFont_wght.ttf);*/
-    /*src: url(Ubuntu/Ubuntu-Medium.ttf)*/
-    /*src: url(Lora/static/Lora-Medium.ttf)*/
-    /*src: url(Noto_Serif/NotoSerif-Regular.ttf)*/
-    src: url(Source_Serif_Pro/SourceSerifPro-SemiBold.ttf)
-    /*src: url(Cardo/Cardo-Regular.ttf)*/
-    /*src: url(Spectral/Spectral-Medium.ttf)*/
+  font-family: custom;
+  src: url(SourceSerifPro-SemiBold.ttf);
 }
-
-html, body, .container input {
-    font-family: custom !important;
+div.container {
+  font-family: custom !important;
+  margin-bottom: 30px;
 }
-
+div.container input {
+  font-family: custom !important;
+}
 @media only screen and (min-width: 600px) {
-
-    html, body, .container input {
-        font-size: 16px !important;
-    }
+  div.container input {
+    font-size: 16px !important;
+  }
 }
-
-.modal h5 {
-    font-size:1.25rem;
+div.container .modal h5 {
+  font-size: 1.25rem;
 }
-
-.header {
-    background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%)
+div.container .header {
+  background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%);
 }
-
-input[type="radio"] {
-    margin-top: 4px;
+div.container .header h1, div.container .header h2 {
+  color: white !important;
+  font: inherit;
+  line-height: 1 !important;
+  padding: 20px 0 20px 0 !important;
+  margin: 0 !important;
 }
-
-a {
-    text-decoration: none;
+div.container .header h1 {
+  font-size: 32px !important;
 }
-
-.header h1, .header h2 {
-    color: white !important;
-    font: inherit;
-    line-height: 1 !important;
-    padding: 20px 0 20px 0 !important;
-    margin: 0 !important;
+div.container .header h2 {
+  font-size: 25px !important;
 }
-
-.header h1 {
-    font-size: 32px !important;
+div.container input[type=radio] {
+  margin-top: 4px;
 }
-
-.header h2 {
-    font-size: 25px !important;
+div.container a {
+  text-decoration: none;
+  cursor: pointer;
+}
+div.container thead {
+  background-color: rgba(3, 130, 182, 0.7490196078);
+}
+div.container div.container {
+  /*padding-top: 1rem;*/
+  /*padding-bottom: 1rem;*/
+  max-width: 1200px;
+  margin-top: -2px;
+  /*height: 828px;*/
+}
+div.container div#nremp_cut_options_container {
+  height: 150px;
+}
+div.container div#sleep_periods_stages {
+  height: 500px;
+}
+div.container div#bad_annotations {
+  height: 240px;
+}
+div.container textarea {
+  resize: none;
+}
+div.container #status_textarea {
+  min-height: 100px;
+}
+div.container .h-5 {
+  height: 5%;
+}
+div.container .h-95 {
+  height: 95%;
+}
+div.container .lead {
+  color: white;
+}
+@media only screen and (max-width: 600px) {
+  div.container #output_panel {
+    margin-top: 10pt;
+  }
+  div.container h5, div.container span.lead {
+    font-size: 12px !important;
+  }
+  div.container body, div.container a.btn, div.container .form-control, div.container select.form-select, div.container input {
+    font-size: 10px !important;
+  }
+  div.container #input_panel, div.container #output_panel {
+    height: 50%;
+  }
+  div.container div#bad_annotations {
+    height: 215px;
+  }
 }
 
 .footer {
-    line-height: 23px;
+  line-height: 23px;
 }
-
-.footer ul{
-    margin-bottom: 0;
+.footer ol, .footer ul {
+  padding: 0;
+  margin: 0;
 }
-
 .footer .icon-links h3 {
-    padding: 0;
-    margin: 0 0 1rem 0;
-    line-height: 0.85;
+  padding: 0;
+  margin: 0 0 1rem 0;
+  line-height: 0.85;
 }
-a {
-    cursor: pointer;
+.footer .icon-links #review-date {
+  position: absolute;
+  color: #333333;
+  font-size: 0.8rem;
+  right: 0px;
+  bottom: 7.1rem;
+  padding-bottom: 8px;
 }
-thead {
-    background-color: #0382b6bf;
-}
-
-div.container {
-    /*padding-top: 1rem;*/
-    /*padding-bottom: 1rem;*/
-    max-width: 1200px;
-    margin-top:-2px;
-    /*height: 828px;*/
-}
-
-div#nremp_cut_options_container {
-    height: 150px;
-}
-
-div#sleep_periods_stages {
-    height: 500px;
-}
-
-div#bad_annotations {
-    height: 240px;
-}
-
-textarea {
-    resize: none;
-}
-
-#status_textarea {
-    min-height: 100px;
-}
-
-.h-5 {
-    height: 5%;
-}
-
-.h-95 {
-    height: 95%;
-}
-
-.lead {
-    color:white;
-}
-
-@media only screen and (max-width: 600px) {
-    #output_panel {
-      margin-top:10pt;
-    }
-    h5, span.lead {
-        font-size: 12px !important;
-    }
-    body, a.btn, .form-control, select.form-select, input{
-        font-size: 10px !important;
-    }
-
-    #input_panel, #output_panel {
-        height: 50%;
-    }
-
-    div#bad_annotations {
-        height: 215px;
-    }
-  }
