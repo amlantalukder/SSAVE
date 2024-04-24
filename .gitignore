@@ -6,4 +6,5 @@ web_version/static/assets/examples
 web_version/static/main/css/*.scss
 web_version/ssave.log
 venv
+.venv
 
