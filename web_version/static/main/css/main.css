@@ -20,7 +20,8 @@ div.container .modal h5 {
 div.container .header {
   background: linear-gradient(to bottom, #03a7e9 0%, #035a7d 100%);
 }
-div.container .header h1, div.container .header h2 {
+div.container .header h1,
+div.container .header h2 {
   color: white !important;
   font: inherit;
   line-height: 1 !important;
@@ -33,7 +34,7 @@ div.container .header h1 {
 div.container .header h2 {
   font-size: 25px !important;
 }
-div.container input[type=radio] {
+div.container input[type="radio"] {
   margin-top: 4px;
 }
 div.container a {
@@ -78,13 +79,19 @@ div.container .lead {
   div.container #output_panel {
     margin-top: 10pt;
   }
-  div.container h5, div.container span.lead {
+  div.container h5,
+  div.container span.lead {
     font-size: 12px !important;
   }
-  div.container body, div.container a.btn, div.container .form-control, div.container select.form-select, div.container input {
+  div.container body,
+  div.container a.btn,
+  div.container .form-control,
+  div.container select.form-select,
+  div.container input {
     font-size: 10px !important;
   }
-  div.container #input_panel, div.container #output_panel {
+  div.container #input_panel,
+  div.container #output_panel {
     height: 50%;
   }
   div.container div#bad_annotations {
@@ -95,7 +102,8 @@ div.container .lead {
 .footer {
   line-height: 23px;
 }
-.footer ol, .footer ul {
+.footer ol,
+.footer ul {
   padding: 0;
   margin: 0;
 }
