@@ -50,7 +50,7 @@
                   <div id="select_channels" class="tab-pane active">
                     <div class="row m-2">
                       <div class="col text-center">
-                        <a id="select_all_or_none" class="btn btn-info" onclick="selectAllChannels(true);">Select All</a>
+                        <a id="select_all_or_none" class="btn btn-info" href="#" onclick="selectAllChannels(true); return false;">Select All</a>
                       </div>
                     </div>
                     <div class="row m-2">
@@ -59,11 +59,7 @@
                   </div>
                   <div id="select_sleep_stages" class="tab-pane">
                     <div class="row m-2">
-                      <h5 class="text-center">
-                        We have extracted the events found in your EDF file. The events already assigned to the sleep stages are shown on the right panel. The rest of the
-                        unassigned events are shown on the left panel. If there is any unassigned events that may be relevant to sleep stages, they are shown on top of the left
-                        panel.
-                      </h5>
+                      <h5 class="text-center">We have extracted the events found in your EDF file. The events already assigned to the sleep stages are shown on the right panel. The rest of the unassigned events are shown on the left panel. If there is any unassigned events that may be relevant to sleep stages, they are shown on top of the left panel.</h5>
                     </div>
                     <div class="row m-2">
                       <div class="col" style="height: 530px">
@@ -86,12 +82,12 @@
                           <div class="col m-auto">
                             <div class="row">
                               <div class="col-auto p-1 text-center">
-                                <a class="btn btn-primary" onclick="moveAnnotsToRightPanel();">&gt;&gt;</a>
+                                <a class="btn btn-primary" href="#" onclick="moveAnnotsToRightPanel(); return false;">&gt;&gt;</a>
                               </div>
                             </div>
                             <div class="row">
                               <div class="col-auto p-1 text-center">
-                                <a class="btn btn-primary" onclick="moveAnnotsToLeftPanel();">&#60;&#60;</a>
+                                <a class="btn btn-primary" href="#" onclick="moveAnnotsToLeftPanel(); return false;">&#60;&#60;</a>
                               </div>
                             </div>
                           </div>
@@ -235,7 +231,7 @@
   </div>
   <div class="row mt-3 mb-3">
     <div class="col text-center">
-      <a class="btn btn-primary" onclick="saveSettings();">Save</a>
+      <a class="btn btn-primary" href="#" onclick="saveSettings(); return false;">Save</a>
     </div>
   </div>
 </div>
@@ -255,10 +251,10 @@
 </div>
 <script type="text/javascript">
   const job_id = "{{job_id}}";
-  const sleep_stages = JSON.parse("{{ sleep_stages|tojson }}");
-  var channel_settings = JSON.parse("{{ channel_settings|tojson }}");
-  var annots_all_settings = JSON.parse("{{ annots_all_settings|tojson }}");
-  var annots_right_settings = JSON.parse("{{ annots_right_settings|tojson }}");
+  const sleep_stages = JSON.parse('{{ sleep_stages|tojson|safe }}');
+  var channel_settings = JSON.parse('{{ channel_settings|tojson }}');
+  var annots_all_settings = JSON.parse('{{ annots_all_settings|tojson }}');
+  var annots_right_settings = JSON.parse('{{ annots_right_settings|tojson }}');
   loadSettings();
 </script>
 {% endblock %}

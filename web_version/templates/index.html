@@ -53,28 +53,13 @@
                 <div class="row">
                   <div class="col">
                     <div class="input-group custom-file-button">
-                      <a class="btn btn-primary" onclick="document.getElementById('sample_file_path').click();">Choose File</a>
-                      <input
-                        id="sample_file_path_proxy"
-                        class="form-control"
-                        type="text"
-                        value="No file chosen"
-                        onclick="document.getElementById('sample_file_path').click();"
-                        readonly
-                      />
-                      <input
-                        id="sample_file_path"
-                        type="file"
-                        accept=".edf"
-                        class="invisible"
-                        style="width: 0px; height: 0px"
-                        name="sample_file_path"
-                        onchange="enableLoadButton();"
-                      />
+                      <a class="btn btn-primary" href="#" onclick="document.getElementById('sample_file_path').click(); return false;">Choose File</a>
+                      <input id="sample_file_path_proxy" class="form-control" type="text" value="No file chosen" onclick="document.getElementById('sample_file_path').click();" readonly />
+                      <input id="sample_file_path" type="file" accept=".edf" class="invisible" style="width: 0px; height: 0px" name="sample_file_path" onchange="enableLoadButton();" />
                     </div>
                   </div>
                   <div class="col-auto text-end">
-                    <a id="load_btn" class="btn btn-primary disabled" onclick="loadData();">Load</a>
+                    <a id="load_btn" class="btn btn-primary disabled" href="#" onclick="loadData(); return false;">Load</a>
                   </div>
                 </div>
                 <div class="row">
@@ -87,13 +72,13 @@
                 <div class="row border" style="font-size: 0.8em">
                   <div id="example_edf" class="col text-center">
                     <label>Use example data:</label>
-                    <a class="text-blue" onclick="loadData(innerHTML);">EDF File 1</a>, <a class="text-blue" onclick="loadData(innerHTML);">EDF File 2</a>,
-                    <a class="text-blue" onclick="loadData(innerHTML);">EDF File 3</a>
+                    <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">EDF File 1</a>, <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">EDF File 2</a>,
+                    <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">EDF File 3</a>
                   </div>
                   <div id="example_annot" class="col text-center d-none">
                     <label>Use example data:</label>
-                    <a class="text-blue" onclick="loadData(innerHTML);">Sleep Stages File 1</a>, <a class="text-blue" onclick="loadData(innerHTML);">Sleep Stages File 2</a>,
-                    <a class="text-blue" onclick="loadData(innerHTML);">Sleep Stages File 3</a>
+                    <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">Sleep Stages File 1</a>, <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">Sleep Stages File 2</a>,
+                    <a class="text-blue" href="#" onclick="loadData(innerHTML); return false;">Sleep Stages File 3</a>
                   </div>
                 </div>
               </div>
@@ -102,14 +87,14 @@
           <form id="exec_form">
             <div class="row border-top border-5 ps-2 pe-2 pt-3 pb-3">
               <div class="col m-auto text-start">
-                <a id="configure_btn" class="btn btn-primary disabled" onclick="gotoConfigPage();" target="_blank">Configure</a>
+                <a id="configure_btn" class="btn btn-primary disabled" href="#" onclick="gotoConfigPage(); return false;" target="_blank">Configure</a>
               </div>
               <div class="col m-auto text-center">
                 <input id="apply_filter_btn" class="form-check-input" type="checkbox" name="apply_filter" disabled />
                 <label id="apply_filter_label" class="form-check-label" for="apply_filter">Apply Filters</label>
               </div>
               <div class="col m-auto text-end">
-                <a id="execute_btn" class="btn btn-primary disabled" onclick="execute();">Execute</a>
+                <a id="execute_btn" class="btn btn-primary disabled" href="#" onclick="execute(); return false;">Execute</a>
               </div>
             </div>
           </form>
@@ -135,7 +120,7 @@
                   <a class="nav-link" href="#sleep_periods_stages" data-bs-toggle="tab">Sleep Periods and Stages</a>
                 </li>
                 <li class="flex-grow-1">
-                  <a id="download_btn" class="btn btn-primary float-end disabled" onclick="downloadOutputs()">Download</a>
+                  <a id="download_btn" class="btn btn-primary float-end disabled" href="#" onclick="downloadOutputs(); return false;">Download</a>
                 </li>
               </ul>
             </div>
@@ -156,9 +141,7 @@
                 <div id="nremp_cut_options" class="tab-pane">
                   <div class="row m-1">
                     <div class="col text-center m-auto">
-                      <span style="font-size: 0.8rem">
-                        We have found the following cut options for longer NREM Period. Please select the options you like and click "Execute".
-                      </span>
+                      <span style="font-size: 0.8rem"> We have found the following cut options for longer NREM Period. Please select the options you like and click "Execute". </span>
                     </div>
                   </div>
                   <div class="row">

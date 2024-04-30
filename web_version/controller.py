@@ -77,7 +77,6 @@ class WebUIController(Controller):
     def loadSleepData(self, view):
 
         try:
-
             file_type = self.validate(view.form.get('file_type'), 'file_type')
 
             if view.form.get('example') is None:
@@ -234,7 +233,7 @@ class WebUIController(Controller):
 
     # --------------------------------------------------------------------------
     def getConfig(self):
-
+    
         try:
             other_data = np.load(f'{self.FOLDER_OTHER_DATA}/other_data.npy', allow_pickle=True).item()
 

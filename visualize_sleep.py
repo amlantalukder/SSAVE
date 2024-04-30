@@ -89,7 +89,7 @@ class SleepInfo:
     # --------------------------------------------------------------------------
     def applyFilterOnEEG(self):
 
-        self.logger._print(f'Applying filters:', Config.FILTERS)
+        self.logger._print(f'Applying filters: {Config.FILTERS}')
 
         if self.sampling_freq/2 > Config.FILTERS['notch']:
             self.eeg_data_epoch_wise = mne.filter.notch_filter(self.eeg_data_epoch_wise, self.sampling_freq, Config.FILTERS['notch'], fir_design="firwin", verbose=False)
@@ -454,7 +454,7 @@ class SleepInfo:
         def applyCutOptions():
 
             if len(self.cut_options_selected) > 0:
-                self.logger._print('Applying selected cut options:', self.cut_options_selected)
+                self.logger._print('Applying selected cut options: {self.cut_options_selected}')
                 self.cut_options_selected = sorted(self.cut_options_selected)
                 sc_index_inc = j = 0
                 for i in range(self.cut_options_selected[j]-1, len(self.sleep_periods)):

@@ -30,7 +30,7 @@ def config(job_id):
         annots_all_settings, annots_right_settings, sleep_stages, \
         filter_settings, bad_annot_settings, \
         epoch_size = data
-
+    
     app.logger.info(f'Configuration response: {response}, job id: {job_id}')
 
     return render_template('config.html', job_id=job_id,
